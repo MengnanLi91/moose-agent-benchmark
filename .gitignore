@@ -9,4 +9,4 @@ __pycache__/
 build/
 dist/
 benchmark-results/
-.claude/settings.local.json
+.claude/
