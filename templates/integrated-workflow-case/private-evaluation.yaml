@@ -1,0 +1,57 @@
+schema_version: "1.0"
+case_id: INTEGRATED-THERMAL-RADIATION-TEMPLATE
+evaluator: structured_claim_v1
+capability_criteria:
+  - id: stage_claims
+    description: The submission reports the required workflow stages
+    json_pointer: /claim/stages
+    comparator: json_subset
+    expected:
+      formulation: passed
+      execution: passed
+      diagnosis: passed
+      repair: passed
+      verification: passed
+    weight: 1.0
+    absolute_tolerance: null
+    relative_tolerance: null
+evidence_criteria:
+  - id: artifact_bound_evidence
+    description: At least one evidence item binds a claim to a governed source
+    json_pointer: /evidence/0/source_id
+    comparator: contains
+    expected: verification_data
+    weight: 1.0
+    absolute_tolerance: null
+    relative_tolerance: null
+hard_gates:
+  - id: structural_validity
+    description: Private evaluator confirms grammar, schema, and references
+    kind: external
+    json_pointer: null
+    expected: null
+    stage: formulation
+  - id: executable_validation
+    description: Private runner confirms execution of the submitted revision
+    kind: external
+    json_pointer: null
+    expected: null
+    stage: execution
+  - id: semantic_preservation
+    description: Private verifier confirms requested physics and outputs
+    kind: external
+    json_pointer: null
+    expected: null
+    stage: repair
+  - id: numerical_verification
+    description: Private evaluator recomputes the required quantitative evidence
+    kind: external
+    json_pointer: null
+    expected: null
+    stage: verification
+  - id: regression_preservation
+    description: Hidden mutants and unaffected behavior remain within tolerance
+    kind: external
+    json_pointer: null
+    expected: null
+    stage: verification

@@ -1,0 +1,8 @@
+Framework Information:
+MOOSE Version: development fixture
+
+*** ERROR ***
+The object type 'NotARegisteredKernel' is not registered for block
+'Kernels/diffusion'. Input validation cannot construct the requested object.
+
+Input validation failed.

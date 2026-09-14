@@ -1,0 +1,60 @@
+schema_version: "1.0"
+case_id: DIAG-THERMAL-SCHEMA-001
+title: Classify an unregistered MOOSE object failure
+case_kind: atomic
+track: DIAG
+subcategory: D1
+difficulty: L1
+base_problem_id: THERMAL-CONDUCTION-BASE-001
+physics_domains:
+  - thermal_energy_transport
+target:
+  application: moose_test-opt
+  version: synthetic-log-fixture-v1
+  executable_hint: moose_test-opt
+prompt_path: prompt.md
+prompt_sha256: 61310d9bf2160d55ff961a1dacc742b442cc8885ba672db11d0f15e25ad08580
+artifacts:
+  - id: failing_input
+    path: artifacts/failing.i
+    role: immutable_input
+    mutable: false
+    required: true
+    sha256: 83939ceae0e1c4d2acd721df9c227277eb693932a2cb4669231e4a7f3d10020e
+evidence_sources:
+  - id: check_input_log
+    path: evidence/check_input.log
+    kind: moose_check_input_log
+    description: Output captured from the supplied input during MOOSE input validation
+    sha256: 109a3cb0b4c219dbb375726e2c79d11cd51973d08a2e9ea8f481c94f44cc3608
+starting_state:
+  description: The physical formulation is supplied and the input artifact is immutable.
+  supplied_truth:
+    - The intended model is steady scalar diffusion on a one-dimensional generated mesh.
+    - The equation and boundary conditions are correct for this classification task.
+  excluded_from_scoring:
+    - Exact replacement object name
+    - Repair patch
+    - Solver configuration
+actions:
+  permitted:
+    - Inspect the supplied input file.
+    - Inspect the supplied MOOSE check-input log.
+  prohibited:
+    - Modify or execute the input.
+    - Consult the private evaluator specification.
+budget:
+  wall_time_seconds: 60
+  cpu_seconds: 30
+  memory_mib: 512
+  validation_attempts: 0
+  execution_attempts: 0
+submission:
+  required_claim_paths:
+    - /claim/failure_stage
+    - /claim/terminal_symptom
+  evidence_required: true
+  artifacts_allowed: false
+  required_artifact_roles: []
+  maximum_artifacts: 0
+required_stages: []

@@ -1,0 +1,14 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.2.0",
+    "case_id": "DIAG-THERMAL-SCHEMA-001",
+    "submission_sha256": "b172c65aa584309f6b45c00d6558f9e4c41e9f4e29c1d0be63e4d86c319b0734",
+    "gate_id": "resource_compliance",
+    "passed": true,
+    "detail": "Evaluator-observed use remained within the public case budget.",
+    "evidence": [
+      "development-fixture-telemetry"
+    ]
+  }
+]

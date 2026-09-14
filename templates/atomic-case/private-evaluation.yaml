@@ -1,0 +1,34 @@
+schema_version: "1.0"
+case_id: FORM-THERMAL-F2-TEMPLATE
+evaluator: structured_claim_v1
+capability_criteria:
+  - id: residual_terms
+    description: Required residual terms, including the nonlinear boundary contribution
+    json_pointer: /claim/residual_terms
+    comparator: set_f1
+    expected:
+      - transient_volume_term
+      - conduction_volume_term
+      - source_volume_term
+      - radiation_boundary_term
+    weight: 0.7
+    absolute_tolerance: null
+    relative_tolerance: null
+  - id: boundary_handling
+    description: Correctly treats radiation as a natural boundary contribution
+    json_pointer: /claim/natural_boundary_handling
+    comparator: normalized_exact
+    expected: natural_boundary_residual
+    weight: 0.3
+    absolute_tolerance: null
+    relative_tolerance: null
+evidence_criteria:
+  - id: evidence_source
+    description: Binds the derivation to the supplied equation specification
+    json_pointer: /evidence/0/source_id
+    comparator: exact
+    expected: equation_specification_evidence
+    weight: 1.0
+    absolute_tolerance: null
+    relative_tolerance: null
+hard_gates: []

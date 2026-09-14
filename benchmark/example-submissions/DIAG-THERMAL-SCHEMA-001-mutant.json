@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "case_id": "DIAG-THERMAL-SCHEMA-001",
+  "track": "DIAG",
+  "subcategory": "D1",
+  "claim": {
+    "failure_stage": "nonlinear_solve",
+    "terminal_symptom": "nonlinear_divergence"
+  },
+  "evidence": [
+    {
+      "source_id": "check_input_log",
+      "observation": "The requested Kernel object type is not registered.",
+      "interpretation": "This is incorrectly attributed to the nonlinear solver.",
+      "artifact_sha256": null
+    }
+  ],
+  "artifacts": [],
+  "confidence": 0.95,
+  "limitations": [],
+  "usage": {
+    "wall_time_seconds": 2.0,
+    "cpu_seconds": 0.4,
+    "validation_attempts": 0,
+    "execution_attempts": 0
+  }
+}

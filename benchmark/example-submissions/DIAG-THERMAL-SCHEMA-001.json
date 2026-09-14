@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "case_id": "DIAG-THERMAL-SCHEMA-001",
+  "track": "DIAG",
+  "subcategory": "D1",
+  "claim": {
+    "failure_stage": "object_schema_validation",
+    "terminal_symptom": "input_validation_failure"
+  },
+  "evidence": [
+    {
+      "source_id": "check_input_log",
+      "observation": "The requested Kernel object type is not registered.",
+      "interpretation": "MOOSE stops during object schema validation before problem execution.",
+      "artifact_sha256": null
+    }
+  ],
+  "artifacts": [],
+  "confidence": 0.99,
+  "limitations": [
+    "This D1 answer does not propose a repair."
+  ],
+  "usage": {
+    "wall_time_seconds": 2.1,
+    "cpu_seconds": 0.4,
+    "validation_attempts": 0,
+    "execution_attempts": 0
+  }
+}

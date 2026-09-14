@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --extra dev --locked
+
+      - name: Static checks
+        run: |
+          uv run python -m compileall -q src tests ci
+          uv run ruff check .
+          uv run black --check .
+
+      - name: Tests
+        run: uv run pytest -q
+
+      - name: Validate and score development fixtures
+        run: |
+          uv run moose-benchmark validate benchmark/manifest.yaml
+          uv run moose-benchmark score \
+            --manifest benchmark/manifest.yaml \
+            --case-id DIAG-THERMAL-SCHEMA-001 \
+            --submission benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001.json \
+            --external-gates external-gates.json \
+            --output /tmp/gold.json
+          uv run moose-benchmark score \
+            --manifest benchmark/manifest.yaml \
+            --case-id DIAG-THERMAL-SCHEMA-001 \
+            --submission benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001-mutant.json \
+            --external-gates external-gates-mutant.json \
+            --output /tmp/mutant.json
+          uv run python ci/assert_example_scores.py /tmp/gold.json /tmp/mutant.json
+
+      - name: Build release artifacts
+        run: |
+          uv build
+          uv run python ci/build_public_bundle.py \
+            --manifest benchmark/manifest.yaml \
+            --output /tmp/moose-agent-benchmark-public.tar.gz
+          ! tar -tzf /tmp/moose-agent-benchmark-public.tar.gz | grep -q private

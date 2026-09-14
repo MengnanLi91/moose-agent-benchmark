@@ -1,0 +1,59 @@
+schema_version: "1.0"
+case_id: INTEGRATED-THERMAL-RADIATION-TEMPLATE
+title: Integrated nonlinear thermal radiation workflow
+case_kind: integrated_workflow
+track: null
+subcategory: null
+difficulty: L4
+base_problem_id: THERMAL-RADIATION-BASE-TEMPLATE
+physics_domains:
+  - thermal_energy_transport
+target:
+  application: heat_conduction-opt
+  version: replace-with-tested-build-hash
+  executable_hint: heat_conduction-opt
+prompt_path: prompt.md
+prompt_sha256: 02bb5e20624bc2db70d0a07bd9307e593cda4fcb1a0e25e548a9c298711c71f3
+artifacts:
+  - id: starter_input
+    path: artifacts/starter.i
+    role: mutable_input
+    mutable: true
+    required: true
+    sha256: 477bf983764f07e544131abf76bb18eb960c85f059d5cb814f94701afcd91150
+evidence_sources: []
+starting_state:
+  description: The agent receives the physical specification and an incomplete starter input.
+  supplied_truth:
+    - Governing equations and constitutive functions
+    - Geometry, materials, initial conditions, and boundary conditions
+  excluded_from_scoring: []
+actions:
+  permitted:
+    - Inspect and modify designated case artifacts.
+    - Run bounded input validation and MOOSE execution.
+    - Postprocess generated results.
+  prohibited:
+    - Modify the target application.
+    - Read private evaluator files.
+budget:
+  wall_time_seconds: 600
+  cpu_seconds: 300
+  memory_mib: 8192
+  validation_attempts: 6
+  execution_attempts: 4
+submission:
+  required_claim_paths:
+    - /claim/stages
+  evidence_required: true
+  artifacts_allowed: true
+  required_artifact_roles:
+    - final_input
+    - verification_data
+  maximum_artifacts: 4
+required_stages:
+  - formulation
+  - execution
+  - diagnosis
+  - repair
+  - verification

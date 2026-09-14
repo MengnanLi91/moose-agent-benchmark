@@ -1,0 +1,60 @@
+schema_version: "1.0"
+case_id: FORM-THERMAL-F2-TEMPLATE
+title: Derive a nonlinear radiation boundary residual
+case_kind: atomic
+track: FORM
+subcategory: F2
+difficulty: L2
+base_problem_id: THERMAL-RADIATION-BASE-TEMPLATE
+physics_domains:
+  - thermal_energy_transport
+target:
+  application: heat_conduction-opt
+  version: replace-with-tested-build-hash
+  executable_hint: heat_conduction-opt
+prompt_path: prompt.md
+prompt_sha256: 44eedf2646c9790e322d89147319405331a33bc1087e4d583f722a0867ae0560
+artifacts:
+  - id: equation_specification
+    path: artifacts/equation-specification.md
+    role: supplied_physics_specification
+    mutable: false
+    required: true
+    sha256: 9a455f35d160354832f2406d53a4de31e2eeb7c72bf534c76d6bf3d09c1d0c45
+evidence_sources:
+  - id: equation_specification_evidence
+    path: artifacts/equation-specification.md
+    kind: problem_specification
+    description: Governing equation and radiative boundary condition supplied to the agent
+    sha256: 9a455f35d160354832f2406d53a4de31e2eeb7c72bf534c76d6bf3d09c1d0c45
+starting_state:
+  description: The complete strong form and boundary condition are supplied.
+  supplied_truth:
+    - Governing equation
+    - Constitutive dependencies
+    - Boundary orientation and sign convention
+  excluded_from_scoring:
+    - MOOSE object selection
+    - Input syntax
+    - Executable success
+actions:
+  permitted:
+    - Inspect the supplied equation specification.
+    - Return the residual terms for the requested variable.
+  prohibited:
+    - Construct or execute a MOOSE input.
+budget:
+  wall_time_seconds: 120
+  cpu_seconds: 60
+  memory_mib: 1024
+  validation_attempts: 0
+  execution_attempts: 0
+submission:
+  required_claim_paths:
+    - /claim/residual_terms
+    - /claim/natural_boundary_handling
+  evidence_required: true
+  artifacts_allowed: false
+  required_artifact_roles: []
+  maximum_artifacts: 0
+required_stages: []

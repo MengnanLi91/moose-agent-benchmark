@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moose-agent-benchmark"
+version = "0.2.0"
+description = "Reference harness for MOOSE-native agent formulation, diagnosis, repair, and verification benchmarks"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.7,<3",
+  "PyYAML>=6,<7",
+]
+
+[project.optional-dependencies]
+dev = [
+  "black>=24.10",
+  "build>=1.2",
+  "pytest>=8.3",
+  "ruff>=0.8",
+]
+
+[project.scripts]
+moose-benchmark = "moose_benchmark.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]

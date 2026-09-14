@@ -1,0 +1,26 @@
+schema_version: "1.0"
+benchmark_id: moose-agent-benchmark-development
+benchmark_version: 0.2.0
+required_atomic_subcategories:
+  - F1
+  - F2
+  - F3
+  - F4
+  - D1
+  - D2
+  - D3
+  - D4
+  - R1
+  - R2
+  - R3
+  - R4
+  - V1
+  - V2
+  - V3
+  - V4
+cases:
+  - case_id: DIAG-THERMAL-SCHEMA-001
+    public_case: public/cases/DIAG-THERMAL-SCHEMA-001/case.yaml
+    private_evaluation: private/cases/DIAG-THERMAL-SCHEMA-001/evaluation.yaml
+    split: development
+    enabled: true

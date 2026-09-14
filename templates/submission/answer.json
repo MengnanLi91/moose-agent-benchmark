@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "case_id": "REPLACE-WITH-CASE-ID",
+  "track": "DIAG",
+  "subcategory": "D3",
+  "claim": {},
+  "evidence": [
+    {
+      "source_id": "replace-with-public-source-id",
+      "observation": "Direct observation from the named source",
+      "interpretation": "Why the observation supports the designated claim",
+      "artifact_sha256": null
+    }
+  ],
+  "artifacts": [],
+  "confidence": 0.5,
+  "limitations": [],
+  "usage": {
+    "wall_time_seconds": 0,
+    "cpu_seconds": 0,
+    "validation_attempts": 0,
+    "execution_attempts": 0
+  }
+}

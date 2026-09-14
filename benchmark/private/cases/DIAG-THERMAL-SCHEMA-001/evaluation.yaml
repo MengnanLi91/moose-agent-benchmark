@@ -1,0 +1,56 @@
+schema_version: "1.0"
+case_id: DIAG-THERMAL-SCHEMA-001
+evaluator: structured_claim_v1
+capability_criteria:
+  - id: earliest_failure_stage
+    description: Classifies the earliest failure as object schema validation
+    json_pointer: /claim/failure_stage
+    comparator: normalized_exact
+    expected: object_schema_validation
+    weight: 0.8
+    absolute_tolerance: null
+    relative_tolerance: null
+  - id: terminal_symptom
+    description: Distinguishes the terminal input-validation failure from its cause
+    json_pointer: /claim/terminal_symptom
+    comparator: normalized_exact
+    expected: input_validation_failure
+    weight: 0.2
+    absolute_tolerance: null
+    relative_tolerance: null
+evidence_criteria:
+  - id: evidence_source
+    description: Binds the claim to the supplied MOOSE log
+    json_pointer: /evidence/0/source_id
+    comparator: exact
+    expected: check_input_log
+    weight: 0.35
+    absolute_tolerance: null
+    relative_tolerance: null
+  - id: observed_message
+    description: Identifies the unregistered-object observation
+    json_pointer: /evidence/0/observation
+    comparator: contains
+    expected: not registered
+    weight: 0.35
+    absolute_tolerance: null
+    relative_tolerance: null
+  - id: interpretation
+    description: Connects the observation to object schema validation
+    json_pointer: /evidence/0/interpretation
+    comparator: contains
+    expected: object schema
+    weight: 0.3
+    absolute_tolerance: null
+    relative_tolerance: null
+hard_gates:
+  - id: immutable_artifact_policy
+    description: Diagnosis cases cannot submit modified artifacts
+    kind: field_equals
+    json_pointer: /artifacts
+    expected: []
+  - id: resource_compliance
+    description: Evaluator telemetry confirms compliance with the public budget
+    kind: external
+    json_pointer: null
+    expected: null
