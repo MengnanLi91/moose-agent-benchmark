@@ -1,4 +1,4 @@
-# MOOSE Agent Benchmark starter
+# MOOSE Agent Benchmark
 
 This repository is a runnable starting point for evaluating MOOSE agents across four
 separate capabilities:
@@ -92,11 +92,4 @@ The starter keeps private files in the same repository for convenience. A public
 release should build the participant bundle from `benchmark/public` and retain
 `benchmark/private` in a protected evaluator repository or service.
 
-## GitHub
 
-The repository includes `.github/workflows/ci.yml`. After creating an empty GitHub repository:
-
-```bash
-git remote add origin git@github.com:YOUR-ACCOUNT/moose-agent-benchmark.git
-git push -u origin main
-```
