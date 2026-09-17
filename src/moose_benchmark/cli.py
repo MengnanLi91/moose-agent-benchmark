@@ -10,6 +10,9 @@ from pathlib import Path
 
 from pydantic import BaseModel, TypeAdapter, ValidationError
 
+from .catalog.loader import load_coverage_config
+from .catalog.report import build_catalog_report, format_catalog_report
+from .catalog.validator import validate_catalog
 from .contracts import CaseResult, EvaluationContext, ExternalGateResult
 from .evaluators import get_evaluator
 from .loader import (
@@ -30,6 +33,15 @@ def _write_json(data: BaseModel | dict, output: str | None) -> None:
     if isinstance(data, BaseModel):
         data = data.model_dump(mode="json")
     text = json.dumps(data, indent=2, sort_keys=True) + "\n"
+    if output:
+        target = Path(output)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(text, encoding="utf-8")
+    else:
+        print(text, end="")
+
+
+def _write_text(text: str, output: str | None) -> None:
     if output:
         target = Path(output)
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -177,9 +189,56 @@ def command_run_check(args: argparse.Namespace) -> int:
     return 0 if result.exit_code == 0 and not result.timed_out else 1
 
 
+def command_catalog_validate(args: argparse.Namespace) -> int:
+    result = validate_catalog(args.repo_root, strict=args.strict)
+    if result.errors:
+        for error in result.errors:
+            print(f"ERROR: {error}", file=sys.stderr)
+        return 1
+    mode = "strict" if args.strict else "standard"
+    print(f"validated {len(result.documents)} catalog case(s) in {mode} mode")
+    return 0
+
+
+def command_catalog_report(args: argparse.Namespace) -> int:
+    validation = validate_catalog(args.repo_root)
+    if validation.errors:
+        for error in validation.errors:
+            print(f"ERROR: {error}", file=sys.stderr)
+        return 1
+    repo_root = Path(args.repo_root).resolve()
+    coverage = load_coverage_config(repo_root / "catalog/coverage.yaml")
+    report = build_catalog_report(validation, coverage)
+    if args.format == "json":
+        _write_json(report, args.output)
+    else:
+        _write_text(format_catalog_report(report), args.output)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="moose-benchmark")
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    catalog = subparsers.add_parser("catalog", help="manage the collaboration catalog")
+    catalog_commands = catalog.add_subparsers(dest="catalog_command", required=True)
+
+    catalog_validate = catalog_commands.add_parser(
+        "validate",
+        help="validate catalog records and benchmark consistency",
+    )
+    catalog_validate.add_argument("--strict", action="store_true")
+    catalog_validate.add_argument("--repo-root", default=".")
+    catalog_validate.set_defaults(handler=command_catalog_validate)
+
+    catalog_report = catalog_commands.add_parser(
+        "report",
+        help="report catalog development status",
+    )
+    catalog_report.add_argument("--format", choices=("text", "json"), default="text")
+    catalog_report.add_argument("--output")
+    catalog_report.add_argument("--repo-root", default=".")
+    catalog_report.set_defaults(handler=command_catalog_report)
 
     validate = subparsers.add_parser("validate", help="validate a benchmark manifest")
     validate.add_argument("manifest")

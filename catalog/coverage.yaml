@@ -1,0 +1,12 @@
+schema_version: "1.0"
+release: initial-120
+track_targets:
+  FORM: 30
+  DIAG: 30
+  REPAIR: 45
+  VERIFY: 15
+difficulty_targets:
+  L1: 24
+  L2: 36
+  L3: 42
+  L4: 18

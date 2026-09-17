@@ -30,6 +30,7 @@ jobs:
 
       - name: Validate and score development fixtures
         run: |
+          uv run moose-benchmark catalog validate --strict
           uv run moose-benchmark validate benchmark/manifest.yaml
           uv run moose-benchmark score \
             --manifest benchmark/manifest.yaml \

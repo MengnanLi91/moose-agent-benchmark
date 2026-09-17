@@ -1,0 +1,122 @@
+filters:
+  and:
+    - file.inFolder("catalog/cases")
+properties:
+  file.name:
+    displayName: Record
+views:
+  - type: table
+    name: All cases
+    order:
+      - case_id
+      - title
+      - track
+      - subcategory
+      - physics_domains
+      - difficulty
+      - status
+      - owner
+      - priority
+  - type: table
+    name: Needs owner
+    filters:
+      and:
+        - 'owner == null'
+        - 'status != "complete"'
+    order:
+      - case_id
+      - title
+      - track
+      - subcategory
+      - status
+      - priority
+  - type: table
+    name: In progress
+    filters:
+      and:
+        - 'status == "in_progress"'
+    order:
+      - case_id
+      - title
+      - owner
+      - track
+      - subcategory
+  - type: table
+    name: Ready for review
+    filters:
+      and:
+        - 'status == "review"'
+    order:
+      - case_id
+      - title
+      - owner
+      - reviewers
+  - type: table
+    name: Blocked
+    filters:
+      and:
+        - 'status == "blocked"'
+    order:
+      - case_id
+      - title
+      - owner
+      - priority
+  - type: table
+    name: Complete
+    filters:
+      and:
+        - 'status == "complete"'
+    order:
+      - case_id
+      - title
+      - track
+      - subcategory
+      - reviewers
+  - type: table
+    name: FORM
+    filters:
+      and:
+        - 'track == "FORM"'
+    order:
+      - case_id
+      - title
+      - subcategory
+      - difficulty
+      - status
+      - owner
+  - type: table
+    name: DIAG
+    filters:
+      and:
+        - 'track == "DIAG"'
+    order:
+      - case_id
+      - title
+      - subcategory
+      - difficulty
+      - status
+      - owner
+  - type: table
+    name: REPAIR
+    filters:
+      and:
+        - 'track == "REPAIR"'
+    order:
+      - case_id
+      - title
+      - subcategory
+      - difficulty
+      - status
+      - owner
+  - type: table
+    name: VERIFY
+    filters:
+      and:
+        - 'track == "VERIFY"'
+    order:
+      - case_id
+      - title
+      - subcategory
+      - difficulty
+      - status
+      - owner

@@ -1,0 +1,81 @@
+name: Benchmark case proposal
+description: Propose a new atomic or integrated MOOSE agent benchmark case.
+title: "[Case proposal] "
+labels:
+  - benchmark-case
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Proposed case title
+    validations:
+      required: true
+  - type: dropdown
+    id: track
+    attributes:
+      label: Candidate track
+      options:
+        - FORM
+        - DIAG
+        - REPAIR
+        - VERIFY
+        - Integrated workflow
+    validations:
+      required: true
+  - type: input
+    id: subcategory
+    attributes:
+      label: Candidate subcategory
+      description: Use F1-F4, D1-D4, R1-R4, V1-V4, or N/A for integrated workflows.
+    validations:
+      required: true
+  - type: input
+    id: domain
+    attributes:
+      label: Physics domain
+    validations:
+      required: true
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Candidate difficulty
+      options:
+        - L1
+        - L2
+        - L3
+        - L4
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and source
+      description: Describe the problem, provenance, available files, and target application.
+    validations:
+      required: true
+  - type: textarea
+    id: capability
+    attributes:
+      label: Capability isolation
+      description: Explain why this case measures the selected capability.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Available reference evidence
+    validations:
+      required: true
+  - type: textarea
+    id: overlap
+    attributes:
+      label: Potential overlap
+      description: Identify nearby capabilities and how they will be excluded from scoring.
+  - type: textarea
+    id: licensing
+    attributes:
+      label: Licensing and provenance concerns
+  - type: input
+    id: owner
+    attributes:
+      label: Suggested owner
