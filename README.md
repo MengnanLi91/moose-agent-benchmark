@@ -12,7 +12,7 @@ Atomic cases score one capability. Integrated workflow cases measure the complet
 are reported separately. Public case material and private evaluator specifications use separate
 directories so a release can publish prompts and artifacts without exposing gold answers.
 
-## Quick start
+## Quick start: run the benchmark
 
 ```bash
 uv sync --extra dev
@@ -31,46 +31,94 @@ uv run moose-benchmark aggregate \
 uv run pytest -q
 ```
 
-## Collaboration quick start
+## Quick start: view and edit examples in Obsidian
 
-Catalog records are ordinary Markdown files tracked by Git. To edit them with Obsidian:
+The catalog is a collection of ordinary Markdown files, so the repository can be opened
+directly as an Obsidian vault. Obsidian is optional, but its Bases view provides a convenient
+dashboard for browsing cases by track, subcategory, status, owner, and difficulty.
 
-1. Clone the repository and install the development environment:
+### 1. Install the project
 
-   ```bash
-   git clone https://github.com/MengnanLi91/moose-agent-benchmark.git
-   cd moose-agent-benchmark
-   uv sync --extra dev
-   ```
+Install Git, `uv`, and the Obsidian desktop application. Then clone the repository and create
+the development environment:
 
-2. In Obsidian, choose **Open folder as vault** and select the repository root.
-3. Enable the **Bases** core plugin.
+```bash
+git clone https://github.com/MengnanLi91/moose-agent-benchmark.git
+cd moose-agent-benchmark
+uv sync --extra dev
+```
+
+Confirm that the catalog is valid:
+
+```bash
+uv run moose-benchmark catalog validate --strict
+uv run moose-benchmark catalog report
+```
+
+### 2. Open the catalog in Obsidian
+
+1. Start Obsidian and choose **Open folder as vault**.
+2. Select the cloned `moose-agent-benchmark` repository root, not only the `catalog/`
+   directory.
+3. Open **Settings → Core plugins** and enable **Bases**.
 4. Open `catalog/Benchmark Dashboard.md`.
-5. Copy an atomic or integrated record from `catalog/templates/`.
-6. Edit the catalog record and corresponding benchmark files.
-7. Validate the work:
 
-   ```bash
-   uv run moose-benchmark catalog validate --strict
-   uv run moose-benchmark catalog report
-   uv run moose-benchmark validate benchmark/manifest.yaml
-   uv run pytest -q
-   ```
+The dashboard embeds `catalog/benchmark.base`. Use its tables to browse all cases or filter
+them by FORM, DIAG, REPAIR, and VERIFY.
 
-8. Review and synchronize the changes with Git:
+### 3. View the examples
 
-   ```bash
-   git pull
-   git status
-   git diff
-   git add catalog/ benchmark/
-   git commit -m "Update benchmark catalog"
-   git push
-   ```
+Open a record from the dashboard or browse `catalog/cases/` directly. For example:
 
-Obsidian edits the files in the local repository directly, but it does not push them to
-GitHub automatically. The Obsidian Git community plugin is optional; manual, meaningful
-commits are recommended.
+- `catalog/cases/F1-THERMAL-RADIATION-001.md` is a planned formulation case.
+- `catalog/cases/R3-FLUID-PRESSURE-NULLSPACE-001.md` is a planned repair case.
+- `catalog/cases/DIAG-THERMAL-SCHEMA-001.md` documents the implemented example case.
+
+Each record has YAML frontmatter for searchable project metadata followed by Markdown
+sections describing the benchmark purpose, starting information, required output, capability
+isolation, provenance, and implementation checklist.
+
+Most seed examples have `status: planned`. They are benchmark designs, not runnable bundles
+yet. Runnable cases also require public artifacts, a private evaluator, development
+submissions, and a manifest entry under `benchmark/`.
+
+### 4. Edit an example
+
+Open a planned record and update its frontmatter and Markdown body. Common first edits include:
+
+- assigning `owner`;
+- changing `status` from `planned` to `in_progress`;
+- refining the starting information and required output;
+- documenting the base model, evidence, and provenance;
+- checking completed implementation tasks.
+
+Obsidian saves changes directly to the repository. To create a separate case instead of
+editing an existing example, copy `catalog/templates/atomic-case-record.md` or
+`catalog/templates/integrated-case-record.md` into `catalog/cases/<case-id>.md`.
+
+Keep private expected answers, hidden mutations, evaluator reasoning, and unreleased numeric
+tolerances out of catalog records.
+
+### 5. Validate and review the changes
+
+Run the catalog, benchmark, and test checks:
+
+```bash
+uv run moose-benchmark catalog validate --strict
+uv run moose-benchmark catalog report
+uv run moose-benchmark validate benchmark/manifest.yaml
+uv run pytest -q
+```
+
+Then inspect the files that Obsidian changed:
+
+```bash
+git status
+git diff
+```
+
+Obsidian does not push changes to GitHub automatically. The Obsidian Git community plugin is
+optional; normal Git commits and pull requests remain the recommended collaboration workflow.
 
 See the [catalog user guide](docs/catalog-user-guide.md) for authoring and review instructions
 and the [catalog developer guide](docs/catalog-developer-guide.md) for implementation details.
