@@ -1,0 +1,83 @@
+schema_version: "1.0"
+
+case_id: F3-PHASEFIELD-SPLITCH-001
+title: Map a Split Cahn-Hilliard Formulation to MOOSE Objects
+case_kind: atomic
+track: FORM
+subcategory: F3
+difficulty: L3
+base_problem_id: MOOSE-PHASEFIELD-SPLITCH-BASE-001
+
+physics_domains:
+  - phase_transformation_and_microstructure
+
+target:
+  application: phase_field-opt
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: phase_field-opt
+
+prompt_path: prompt.md
+prompt_sha256: 369e75383850e489c3b84c40d354af8dfd7c0d79201a073945cc48fbea5382fe
+
+artifacts:
+  - id: weak_form_artifact
+    path: artifacts/weak-form-specification.md
+    role: supplied_weak_form_and_registry
+    mutable: false
+    required: true
+    sha256: ec53df7e8a4117f2205849557b6f598ad75ed3c5228cf32124078d5af9269dea
+
+evidence_sources:
+  - id: weak_form_specification
+    path: artifacts/weak-form-specification.md
+    kind: weak_form_and_permitted_registry
+    description: >
+      Participant-visible variables, coefficients, split weak residuals, boundary behavior,
+      and permitted MOOSE object registry.
+    sha256: ec53df7e8a4117f2205849557b6f598ad75ed3c5228cf32124078d5af9269dea
+
+starting_state:
+  description: >
+    The split weak formulation, variables, coefficients, boundary behavior, and permitted
+    MOOSE registry are supplied. The participant produces only the object and coupling map.
+  supplied_truth:
+    - c is concentration and mu is chemical potential.
+    - The time derivative of c contributes to the mu residual.
+    - Mobility M and gradient coefficient kappa are constant material properties.
+    - The free energy requires derivatives with respect to c.
+    - Natural zero-flux conditions are already specified.
+  excluded_from_scoring:
+    - Physics selection
+    - Weak-form derivation
+    - Complete input-file syntax
+    - Solver configuration
+    - Execution
+
+actions:
+  permitted:
+    - Inspect the supplied weak form and permitted object registry.
+    - Return a structured MOOSE object and coupling map.
+  prohibited:
+    - Add object types outside the supplied registry.
+    - Construct or execute a complete MOOSE input.
+    - Consult the private evaluator specification.
+
+budget:
+  wall_time_seconds: 120
+  cpu_seconds: 60
+  memory_mib: 1024
+  validation_attempts: 0
+  execution_attempts: 0
+
+submission:
+  required_claim_paths:
+    - /claim/variables
+    - /claim/residual_object_map
+    - /claim/materials
+    - /claim/couplings
+  evidence_required: true
+  artifacts_allowed: false
+  required_artifact_roles: []
+  maximum_artifacts: 0
+
+required_stages: []

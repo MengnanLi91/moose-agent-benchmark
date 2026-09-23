@@ -1,0 +1,88 @@
+schema_version: "1.0"
+
+case_id: F4-POROUS-SOLUTE-001
+title: Assemble a MOOSE Input for 1-D Porous-Flow Tracer Transport
+case_kind: atomic
+track: FORM
+subcategory: F4
+difficulty: L3
+base_problem_id: MOOSE-POROUSFLOW-SOLUTE-BASE-001
+
+physics_domains:
+  - porous_media_and_species_transport
+
+target:
+  application: moose-porous-flow
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+
+prompt_path: prompt.md
+prompt_sha256: 0102963c09603b4e71aa0c0994427b4f5166bc6eae8db3fcadc7abeee620c125
+
+artifacts:
+  - id: assembly_artifact
+    path: artifacts/assembly-specification.md
+    role: supplied_physics_and_object_plan
+    mutable: false
+    required: true
+    sha256: 13e6f371e61d7ebb0be129bab2fab83d27723d745205c514927a90d30de8ab50
+
+evidence_sources:
+  - id: assembly_specification
+    path: artifacts/assembly-specification.md
+    kind: complete_input_assembly_specification
+    description: >
+      Participant-visible mesh, variables, physics, values, object plan, boundary conditions,
+      execution controls, and required outputs.
+    sha256: 13e6f371e61d7ebb0be129bab2fab83d27723d745205c514927a90d30de8ab50
+
+starting_state:
+  description: >
+    The complete physics, object plan, parameters, boundaries, execution controls, and output
+    requests are supplied. The participant assembles and wires a runnable MOOSE input.
+  supplied_truth:
+    - The mesh spans 0 to 80 m with 80 elements.
+    - porepressure and C are both PorousFlow nonlinear variables.
+    - The dictator has one fluid phase and two fluid components.
+    - Porosity, permeability, dispersivity, fluid, boundaries, and time controls are fixed.
+    - Midpoint concentration and Darcy velocity must be written to CSV.
+  excluded_from_scoring:
+    - Physics selection
+    - Weak-form derivation
+    - Object selection
+    - Alternative parameter values
+
+actions:
+  permitted:
+    - Inspect the supplied assembly specification.
+    - Create one MOOSE input artifact.
+    - Use one validation attempt and one bounded execution attempt.
+  prohibited:
+    - Change the supplied physics, parameters, object plan, or requested outputs.
+    - Submit additional artifacts.
+    - Consult the private evaluator specification.
+
+budget:
+  wall_time_seconds: 180
+  cpu_seconds: 120
+  memory_mib: 2048
+  validation_attempts: 1
+  execution_attempts: 1
+
+submission:
+  required_claim_paths:
+    - /claim/assembled_input
+    - /claim/variables
+    - /claim/mesh
+    - /claim/porous_flow
+    - /claim/properties
+    - /claim/boundary_conditions
+    - /claim/required_outputs
+    - /claim/execution
+  evidence_required: true
+  artifacts_allowed: true
+  required_artifact_roles:
+    - moose_input
+  maximum_artifacts: 1
+
+required_stages: []

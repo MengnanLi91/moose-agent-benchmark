@@ -1,0 +1,133 @@
+schema_version: "1.0"
+case_id: F1-SOLID-DUCT-BOWING-001
+evaluator: structured_claim_v1
+
+capability_criteria:
+  - id: solved_variables
+    description: Identifies all three displacement components as solved variables.
+    json_pointer: /claim/variables
+    comparator: set_f1
+    expected:
+      - displacement_x
+      - displacement_y
+      - displacement_z
+    weight: 0.10
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: prescribed_fields
+    description: Recognizes temperature as prescribed rather than solved.
+    json_pointer: /claim/prescribed_fields
+    comparator: set_f1
+    expected:
+      - temperature
+    weight: 0.10
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: governing_law
+    description: Identifies quasi-static balance of linear momentum.
+    json_pointer: /claim/governing_laws
+    comparator: set_f1
+    expected:
+      - quasi_static_balance_of_linear_momentum
+    weight: 0.10
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: kinematics
+    description: Identifies finite strain as the designated reference kinematics.
+    json_pointer: /claim/kinematics
+    comparator: set_f1
+    expected:
+      - finite_strain
+    weight: 0.10
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: elasticity
+    description: Identifies isotropic linear-elastic constitutive behavior.
+    json_pointer: /claim/constitutive_relations
+    comparator: contains
+    expected: isotropic_linear_elasticity
+    weight: 0.10
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: thermal_eigenstrain
+    description: Identifies thermal-expansion eigenstrain as the thermo-mechanical coupling.
+    json_pointer: /claim/constitutive_relations
+    comparator: contains
+    expected: thermal_expansion_eigenstrain
+    weight: 0.20
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: closure_parameters
+    description: Identifies the material quantities required to close the model.
+    json_pointer: /claim/closure_parameters
+    comparator: set_f1
+    expected:
+      - youngs_modulus
+      - poissons_ratio
+      - thermal_expansion_coefficient
+      - stress_free_temperature
+    weight: 0.10
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: boundary_conditions
+    description: Identifies the mechanical fixation and prescribed thermal loading.
+    json_pointer: /claim/boundary_conditions
+    comparator: set_f1
+    expected:
+      - fixed_bottom_displacement_x
+      - fixed_bottom_displacement_y
+      - fixed_bottom_displacement_z
+      - traction_free_remaining_surfaces
+      - prescribed_spatial_temperature_field
+    weight: 0.10
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: requested_qois
+    description: Identifies all requested duct-bowing quantities of interest.
+    json_pointer: /claim/quantities_of_interest
+    comparator: set_f1
+    expected:
+      - lateral_centerline_displacement_core_top
+      - lateral_centerline_displacement_aclp
+      - lateral_centerline_displacement_duct_top
+    weight: 0.10
+    absolute_tolerance: null
+    relative_tolerance: null
+
+evidence_criteria:
+  - id: evidence_source
+    description: Grounds the physics specification in the supplied problem.
+    json_pointer: /evidence/0/source_id
+    comparator: exact
+    expected: problem_specification
+    weight: 0.40
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: thermal_gradient_observation
+    description: Recognizes the imposed thermal gradient.
+    json_pointer: /evidence/0/observation
+    comparator: contains
+    expected: temperature gradient
+    weight: 0.30
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: thermal_expansion_interpretation
+    description: Connects prescribed temperature to deformation through thermal expansion.
+    json_pointer: /evidence/0/interpretation
+    comparator: contains
+    expected: thermal expansion
+    weight: 0.30
+    absolute_tolerance: null
+    relative_tolerance: null
+
+hard_gates: []

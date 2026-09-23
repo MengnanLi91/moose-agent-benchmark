@@ -1,0 +1,152 @@
+schema_version: "1.0"
+case_id: F4-POROUS-SOLUTE-001
+evaluator: structured_claim_v1
+
+capability_criteria:
+  - id: assembled_input
+    description: Declares that the requested input artifact was assembled.
+    json_pointer: /claim/assembled_input
+    comparator: exact
+    expected: true
+    weight: 0.05
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: variables
+    description: Declares both required nonlinear variables.
+    json_pointer: /claim/variables
+    comparator: set_f1
+    expected:
+      - porepressure
+      - C
+    weight: 0.10
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: mesh
+    description: Preserves the supplied one-dimensional mesh.
+    json_pointer: /claim/mesh
+    comparator: json_subset
+    expected:
+      dimension: 1
+      xmin: 0
+      xmax: 80
+      nx: 80
+    weight: 0.15
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: porous_flow
+    description: Preserves the supplied PorousFlow variable and component configuration.
+    json_pointer: /claim/porous_flow
+    comparator: json_subset
+    expected:
+      porous_flow_vars:
+        - porepressure
+        - C
+      number_fluid_phases: 1
+      number_fluid_components: 2
+    weight: 0.15
+    absolute_tolerance: null
+    relative_tolerance: null
+  - id: properties
+    description: Preserves the supplied porosity, permeability, and dispersivity.
+    json_pointer: /claim/properties
+    comparator: json_subset
+    expected:
+      porosity: 0.25
+      permeability: 2.0e-12
+      longitudinal_dispersivity: 0.5
+    weight: 0.15
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: boundary_conditions
+    description: Declares the required inlet, outlet, and tracer conditions.
+    json_pointer: /claim/boundary_conditions
+    comparator: set_f1
+    expected:
+      - inlet_pressure_1.2e5
+      - outlet_pressure_1.0e5
+      - inlet_tracer_0.002
+      - tracer_outflow_component_0
+    weight: 0.15
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: required_outputs
+    description: Declares both midpoint outputs.
+    json_pointer: /claim/required_outputs
+    comparator: set_f1
+    expected:
+      - C_midpoint
+      - Darcy_velocity_midpoint
+    weight: 0.15
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: execution
+    description: Preserves the supplied transient final time and time-step controls.
+    json_pointer: /claim/execution
+    comparator: json_subset
+    expected:
+      end_time: 86400000
+      initial_dt: 1000
+      dtmax: 432000
+      time_stepper: IterationAdaptiveDT
+    weight: 0.10
+    absolute_tolerance: null
+    relative_tolerance: null
+
+evidence_criteria:
+  - id: evidence_source
+    description: Grounds the assembly in the supplied public specification.
+    json_pointer: /evidence/0/source_id
+    comparator: exact
+    expected: assembly_specification
+    weight: 0.40
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: component_observation
+    description: Identifies the supplied phase and component counts.
+    json_pointer: /evidence/0/observation
+    comparator: contains
+    expected: one fluid phase and two fluid components
+    weight: 0.30
+    absolute_tolerance: null
+    relative_tolerance: null
+
+  - id: wiring_interpretation
+    description: Explains that the artifact preserves the supplied parameter wiring.
+    json_pointer: /evidence/0/interpretation
+    comparator: contains
+    expected: parameter wiring
+    weight: 0.30
+    absolute_tolerance: null
+    relative_tolerance: null
+
+hard_gates:
+  - id: input_validation
+    description: MOOSE --check-input succeeds.
+    kind: external
+    json_pointer: null
+    expected: null
+
+  - id: bounded_execution
+    description: The authoritative bounded run completes successfully.
+    kind: external
+    json_pointer: null
+    expected: null
+
+  - id: required_output_generation
+    description: The requested midpoint QoI output is generated through the final time.
+    kind: external
+    json_pointer: null
+    expected: null
+
+  - id: semantic_preservation
+    description: The input preserves all supplied physics, parameters, and references.
+    kind: external
+    json_pointer: null
+    expected: null

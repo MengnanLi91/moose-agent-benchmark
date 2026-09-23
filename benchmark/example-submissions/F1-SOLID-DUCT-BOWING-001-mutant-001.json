@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "case_id": "F1-SOLID-DUCT-BOWING-001",
+  "track": "FORM",
+  "subcategory": "F1",
+  "claim": {
+    "variables": [
+      "displacement_x",
+      "displacement_y",
+      "displacement_z"
+    ],
+    "prescribed_fields": [
+      "temperature"
+    ],
+    "governing_laws": [
+      "quasi_static_balance_of_linear_momentum"
+    ],
+    "kinematics": [
+      "finite_strain"
+    ],
+    "constitutive_relations": [
+      "isotropic_linear_elasticity"
+    ],
+    "closure_parameters": [
+      "youngs_modulus",
+      "poissons_ratio"
+    ],
+    "boundary_conditions": [
+      "fixed_bottom_displacement_x",
+      "fixed_bottom_displacement_y",
+      "fixed_bottom_displacement_z",
+      "traction_free_remaining_surfaces",
+      "prescribed_spatial_temperature_field"
+    ],
+    "quantities_of_interest": [
+      "lateral_centerline_displacement_core_top",
+      "lateral_centerline_displacement_aclp",
+      "lateral_centerline_displacement_duct_top"
+    ]
+  },
+  "evidence": [
+    {
+      "source_id": "problem_specification",
+      "observation": "The duct has a prescribed temperature gradient.",
+      "interpretation": "Temperature is supplied as an external field.",
+      "artifact_sha256": null
+    }
+  ],
+  "artifacts": [],
+  "confidence": 0.9,
+  "limitations": [],
+  "usage": {
+    "wall_time_seconds": 5.0,
+    "cpu_seconds": 1.0,
+    "validation_attempts": 0,
+    "execution_attempts": 0
+  }
+}

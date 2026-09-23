@@ -1,0 +1,49 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.2.0",
+    "case_id": "F4-POROUS-SOLUTE-001",
+    "submission_sha256": "082a84f9d79a049c9fde1bfc1c82c0070f06703ef7bc860d5d5050d37033b091",
+    "gate_id": "input_validation",
+    "passed": true,
+    "detail": "combined-opt c2dfd9fedd reported Syntax OK on September 22, 2026.",
+    "evidence": ["moose_check_input:syntax_ok"]
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.2.0",
+    "case_id": "F4-POROUS-SOLUTE-001",
+    "submission_sha256": "082a84f9d79a049c9fde1bfc1c82c0070f06703ef7bc860d5d5050d37033b091",
+    "gate_id": "bounded_execution",
+    "passed": true,
+    "detail": "The authoritative run completed 208 time steps through 86400000 seconds.",
+    "evidence": ["exit_code:0", "final_time:86400000"]
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.2.0",
+    "case_id": "F4-POROUS-SOLUTE-001",
+    "submission_sha256": "082a84f9d79a049c9fde1bfc1c82c0070f06703ef7bc860d5d5050d37033b091",
+    "gate_id": "required_output_generation",
+    "passed": true,
+    "detail": "CSV output contains both midpoint columns and a final-time row.",
+    "evidence": [
+      "columns:C_midpoint,Darcy_velocity_midpoint",
+      "final_row:86400000,0.002,4.9737123050241e-07"
+    ]
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.2.0",
+    "case_id": "F4-POROUS-SOLUTE-001",
+    "submission_sha256": "082a84f9d79a049c9fde1bfc1c82c0070f06703ef7bc860d5d5050d37033b091",
+    "gate_id": "semantic_preservation",
+    "passed": true,
+    "detail": "The submitted input matches the private required structure and supplied values.",
+    "evidence": [
+      "artifact_sha256:cff9fee28b0321e835ec78e9ae8a80b5962e2f620c042a32c6d1ac6553df2bb9",
+      "porous_flow_vars:porepressure,C",
+      "midpoint:40"
+    ]
+  }
+]

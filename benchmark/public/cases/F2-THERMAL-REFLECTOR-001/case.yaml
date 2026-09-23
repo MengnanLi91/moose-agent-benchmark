@@ -1,0 +1,86 @@
+schema_version: "1.0"
+
+case_id: F2-THERMAL-REFLECTOR-001
+title: Steady Heat Conduction in a PB-FHR Reflector Block
+case_kind: atomic
+track: FORM
+subcategory: F2
+difficulty: L2
+base_problem_id: VTB-PBFHR-REFLECTOR-CONDUCTION-BASE-001
+
+physics_domains:
+  - thermal_energy_transport
+
+target:
+  application: moose-heat-transfer
+  version: vtb-1c7337a264d44ee4cdc64c0855e156be2f3b8ce6-reduced-v1
+  executable_hint: null
+
+prompt_path: prompt.md
+prompt_sha256: a1f409863fcb8aea12408cf11d0a412952a9ed9e031c70532a8ec64022f89a96
+
+artifacts:
+  - id: strong_form_artifact
+    path: artifacts/equation-specification.md
+    role: supplied_strong_form
+    mutable: false
+    required: true
+    sha256: 76d56f78f2cce98dc53d03abc64a031ae87bc9f7b7ef8b91bc28a083ed416098
+
+evidence_sources:
+  - id: equation_specification
+    path: artifacts/equation-specification.md
+    kind: strong_form_and_boundary_specification
+    description: >
+      Participant-visible strong equation, flux convention, boundary decomposition,
+      coefficients, and essential and natural boundary conditions.
+    sha256: 76d56f78f2cce98dc53d03abc64a031ae87bc9f7b7ef8b91bc28a083ed416098
+
+starting_state:
+  description: >
+    The strong thermal equation, coefficients, flux convention, and complete boundary
+    decomposition are supplied. The participant derives only the weak residual.
+  supplied_truth:
+    - Temperature is the only unknown.
+    - Conductivity is constant and volumetric heat generation is zero.
+    - The outward conductive flux is q_n = -k grad(T) dot n.
+    - The prescribed heat flux enters the solid on Gamma_q.
+    - Gamma_h is convective, Gamma_D is essential, and Gamma_ad is insulated.
+  excluded_from_scoring:
+    - MOOSE object selection
+    - Input-file construction
+    - Solver configuration
+    - Execution
+    - Numerical verification
+
+actions:
+  permitted:
+    - Inspect the supplied equation and boundary specification.
+    - Return a structured weak residual.
+  prohibited:
+    - Select MOOSE objects.
+    - Construct or execute a MOOSE input.
+    - Consult the private evaluator specification.
+
+budget:
+  wall_time_seconds: 120
+  cpu_seconds: 60
+  memory_mib: 1024
+  validation_attempts: 0
+  execution_attempts: 0
+
+submission:
+  required_claim_paths:
+    - /claim/residual_terms
+    - /claim/volume_terms
+    - /claim/natural_boundary_terms
+    - /claim/essential_boundary_handling
+    - /claim/test_function
+    - /claim/insulated_boundary
+    - /claim/residual_expression
+  evidence_required: true
+  artifacts_allowed: false
+  required_artifact_roles: []
+  maximum_artifacts: 0
+
+required_stages: []

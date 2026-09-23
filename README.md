@@ -66,11 +66,25 @@ uv run moose-benchmark catalog report
 The dashboard embeds `catalog/benchmark.base`. Use its tables to browse all cases or filter
 them by FORM, DIAG, REPAIR, and VERIFY.
 
-### 3. View the examples
+### 3. Install the Obsidian Git community plugin
+
+1. Open **Settings → Community plugins** and enable community plugins if prompted.
+2. Select **Browse**, search for **Git**, then choose **Install** and **Enable**.
+3. Confirm that the repository's Git remote and GitHub authentication already work from the
+   command line. The plugin uses the Git configuration and credentials on your computer.
+
+The plugin adds Git commands to Obsidian's command palette and may also provide a source
+control view for reviewing changed files.
+
+### 4. View the examples
 
 Open a record from the dashboard or browse `catalog/cases/` directly. For example:
 
 - `catalog/cases/F1-THERMAL-RADIATION-001.md` is a planned formulation case.
+- `catalog/cases/F1-SOLID-DUCT-BOWING-001.md` is an implemented physics-specification case.
+- `catalog/cases/F2-THERMAL-REFLECTOR-001.md` is an implemented weak-form case.
+- `catalog/cases/F3-PHASEFIELD-SPLITCH-001.md` is an implemented object-mapping case.
+- `catalog/cases/F4-POROUS-SOLUTE-001.md` is an implemented input-assembly case.
 - `catalog/cases/R3-FLUID-PRESSURE-NULLSPACE-001.md` is a planned repair case.
 - `catalog/cases/DIAG-THERMAL-SCHEMA-001.md` documents the implemented example case.
 
@@ -82,7 +96,10 @@ Most seed examples have `status: planned`. They are benchmark designs, not runna
 yet. Runnable cases also require public artifacts, a private evaluator, development
 submissions, and a manifest entry under `benchmark/`.
 
-### 4. Edit an example
+### 5. Edit, commit, and push from Obsidian
+
+Before editing, open the command palette with **Ctrl/Cmd+P** and run the Git plugin's
+**Pull** command to retrieve remote changes.
 
 Open a planned record and update its frontmatter and Markdown body. Common first edits include:
 
@@ -99,7 +116,18 @@ editing an existing example, copy `catalog/templates/atomic-case-record.md` or
 Keep private expected answers, hidden mutations, evaluator reasoning, and unreleased numeric
 tolerances out of catalog records.
 
-### 5. Validate and review the changes
+After editing:
+
+1. Save the file and review the changed files in the Git source control view.
+2. Run the repository validation commands below.
+3. From **Ctrl/Cmd+P**, run the Git plugin's **Commit all changes** command and enter a clear
+   commit message.
+4. Run the Git plugin's **Push** command to push the commit to GitHub.
+
+For shared branches, pull before editing and confirm that you are on the intended branch
+before committing or pushing.
+
+### 6. Validate and review the changes
 
 Run the catalog, benchmark, and test checks:
 
@@ -117,8 +145,8 @@ git status
 git diff
 ```
 
-Obsidian does not push changes to GitHub automatically. The Obsidian Git community plugin is
-optional; normal Git commits and pull requests remain the recommended collaboration workflow.
+The Obsidian Git community plugin can commit and push directly from the vault. Pull requests
+remain recommended when branch protection or review is required.
 
 See the [catalog user guide](docs/catalog-user-guide.md) for authoring and review instructions
 and the [catalog developer guide](docs/catalog-developer-guide.md) for implementation details.

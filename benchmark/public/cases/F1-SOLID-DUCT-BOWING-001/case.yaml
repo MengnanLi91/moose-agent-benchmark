@@ -1,0 +1,89 @@
+schema_version: "1.0"
+
+case_id: F1-SOLID-DUCT-BOWING-001
+title: Thermally Induced Bowing of a Hexagonal Reactor Duct
+case_kind: atomic
+track: FORM
+subcategory: F1
+difficulty: L3
+base_problem_id: VTB-IAEA-VP1-DUCT-BOWING-BASE-001
+
+physics_domains:
+  - solid_and_structural_mechanics
+  - coupled_engineering_systems
+
+target:
+  application: moose-solid-mechanics
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: null
+
+prompt_path: prompt.md
+prompt_sha256: bc68849d405537713a5565a70dc3d4e0cf75ef2539b1b46f81680c55babd7bfa
+
+artifacts:
+  - id: engineering_description
+    path: artifacts/engineering-description.md
+    role: supplied_engineering_description
+    mutable: false
+    required: true
+    sha256: 2bf9a235a27db21044c62f827b2276b1dc7f7468a9af76840ba64908a1b65e74
+
+evidence_sources:
+  - id: problem_specification
+    path: artifacts/engineering-description.md
+    kind: engineering_problem_specification
+    description: >
+      Participant-visible geometry, prescribed temperature, material properties,
+      mechanical constraints, and requested quantities of interest.
+    sha256: 2bf9a235a27db21044c62f827b2276b1dc7f7468a9af76840ba64908a1b65e74
+
+starting_state:
+  description: >
+    The engineering problem is fully supplied. The participant produces only the
+    F1 physics specification.
+  supplied_truth:
+    - Temperature is prescribed and is not a solved variable.
+    - The material is isotropic elastic with thermal expansion.
+    - The duct bottom is fixed in all displacement directions.
+    - Remaining surfaces are mechanically free.
+    - Finite strain is the designated reference kinematics.
+    - Requested outputs are lateral duct-centerline displacements.
+  excluded_from_scoring:
+    - Weak-form derivation
+    - MOOSE object selection
+    - MOOSE input syntax
+    - Solver configuration
+    - Execution and numerical verification
+
+actions:
+  permitted:
+    - Inspect the supplied engineering specification.
+    - Return a structured physics specification.
+  prohibited:
+    - Construct or execute a MOOSE input.
+    - Select MOOSE objects.
+    - Consult the private evaluator specification.
+
+budget:
+  wall_time_seconds: 120
+  cpu_seconds: 60
+  memory_mib: 1024
+  validation_attempts: 0
+  execution_attempts: 0
+
+submission:
+  required_claim_paths:
+    - /claim/variables
+    - /claim/prescribed_fields
+    - /claim/governing_laws
+    - /claim/kinematics
+    - /claim/constitutive_relations
+    - /claim/closure_parameters
+    - /claim/boundary_conditions
+    - /claim/quantities_of_interest
+  evidence_required: true
+  artifacts_allowed: false
+  required_artifact_roles: []
+  maximum_artifacts: 0
+
+required_stages: []

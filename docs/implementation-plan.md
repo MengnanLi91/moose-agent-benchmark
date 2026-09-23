@@ -11,7 +11,7 @@ end-to-end measure of workflow success. The implementation therefore needs four 
 4. **Result service**: artifact-bound case results and macro-aggregated reports.
 
 The starter implements the contracts, a deterministic structured evaluator, gated scoring,
-aggregation, a bounded MOOSE check-input runner, one development case, and CI. It intentionally
+aggregation, a bounded MOOSE check-input runner, five development cases, and CI. It intentionally
 does not treat textual similarity to one reference input as proof of correctness.
 
 ## 2. Code structure

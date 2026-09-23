@@ -24,3 +24,23 @@ cases:
     private_evaluation: private/cases/DIAG-THERMAL-SCHEMA-001/evaluation.yaml
     split: development
     enabled: true
+  - case_id: F1-SOLID-DUCT-BOWING-001
+    public_case: public/cases/F1-SOLID-DUCT-BOWING-001/case.yaml
+    private_evaluation: private/cases/F1-SOLID-DUCT-BOWING-001/evaluation.yaml
+    split: development
+    enabled: true
+  - case_id: F2-THERMAL-REFLECTOR-001
+    public_case: public/cases/F2-THERMAL-REFLECTOR-001/case.yaml
+    private_evaluation: private/cases/F2-THERMAL-REFLECTOR-001/evaluation.yaml
+    split: development
+    enabled: true
+  - case_id: F3-PHASEFIELD-SPLITCH-001
+    public_case: public/cases/F3-PHASEFIELD-SPLITCH-001/case.yaml
+    private_evaluation: private/cases/F3-PHASEFIELD-SPLITCH-001/evaluation.yaml
+    split: development
+    enabled: true
+  - case_id: F4-POROUS-SOLUTE-001
+    public_case: public/cases/F4-POROUS-SOLUTE-001/case.yaml
+    private_evaluation: private/cases/F4-POROUS-SOLUTE-001/evaluation.yaml
+    split: development
+    enabled: true

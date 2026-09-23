@@ -1,0 +1,42 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.2.0",
+    "case_id": "F4-POROUS-SOLUTE-001",
+    "submission_sha256": "3ed07c205286e8822730a605cdfaa165b65d3adc2a198dc36d967d1f0a037afe",
+    "gate_id": "input_validation",
+    "passed": true,
+    "detail": "The mutant remains syntactically valid and passes --check-input.",
+    "evidence": ["moose_check_input:syntax_ok"]
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.2.0",
+    "case_id": "F4-POROUS-SOLUTE-001",
+    "submission_sha256": "3ed07c205286e8822730a605cdfaa165b65d3adc2a198dc36d967d1f0a037afe",
+    "gate_id": "bounded_execution",
+    "passed": false,
+    "detail": "The bounded run repeatedly failed nonlinear convergence and did not advance.",
+    "evidence": ["bounded_run:nonconverged", "final_time_not_reached"]
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.2.0",
+    "case_id": "F4-POROUS-SOLUTE-001",
+    "submission_sha256": "3ed07c205286e8822730a605cdfaa165b65d3adc2a198dc36d967d1f0a037afe",
+    "gate_id": "required_output_generation",
+    "passed": false,
+    "detail": "The CSV contains only the initial row and no final-time QoI output.",
+    "evidence": ["last_output_time:0"]
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.2.0",
+    "case_id": "F4-POROUS-SOLUTE-001",
+    "submission_sha256": "3ed07c205286e8822730a605cdfaa165b65d3adc2a198dc36d967d1f0a037afe",
+    "gate_id": "semantic_preservation",
+    "passed": false,
+    "detail": "The PorousFlowDictator omits C from porous_flow_vars.",
+    "evidence": ["actual_porous_flow_vars:porepressure", "required:porepressure,C"]
+  }
+]

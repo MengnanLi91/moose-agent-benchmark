@@ -1,0 +1,35 @@
+schema_version: "1.0"
+case_id: F4-POROUS-SOLUTE-001
+validated_on: "2026-09-22"
+moose_revision: c2dfd9fedd3193740a5278ec32269450c618e3b7
+
+required_structure:
+  variables:
+    - porepressure
+    - C
+  aux_variables:
+    - Darcy_vel_x
+  porous_flow:
+    porous_flow_vars:
+      - porepressure
+      - C
+    number_fluid_phases: 1
+    number_fluid_components: 2
+  required_properties:
+    porosity: 0.25
+    permeability: 2.0e-12
+    longitudinal_dispersivity: 0.5
+  mesh:
+    dimension: 1
+    xmin: 0
+    xmax: 80
+    nx: 80
+  outputs:
+    concentration_point:
+      name: C_midpoint
+      variable: C
+      point: [40, 0, 0]
+    velocity_point:
+      name: Darcy_velocity_midpoint
+      variable: Darcy_vel_x
+      point: [40, 0, 0]

@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "case_id": "F4-POROUS-SOLUTE-001",
+  "validated_on": "2026-09-22",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "final_time_seconds": 86400000.0,
+  "C_midpoint": 0.002,
+  "Darcy_velocity_midpoint": 4.9737123050241e-07
+}
