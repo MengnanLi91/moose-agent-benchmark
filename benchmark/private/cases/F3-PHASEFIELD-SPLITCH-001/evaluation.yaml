@@ -1,109 +1,31 @@
-schema_version: "1.0"
+schema_version: "2.0"
 case_id: F3-PHASEFIELD-SPLITCH-001
-evaluator: structured_claim_v1
+evaluator: semantic_rubric_v1
+reference_solution: reference-solution.md
 
 capability_criteria:
-  - id: variables
-    description: Maps c to concentration and mu to chemical potential.
-    json_pointer: /claim/variables
-    comparator: json_subset
-    expected:
-      c: concentration
-      mu: chemical_potential
+  - id: variable_roles
     weight: 0.10
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: time_derivative_map
-    description: Maps the time derivative of c onto the mu residual.
-    json_pointer: /claim/residual_object_map/0
-    comparator: json_subset
-    expected:
-      term: concentration_time_derivative
-      object: CoupledTimeDerivative
-      variable: mu
-      v: c
-    weight: 0.40
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: mobility_gradient_map
-    description: Maps the chemical-potential gradient term and mobility property.
-    json_pointer: /claim/residual_object_map/1
-    comparator: json_subset
-    expected:
-      term: chemical_potential_gradient
-      object: SplitCHWRes
-      variable: mu
-      mob_name: M
-    weight: 0.10
-    absolute_tolerance: null
-    relative_tolerance: null
-  - id: split_ch_parsed_map
-    description: Maps the concentration/free-energy relation and its couplings.
-    json_pointer: /claim/residual_object_map/2
-    comparator: json_subset
-    expected:
-      term: free_energy_gradient_relation
-      object: SplitCHParsed
-      variable: c
-      w: mu
-      f_name: F
-      kappa_name: kappa
+    full_credit: Identifies c as concentration and mu as chemical potential.
+    partial_credit: Identifies both variables but leaves one physical role unclear.
+  - id: coupled_time_derivative
+    weight: 0.35
+    full_credit: Maps the time derivative of c to CoupledTimeDerivative on the mu residual with v=c.
+    partial_credit: Selects CoupledTimeDerivative but incompletely states its variable coupling.
+    common_errors:
+      - uses TimeDerivative on c
+      - contributes the term to the c residual
+  - id: mobility_gradient
     weight: 0.15
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: free_energy_material
-    description: Uses a derivative-capable material for the free energy.
-    json_pointer: /claim/materials/0
-    comparator: json_subset
-    expected:
-      object: DerivativeParsedMaterial
-      property_name: F
-      coupled_variables:
-        - c
-    weight: 0.15
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: coupling_completeness
-    description: Identifies both cross-variable couplings in the split system.
-    json_pointer: /claim/couplings
-    comparator: set_f1
-    expected:
-      - c_time_derivative_to_mu_residual
-      - mu_to_c_split_ch_relation
-    weight: 0.10
-    absolute_tolerance: null
-    relative_tolerance: null
-
-evidence_criteria:
-  - id: evidence_source
-    description: Grounds the mapping in the supplied weak-form artifact.
-    json_pointer: /evidence/0/source_id
-    comparator: exact
-    expected: weak_form_specification
-    weight: 0.40
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: time_term_observation
-    description: Identifies the time derivative of c in the supplied mu equation.
-    json_pointer: /evidence/0/observation
-    comparator: contains
-    expected: time derivative of c
-    weight: 0.30
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: residual_interpretation
-    description: Connects that term to the mu residual.
-    json_pointer: /evidence/0/interpretation
-    comparator: contains
-    expected: mu residual
-    weight: 0.30
-    absolute_tolerance: null
-    relative_tolerance: null
+    full_credit: Maps the chemical-potential gradient term to SplitCHWRes with mobility M.
+    partial_credit: Selects SplitCHWRes but omits the mobility property wiring.
+  - id: free_energy_relation
+    weight: 0.20
+    full_credit: Maps the concentration relation to SplitCHParsed with w=mu, f_name=F, and kappa.
+    partial_credit: Selects SplitCHParsed but omits one required coupling or property name.
+  - id: materials_and_couplings
+    weight: 0.20
+    full_credit: Uses a derivative-capable F material and constant M/kappa with both cross couplings.
+    partial_credit: The material choices are correct but one coupling or property is incomplete.
 
 hard_gates: []

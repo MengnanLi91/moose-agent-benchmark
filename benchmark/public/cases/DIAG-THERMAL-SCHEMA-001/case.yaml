@@ -1,10 +1,11 @@
-schema_version: "1.0"
+schema_version: "2.0"
 case_id: DIAG-THERMAL-SCHEMA-001
 title: Classify an unregistered MOOSE object failure
 case_kind: atomic
 track: DIAG
 subcategory: D1
 difficulty: L1
+scoring_profile: balanced_v1
 base_problem_id: THERMAL-CONDUCTION-BASE-001
 physics_domains:
   - thermal_energy_transport
@@ -50,11 +51,11 @@ budget:
   validation_attempts: 0
   execution_attempts: 0
 submission:
+  response_mode: structured_json
   required_claim_paths:
     - /claim/failure_stage
     - /claim/terminal_symptom
   evidence_required: true
-  artifacts_allowed: false
-  required_artifact_roles: []
+  required_artifacts: []
   maximum_artifacts: 0
 required_stages: []

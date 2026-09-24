@@ -1,0 +1,13 @@
+{
+  "claim": {
+    "failure_stage": "nonlinear_solve",
+    "terminal_symptom": "nonlinear_divergence"
+  },
+  "evidence": [
+    {
+      "source_id": "check_input_log",
+      "observation": "The requested Kernel object type is not registered.",
+      "interpretation": "This is incorrectly attributed to the nonlinear solver."
+    }
+  ]
+}

@@ -9,9 +9,24 @@ import signal
 import subprocess
 import time
 from dataclasses import asdict, dataclass
+from datetime import datetime
 from pathlib import Path
 
-from .loader import resolve_inside
+from .contracts import (
+    CaseContract,
+    ModelIdentity,
+    RecordedArtifact,
+    RecordedResponse,
+    ResponseMode,
+    SubmissionRecord,
+    UsageRecord,
+)
+from .loader import (
+    discover_submission_artifact_paths,
+    resolve_inside,
+    sha256_file,
+    sha256_submission_content,
+)
 
 
 @dataclass(frozen=True)
@@ -133,4 +148,72 @@ def run_moose_check(
             "PATH": os.environ.get("PATH", ""),
             "LD_LIBRARY_PATH": os.environ.get("LD_LIBRARY_PATH", ""),
         },
+    )
+
+
+def build_submission_record(
+    case: CaseContract,
+    submission_root: Path,
+    *,
+    model: ModelIdentity,
+    started_at: datetime,
+    finished_at: datetime,
+    usage: UsageRecord,
+) -> SubmissionRecord:
+    submission_root = submission_root.resolve()
+    if not submission_root.is_dir():
+        raise ValueError(f"submission directory does not exist: {submission_root}")
+
+    response_name = (
+        "response.json"
+        if case.submission.response_mode == ResponseMode.STRUCTURED_JSON
+        else "response.md"
+    )
+    response_path = resolve_inside(submission_root, response_name)
+    response = None
+    if response_path.is_file():
+        response = RecordedResponse(
+            path=response_name,
+            media_type=(
+                "application/json"
+                if case.submission.response_mode == ResponseMode.STRUCTURED_JSON
+                else "text/markdown"
+            ),
+            sha256=sha256_file(response_path),
+            size_bytes=response_path.stat().st_size,
+        )
+    elif case.submission.response_mode != ResponseMode.ARTIFACT:
+        raise ValueError(f"required response does not exist: {response_path}")
+
+    artifacts = []
+    artifact_roles = {
+        required.path: required.role for required in case.submission.required_artifacts
+    }
+    discovered_paths = discover_submission_artifact_paths(submission_root)
+    unexpected_paths = set(discovered_paths) - set(artifact_roles)
+    if unexpected_paths:
+        raise ValueError("undeclared submission artifacts: " + ", ".join(sorted(unexpected_paths)))
+    for required in case.submission.required_artifacts:
+        path = resolve_inside(submission_root, required.path)
+        if not path.is_file():
+            raise ValueError(f"required submission artifact does not exist: {path}")
+        artifacts.append(
+            RecordedArtifact(
+                role=required.role,
+                path=required.path,
+                sha256=sha256_file(path),
+                size_bytes=path.stat().st_size,
+            )
+        )
+    submission_sha256 = sha256_submission_content(submission_root, response, artifacts)
+    return SubmissionRecord(
+        schema_version="2.0",
+        case_id=case.case_id,
+        model=model,
+        started_at=started_at,
+        finished_at=finished_at,
+        response=response,
+        artifacts=artifacts,
+        usage=usage,
+        submission_sha256=submission_sha256,
     )

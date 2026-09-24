@@ -1,10 +1,11 @@
-schema_version: "1.0"
+schema_version: "2.0"
 case_id: INTEGRATED-THERMAL-RADIATION-TEMPLATE
 title: Integrated nonlinear thermal radiation workflow
 case_kind: integrated_workflow
 track: null
 subcategory: null
 difficulty: L4
+scoring_profile: balanced_v1
 base_problem_id: THERMAL-RADIATION-BASE-TEMPLATE
 physics_domains:
   - thermal_energy_transport
@@ -43,14 +44,16 @@ budget:
   validation_attempts: 6
   execution_attempts: 4
 submission:
+  response_mode: structured_json
   required_claim_paths:
     - /claim/stages
   evidence_required: true
-  artifacts_allowed: true
-  required_artifact_roles:
-    - final_input
-    - verification_data
-  maximum_artifacts: 4
+  required_artifacts:
+    - role: final_input
+      path: artifacts/final.i
+    - role: verification_data
+      path: artifacts/verification.csv
+  maximum_artifacts: 2
 required_stages:
   - formulation
   - execution

@@ -10,8 +10,9 @@ from ..contracts import (
     EvaluationContext,
     EvaluationSpec,
     ExternalGateResult,
-    SubmissionEnvelope,
+    SubmissionRecord,
 )
+from ..llm import LLMClient
 
 
 class Evaluator(Protocol):
@@ -19,7 +20,9 @@ class Evaluator(Protocol):
         self,
         case: CaseContract,
         evaluation: EvaluationSpec,
-        submission: SubmissionEnvelope,
+        submission: SubmissionRecord,
         external_gates: list[ExternalGateResult],
         context: EvaluationContext,
+        *,
+        llm_client: LLMClient | None = None,
     ) -> CaseResult: ...

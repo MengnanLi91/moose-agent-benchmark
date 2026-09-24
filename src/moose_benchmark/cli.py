@@ -6,6 +6,7 @@ import argparse
 import json
 import sys
 from collections import defaultdict
+from datetime import UTC, datetime
 from pathlib import Path
 
 from pydantic import BaseModel, TypeAdapter, ValidationError
@@ -13,19 +14,27 @@ from pydantic import BaseModel, TypeAdapter, ValidationError
 from .catalog.loader import load_coverage_config
 from .catalog.report import build_catalog_report, format_catalog_report
 from .catalog.validator import validate_catalog
-from .contracts import CaseResult, EvaluationContext, ExternalGateResult
+from .contracts import (
+    CaseResult,
+    EvaluationContext,
+    ExternalGateResult,
+    ModelIdentity,
+    ResponseMode,
+    TokenUsage,
+    UsageRecord,
+)
 from .evaluators import get_evaluator
+from .llm import EvaluatorInfrastructureError, LLMClient, load_llm_config
 from .loader import (
     case_bundle_paths,
     load_case,
     load_evaluation,
     load_manifest,
-    load_submission,
+    load_submission_record,
     resolve_inside,
     sha256_file,
-    sha256_model,
 )
-from .runner import RunLimits, run_moose_check
+from .runner import RunLimits, build_submission_record, run_moose_check
 from .scoring import aggregate_results
 
 
@@ -69,6 +78,16 @@ def validate_manifest(manifest_path: str | Path) -> list[str]:
             case = load_case(case_path)
             evaluation = load_evaluation(evaluation_path)
             get_evaluator(evaluation.evaluator)
+            if (
+                evaluation.evaluator == "semantic_rubric_v1"
+                and case.submission.response_mode == ResponseMode.STRUCTURED_JSON
+            ):
+                errors.append(f"{ref.case_id}: semantic evaluator requires a free response")
+            if (
+                evaluation.evaluator == "structured_claim_v2"
+                and case.submission.response_mode != ResponseMode.STRUCTURED_JSON
+            ):
+                errors.append(f"{ref.case_id}: structured evaluator requires structured_json")
             if case.case_id != ref.case_id or evaluation.case_id != ref.case_id:
                 errors.append(f"{ref.case_id}: manifest, case, and evaluation IDs differ")
             if case.target.version.startswith("replace-with-"):
@@ -98,6 +117,13 @@ def validate_manifest(manifest_path: str | Path) -> list[str]:
                     errors.append(f"{ref.case_id}: evidence is missing a sha256: {evidence}")
                 elif sha256_file(evidence) != item.sha256:
                     errors.append(f"{ref.case_id}: evidence hash mismatch: {evidence}")
+            if evaluation.reference_solution is not None:
+                reference = resolve_inside(
+                    evaluation_path.parent,
+                    evaluation.reference_solution,
+                )
+                if not reference.is_file():
+                    errors.append(f"{ref.case_id}: reference solution does not exist: {reference}")
         except Exception as exc:  # validation reports every case before failing
             errors.append(f"{ref.case_id}: {exc}")
     for base_problem_id, splits in sorted(base_problem_splits.items()):
@@ -140,25 +166,87 @@ def command_score(args: argparse.Namespace) -> int:
     case_path, evaluation_path = case_bundle_paths(args.manifest, args.case_id)
     case = load_case(case_path)
     evaluation = load_evaluation(evaluation_path)
-    submission = load_submission(args.submission)
+    submission_root = Path(args.submission_dir).resolve()
+    run_record_path = (
+        Path(args.run_record).resolve() if args.run_record else submission_root / "run-record.json"
+    )
+    submission = load_submission_record(run_record_path)
     external_gates = _load_external_gates(
         args.external_gates,
         private_case_root=evaluation_path.parent,
     )
     evaluator = get_evaluator(evaluation.evaluator)
-    artifact_root = (
-        Path(args.artifact_root).resolve()
-        if args.artifact_root
-        else Path(args.submission).resolve().parent
-    )
     context = EvaluationContext(
         benchmark_id=manifest.benchmark_id,
         benchmark_version=manifest.benchmark_version,
-        submission_sha256=sha256_model(submission),
-        artifact_root=artifact_root,
+        submission_sha256=submission.submission_sha256,
+        run_record_sha256=sha256_file(run_record_path),
+        submission_root=submission_root,
+        public_case_root=case_path.parent,
+        private_case_root=evaluation_path.parent,
     )
-    result = evaluator.evaluate(case, evaluation, submission, external_gates, context)
+    llm_client = None
+    if evaluation.evaluator == "semantic_rubric_v1":
+        if not args.llm_config:
+            raise ValueError("--llm-config is required for semantic evaluation")
+        llm_client = LLMClient(load_llm_config(args.llm_config))
+    result = evaluator.evaluate(
+        case,
+        evaluation,
+        submission,
+        external_gates,
+        context,
+        llm_client=llm_client,
+    )
     _write_json(result, args.output)
+    return 0
+
+
+def _parse_timestamp(value: str | None) -> datetime:
+    if value is None:
+        return datetime.now(UTC)
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        raise ValueError("timestamps must include a timezone")
+    return parsed
+
+
+def command_record_submission(args: argparse.Namespace) -> int:
+    case_path, _evaluation_path = case_bundle_paths(args.manifest, args.case_id)
+    case = load_case(case_path)
+    token_usage = None
+    if any((args.input_tokens, args.output_tokens, args.total_tokens)):
+        total_tokens = args.total_tokens or args.input_tokens + args.output_tokens
+        token_usage = TokenUsage(
+            input_tokens=args.input_tokens,
+            output_tokens=args.output_tokens,
+            total_tokens=total_tokens,
+        )
+    configuration = json.loads(args.model_configuration)
+    if not isinstance(configuration, dict):
+        raise ValueError("--model-configuration must be a JSON object")
+    submission_root = Path(args.submission_dir).resolve()
+    record = build_submission_record(
+        case,
+        submission_root,
+        model=ModelIdentity(
+            provider=args.model_provider,
+            model=args.model,
+            configuration=configuration,
+        ),
+        started_at=_parse_timestamp(args.started_at),
+        finished_at=_parse_timestamp(args.finished_at),
+        usage=UsageRecord(
+            wall_time_seconds=args.wall_time,
+            cpu_seconds=args.cpu_time,
+            memory_mib=args.memory_mib,
+            validation_attempts=args.validation_attempts,
+            execution_attempts=args.execution_attempts,
+            tokens=token_usage,
+        ),
+    )
+    output = args.output or str(submission_root / "run-record.json")
+    _write_json(record, output)
     return 0
 
 
@@ -247,17 +335,41 @@ def build_parser() -> argparse.ArgumentParser:
     score = subparsers.add_parser("score", help="score one submission")
     score.add_argument("--manifest", required=True)
     score.add_argument("--case-id", required=True)
-    score.add_argument("--submission", required=True)
+    score.add_argument("--submission-dir", required=True)
+    score.add_argument(
+        "--run-record",
+        help="runner-owned record (defaults to <submission-dir>/run-record.json)",
+    )
+    score.add_argument("--llm-config", help="private semantic-judge configuration")
     score.add_argument(
         "--external-gates",
         help="evaluator-only gate file relative to the private case directory",
     )
-    score.add_argument(
-        "--artifact-root",
-        help="root for submitted artifact paths (defaults to the submission directory)",
-    )
     score.add_argument("--output")
     score.set_defaults(handler=command_score)
+
+    record = subparsers.add_parser(
+        "record-submission",
+        help="capture runner-owned response, artifact, model, and usage metadata",
+    )
+    record.add_argument("--manifest", required=True)
+    record.add_argument("--case-id", required=True)
+    record.add_argument("--submission-dir", required=True)
+    record.add_argument("--model-provider", required=True)
+    record.add_argument("--model", required=True)
+    record.add_argument("--model-configuration", default="{}")
+    record.add_argument("--started-at")
+    record.add_argument("--finished-at")
+    record.add_argument("--wall-time", type=float, default=0)
+    record.add_argument("--cpu-time", type=float, default=0)
+    record.add_argument("--memory-mib", type=float, default=0)
+    record.add_argument("--validation-attempts", type=int, default=0)
+    record.add_argument("--execution-attempts", type=int, default=0)
+    record.add_argument("--input-tokens", type=int, default=0)
+    record.add_argument("--output-tokens", type=int, default=0)
+    record.add_argument("--total-tokens", type=int, default=0)
+    record.add_argument("--output")
+    record.set_defaults(handler=command_record_submission)
 
     aggregate = subparsers.add_parser("aggregate", help="aggregate case-result JSON files")
     aggregate.add_argument("results", nargs="+")
@@ -282,6 +394,6 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
     try:
         raise SystemExit(args.handler(args))
-    except (ValidationError, ValueError, KeyError, OSError) as exc:
+    except (EvaluatorInfrastructureError, ValidationError, ValueError, KeyError, OSError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         raise SystemExit(2) from exc

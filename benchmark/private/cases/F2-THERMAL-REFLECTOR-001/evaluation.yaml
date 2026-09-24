@@ -1,111 +1,33 @@
-schema_version: "1.0"
+schema_version: "2.0"
 case_id: F2-THERMAL-REFLECTOR-001
-evaluator: structured_claim_v1
+evaluator: semantic_rubric_v1
+reference_solution: reference-solution.md
 
 capability_criteria:
-  - id: residual_terms
-    description: Identifies the three nonzero residual contributions.
-    json_pointer: /claim/residual_terms
-    comparator: set_f1
-    expected:
-      - conduction_volume
-      - prescribed_heat_flux_boundary
-      - convection_boundary
-    weight: 0.15
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: volume_term
-    description: Identifies the integrated diffusion volume term.
-    json_pointer: /claim/volume_terms
-    comparator: set_f1
-    expected:
-      - integral_Omega_k_grad_T_dot_grad_v
-    weight: 0.15
-    absolute_tolerance: null
-    relative_tolerance: null
-  - id: natural_boundary_terms
-    description: Identifies the prescribed-flux and convection residual terms.
-    json_pointer: /claim/natural_boundary_terms
-    comparator: set_f1
-    expected:
-      - minus_integral_Gamma_q_qcore_v
-      - plus_integral_Gamma_h_h_T_minus_Tinf_v
-    weight: 0.15
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: convection_sign
-    description: Uses the positive convection contribution under the supplied convention.
-    json_pointer: /claim/natural_boundary_terms
-    comparator: contains
-    expected: plus_integral_Gamma_h_h_T_minus_Tinf_v
+  - id: conduction_volume
+    weight: 0.25
+    full_credit: Correctly integrates conduction by parts and gives the gradient-gradient volume term.
+    partial_credit: Includes conduction but omits its integration region or test-function gradient.
+    common_errors:
+      - incorrect volume-term sign
+      - missing test-function gradient
+  - id: prescribed_flux_boundary
     weight: 0.20
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: dirichlet_handling
-    description: Treats prescribed temperature as an essential condition.
-    json_pointer: /claim/essential_boundary_handling
-    comparator: set_f1
-    expected:
-      - test_function_zero_on_Gamma_D
-    weight: 0.10
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: insulated_boundary
-    description: Recognizes that the insulated surface contributes no residual term.
-    json_pointer: /claim/insulated_boundary
-    comparator: normalized_exact
-    expected: zero_natural_contribution
-    weight: 0.10
-    absolute_tolerance: null
-    relative_tolerance: null
-  - id: test_function
-    description: Identifies the temperature test function.
-    json_pointer: /claim/test_function
-    comparator: normalized_exact
-    expected: temperature_test_function
-    weight: 0.05
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: residual_expression
-    description: Gives the complete residual with the selected sign convention.
-    json_pointer: /claim/residual_expression
-    comparator: normalized_exact
-    expected: integral_Omega_k_grad_T_dot_grad_v - integral_Gamma_q_qcore_v + integral_Gamma_h_h_T_minus_Tinf_v = 0
-    weight: 0.10
-    absolute_tolerance: null
-    relative_tolerance: null
-
-evidence_criteria:
-  - id: evidence_source
-    description: Grounds the derivation in the supplied equation specification.
-    json_pointer: /evidence/0/source_id
-    comparator: exact
-    expected: equation_specification
-    weight: 0.40
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: flux_observation
-    description: Identifies the supplied outward conductive heat-flux convention.
-    json_pointer: /evidence/0/observation
-    comparator: contains
-    expected: outward conductive heat flux
-    weight: 0.30
-    absolute_tolerance: null
-    relative_tolerance: null
-
-  - id: derivation_interpretation
-    description: Connects integration by parts to the boundary-term signs.
-    json_pointer: /evidence/0/interpretation
-    comparator: contains
-    expected: integration by parts
-    weight: 0.30
-    absolute_tolerance: null
-    relative_tolerance: null
+    full_credit: Gives the prescribed inward heat-flux boundary term with the correct sign and region.
+    partial_credit: Includes the prescribed-flux term but incompletely explains its sign or region.
+  - id: convection_boundary
+    weight: 0.25
+    full_credit: Gives the positive convection residual under the supplied outward-flux convention.
+    partial_credit: Includes convection with correct factors but does not make the sign convention clear.
+    common_errors:
+      - negative convection contribution under the supplied convention
+  - id: essential_and_insulated_boundaries
+    weight: 0.15
+    full_credit: States that the test function vanishes on Gamma_D and Gamma_ad contributes zero.
+    partial_credit: Correctly handles only one of the essential or insulated boundaries.
+  - id: complete_residual
+    weight: 0.15
+    full_credit: Presents a complete residual with test function, integration regions, and consistent signs.
+    partial_credit: The residual is substantially correct but omits one requested annotation.
 
 hard_gates: []

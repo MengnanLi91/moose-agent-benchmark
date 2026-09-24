@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "2.0"
 
 case_id: F4-POROUS-SOLUTE-001
 title: Assemble a MOOSE Input for 1-D Porous-Flow Tracer Transport
@@ -6,6 +6,7 @@ case_kind: atomic
 track: FORM
 subcategory: F4
 difficulty: L3
+scoring_profile: form_capability_v1
 base_problem_id: MOOSE-POROUSFLOW-SOLUTE-BASE-001
 
 physics_domains:
@@ -17,7 +18,7 @@ target:
   executable_hint: combined-opt
 
 prompt_path: prompt.md
-prompt_sha256: 0102963c09603b4e71aa0c0994427b4f5166bc6eae8db3fcadc7abeee620c125
+prompt_sha256: 29bde26db0e071f318b1624b450542ae01ab75264f73d426d237bf477c24a5c5
 
 artifacts:
   - id: assembly_artifact
@@ -70,19 +71,12 @@ budget:
   execution_attempts: 1
 
 submission:
-  required_claim_paths:
-    - /claim/assembled_input
-    - /claim/variables
-    - /claim/mesh
-    - /claim/porous_flow
-    - /claim/properties
-    - /claim/boundary_conditions
-    - /claim/required_outputs
-    - /claim/execution
-  evidence_required: true
-  artifacts_allowed: true
-  required_artifact_roles:
-    - moose_input
+  response_mode: artifact
+  required_claim_paths: []
+  evidence_required: false
+  required_artifacts:
+    - role: moose_input
+      path: artifacts/solution.i
   maximum_artifacts: 1
 
 required_stages: []

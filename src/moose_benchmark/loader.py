@@ -10,7 +10,14 @@ from typing import Any, TypeVar
 import yaml
 from pydantic import BaseModel
 
-from .contracts import BenchmarkManifest, CaseContract, EvaluationSpec, SubmissionEnvelope
+from .contracts import (
+    BenchmarkManifest,
+    CaseContract,
+    EvaluationSpec,
+    RecordedArtifact,
+    RecordedResponse,
+    SubmissionRecord,
+)
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -41,8 +48,8 @@ def load_evaluation(path: str | Path) -> EvaluationSpec:
     return load_model(path, EvaluationSpec)
 
 
-def load_submission(path: str | Path) -> SubmissionEnvelope:
-    return load_model(path, SubmissionEnvelope)
+def load_submission_record(path: str | Path) -> SubmissionRecord:
+    return load_model(path, SubmissionRecord)
 
 
 def resolve_inside(root: Path, relative_path: str) -> Path:
@@ -68,6 +75,55 @@ def sha256_model(model: BaseModel) -> str:
         separators=(",", ":"),
     ).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
+
+
+def discover_submission_artifact_paths(submission_root: Path) -> list[str]:
+    submission_root = submission_root.resolve()
+    artifact_root = resolve_inside(submission_root, "artifacts")
+    if not artifact_root.exists():
+        return []
+    if not artifact_root.is_dir():
+        raise ValueError("submission artifacts path must be a directory")
+
+    paths = []
+    for path in artifact_root.rglob("*"):
+        resolved = path.resolve()
+        if resolved != submission_root and submission_root not in resolved.parents:
+            raise ValueError(f"artifact path escapes submission root: {path}")
+        if path.is_file():
+            paths.append(path.relative_to(submission_root).as_posix())
+        elif not path.is_dir():
+            raise ValueError(f"unsupported artifact path: {path}")
+    return sorted(paths)
+
+
+def _update_content_hash(digest: Any, label: str, content: bytes) -> None:
+    label_bytes = label.encode("utf-8")
+    digest.update(len(label_bytes).to_bytes(8, "big"))
+    digest.update(label_bytes)
+    digest.update(len(content).to_bytes(8, "big"))
+    digest.update(content)
+
+
+def sha256_submission_content(
+    submission_root: Path,
+    response: RecordedResponse | None,
+    artifacts: list[RecordedArtifact],
+) -> str:
+    submission_root = submission_root.resolve()
+    digest = hashlib.sha256(b"moose-agent-benchmark-submission-v2\0")
+    if response is None:
+        _update_content_hash(digest, "response", b"")
+    else:
+        _update_content_hash(digest, "response-path", response.path.encode("utf-8"))
+        response_path = resolve_inside(submission_root, response.path)
+        _update_content_hash(digest, "response-content", response_path.read_bytes())
+    for artifact in sorted(artifacts, key=lambda value: (value.role, value.path)):
+        _update_content_hash(digest, "artifact-role", artifact.role.encode("utf-8"))
+        _update_content_hash(digest, "artifact-path", artifact.path.encode("utf-8"))
+        artifact_path = resolve_inside(submission_root, artifact.path)
+        _update_content_hash(digest, "artifact-content", artifact_path.read_bytes())
+    return digest.hexdigest()
 
 
 def case_bundle_paths(manifest_path: str | Path, case_id: str) -> tuple[Path, Path]:

@@ -113,8 +113,8 @@ class CatalogValidationTests(unittest.TestCase):
             ),
             encoding="utf-8",
         )
-        mutant = root / "benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001-mutant.json"
-        mutant.unlink()
+        mutant = root / "benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001-mutant"
+        shutil.rmtree(mutant)
         errors = validate_catalog(root).errors
         self.assertTrue(any("missing mutant submission fixture" in error for error in errors))
 

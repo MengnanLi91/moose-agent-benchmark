@@ -1,34 +1,22 @@
-schema_version: "1.0"
+schema_version: "2.0"
 case_id: FORM-THERMAL-F2-TEMPLATE
-evaluator: structured_claim_v1
+evaluator: semantic_rubric_v1
+reference_solution: reference-solution.md
 capability_criteria:
-  - id: residual_terms
-    description: Required residual terms, including the nonlinear boundary contribution
-    json_pointer: /claim/residual_terms
-    comparator: set_f1
-    expected:
-      - transient_volume_term
-      - conduction_volume_term
-      - source_volume_term
-      - radiation_boundary_term
-    weight: 0.7
-    absolute_tolerance: null
-    relative_tolerance: null
-  - id: boundary_handling
-    description: Correctly treats radiation as a natural boundary contribution
-    json_pointer: /claim/natural_boundary_handling
-    comparator: normalized_exact
-    expected: natural_boundary_residual
-    weight: 0.3
-    absolute_tolerance: null
-    relative_tolerance: null
-evidence_criteria:
-  - id: evidence_source
-    description: Binds the derivation to the supplied equation specification
-    json_pointer: /evidence/0/source_id
-    comparator: exact
-    expected: equation_specification_evidence
-    weight: 1.0
-    absolute_tolerance: null
-    relative_tolerance: null
+  - id: transient_term
+    weight: 0.20
+    full_credit: Includes the transient volume term with its coefficient and temperature test function.
+    partial_credit: Includes the term but omits one supplied coefficient.
+  - id: conduction_term
+    weight: 0.30
+    full_credit: Correctly integrates conduction by parts into the gradient-gradient volume term.
+    partial_credit: Includes conduction but omits its sign, region, or test-function gradient.
+  - id: source_term
+    weight: 0.20
+    full_credit: Includes the volumetric source with the correct sign and test function.
+    partial_credit: Includes the source but omits one requested factor.
+  - id: radiation_boundary
+    weight: 0.30
+    full_credit: Includes nonlinear radiation on the specified boundary with a consistent outward-normal sign.
+    partial_credit: Includes radiation but incompletely states its region, factors, or sign convention.
 hard_gates: []

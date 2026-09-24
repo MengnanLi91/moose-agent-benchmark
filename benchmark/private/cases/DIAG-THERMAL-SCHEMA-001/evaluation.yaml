@@ -1,6 +1,6 @@
-schema_version: "1.0"
+schema_version: "2.0"
 case_id: DIAG-THERMAL-SCHEMA-001
-evaluator: structured_claim_v1
+evaluator: structured_claim_v2
 capability_criteria:
   - id: earliest_failure_stage
     description: Classifies the earliest failure as object schema validation
@@ -43,14 +43,4 @@ evidence_criteria:
     weight: 0.3
     absolute_tolerance: null
     relative_tolerance: null
-hard_gates:
-  - id: immutable_artifact_policy
-    description: Diagnosis cases cannot submit modified artifacts
-    kind: field_equals
-    json_pointer: /artifacts
-    expected: []
-  - id: resource_compliance
-    description: Evaluator telemetry confirms compliance with the public budget
-    kind: external
-    json_pointer: null
-    expected: null
+hard_gates: []

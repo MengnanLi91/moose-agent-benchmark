@@ -21,8 +21,7 @@ uv run moose-benchmark validate benchmark/manifest.yaml
 uv run moose-benchmark score \
   --manifest benchmark/manifest.yaml \
   --case-id DIAG-THERMAL-SCHEMA-001 \
-  --submission benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001.json \
-  --external-gates external-gates.json \
+  --submission-dir benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001 \
   --output benchmark-results/diag-thermal-schema-001.json
 
 uv run moose-benchmark aggregate \
@@ -30,6 +29,21 @@ uv run moose-benchmark aggregate \
   benchmark-results/*.json
 uv run pytest -q
 ```
+
+To score FORM cases, install the optional judge adapters and provide a private configuration:
+
+```bash
+uv sync --extra dev --extra llm
+export OPENAI_API_KEY=...
+uv run moose-benchmark score \
+  --manifest benchmark/manifest.yaml \
+  --case-id F2-THERMAL-REFLECTOR-001 \
+  --submission-dir benchmark/example-submissions/F2-THERMAL-REFLECTOR-001 \
+  --llm-config templates/evaluator/llm-config.yaml
+```
+
+The central configuration supports `openai`, `claude`, `litellm`, and `ollama`. LiteLLM uses
+its OpenAI-compatible proxy URL; API keys are read from the named environment variable.
 
 ## Quick start: view and edit examples in Obsidian
 
@@ -151,9 +165,9 @@ remain recommended when branch protection or review is required.
 See the [catalog user guide](docs/catalog-user-guide.md) for authoring and review instructions
 and the [catalog developer guide](docs/catalog-developer-guide.md) for implementation details.
 
-The external gate file represents evaluator-measured telemetry, not a participant claim. The
-example is a static diagnosis case, so CI does not need a MOOSE executable. A separate
-integration job can run `ci/moose_smoke.sh` on a runner that defines `MOOSE_APP`.
+Runner-owned `run-record.json` files contain model identity, measured usage, response hashes,
+and artifact hashes. Participants return only the requested response and files. External gate
+records represent protected evaluator measurements rather than participant claims.
 
 External gate records are bound to the benchmark version, case ID, and canonical submission hash.
 Submitted artifacts are resolved inside the submission workspace and rehashed before scoring.
@@ -174,12 +188,14 @@ catalog/
 templates/
   atomic-case/                  Copy-ready atomic case contract
   integrated-workflow-case/    Copy-ready end-to-end case contract
-  submission/                   Standard answer envelope
+  submission/                   Participant response template
+  evaluator/                    Private run-record and LLM configuration templates
 src/moose_benchmark/
   contracts.py                  Typed public, private, and submission contracts
   loader.py                     Safe case and manifest loading
   comparison.py                 Deterministic criterion comparators
   evaluators/                   Pluggable evaluator interface and starter evaluator
+  llm/                          OpenAI, Claude, LiteLLM-proxy, and Ollama judge adapters
   scoring.py                    Gated case score and suite aggregation
   runner.py                     Bounded, shell-free MOOSE command runner
   cli.py                        Validate, score, aggregate, and run-check commands
@@ -192,13 +208,17 @@ docs/catalog-developer-guide.md  Catalog architecture and extension guide
 
 ## Scoring contract
 
-For atomic case `i`:
+FORM cases use capability-only scoring:
 
 ```text
-raw_score      = 0.70 * capability + 0.20 * evidence + 0.10 * contract
+raw_score      = capability
 official_score = raw_score when every hard gate passes, otherwise 0
-case_pass      = gates_pass and capability >= 80 and raw_score >= 80
+case_pass      = gates_pass and capability >= 80
 ```
+
+Transitional structured DIAG and integrated cases retain the `0.70/0.20/0.10` balanced profile.
+Submission integrity, required artifacts, and resource budgets are hard gates rather than FORM
+score components.
 
 The Atomic Capability Score is the macro-average of the represented F1 through V4
 subcategory means. Production reports should show missing subcategories rather than imply
@@ -212,7 +232,7 @@ that a partial development set covers the full benchmark.
 4. Put gold criteria and external gate declarations under
    `benchmark/private/cases/<case-id>`.
 5. Register both paths in `benchmark/manifest.yaml`.
-6. Add a gold submission and at least one incorrect mutant submission.
+6. Add gold and mutant submission directories with runner-owned records.
 7. Run `moose-benchmark validate` and the test suite.
 
 The starter keeps private files in the same repository for convenience. A public benchmark

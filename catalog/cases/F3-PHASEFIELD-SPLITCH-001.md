@@ -51,8 +51,7 @@ excluded.
 
 ## Participant contract
 
-The participant may inspect `artifacts/weak-form-specification.md` and return a structured
-object/material/coupling map using only the supplied registry.
+The participant may inspect `artifacts/weak-form-specification.md` and return the object/material/coupling map as prose, a table, or a list using only the supplied registry.
 
 ## Isolation and acceptance
 

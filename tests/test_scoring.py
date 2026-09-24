@@ -1,5 +1,6 @@
 import unittest
 
+from moose_benchmark.contracts import ScoringProfile
 from moose_benchmark.scoring import aggregate_results, calculate_case_score
 
 
@@ -21,11 +22,18 @@ def case_result(
             "R": "REPAIR",
             "V": "VERIFY",
         }[subcategory[0]]
+    form_profile = track == "FORM"
+    scoring_profile = "form_capability_v1" if form_profile else "balanced_v1"
+    score_weights = (
+        {"capability": 1.0, "evidence": 0.0, "contract": 0.0}
+        if form_profile
+        else {"capability": 0.7, "evidence": 0.2, "contract": 0.1}
+    )
     return {
-        "schema_version": "1.0",
+        "schema_version": "2.0",
         "benchmark_id": "benchmark",
         "benchmark_version": "1.0.0",
-        "evaluator": "structured_claim_v1",
+        "evaluator": "semantic_rubric_v1" if form_profile else "structured_claim_v2",
         "case_id": case_id,
         "case_kind": case_kind,
         "track": track,
@@ -34,14 +42,17 @@ def case_result(
         "base_problem_id": f"base-{case_id}",
         "physics_domains": ["thermal_energy_transport"],
         "submission_sha256": "0" * 64,
+        "run_record_sha256": "1" * 64,
         "submitted_artifacts": [],
+        "scoring_profile": scoring_profile,
+        "score_weights": score_weights,
         "component_scores": {
             "capability": score,
-            "evidence": score,
-            "contract": score,
+            "evidence": None if form_profile else score,
+            "contract": None if form_profile else score,
         },
-        "raw_score": score if gates_passed else 100.0,
-        "official_score": score,
+        "raw_score": score,
+        "official_score": score if gates_passed else 0.0,
         "gates_passed": gates_passed,
         "case_passed": passed,
         "gate_results": (
@@ -57,6 +68,17 @@ def case_result(
             ]
         ),
         "criterion_details": {},
+        "evaluator_provenance": (
+            {
+                "provider": "fixture",
+                "model": "fixture",
+                "configuration_sha256": "2" * 64,
+                "request_sha256": "3" * 64,
+                "response_sha256": "4" * 64,
+            }
+            if form_profile
+            else None
+        ),
         "first_failed_stage": first_failed_stage,
     }
 
@@ -68,6 +90,7 @@ class ScoringTests(unittest.TestCase):
             80,
             100,
             [{"id": "gate", "passed": True, "detail": "ok"}],
+            scoring_profile=ScoringProfile.BALANCED,
         )
         self.assertEqual(result["raw_score"], 89.0)
         self.assertEqual(result["official_score"], 89.0)
@@ -79,10 +102,23 @@ class ScoringTests(unittest.TestCase):
             100,
             100,
             [{"id": "gate", "passed": False, "detail": "failed"}],
+            scoring_profile=ScoringProfile.BALANCED,
         )
         self.assertEqual(result["raw_score"], 100.0)
         self.assertEqual(result["official_score"], 0.0)
         self.assertFalse(result["case_passed"])
+
+    def test_form_profile_uses_capability_only(self):
+        result = calculate_case_score(
+            85,
+            None,
+            None,
+            [{"id": "gate", "passed": True, "detail": "ok"}],
+            scoring_profile=ScoringProfile.FORM_CAPABILITY,
+        )
+        self.assertEqual(result["raw_score"], 85.0)
+        self.assertEqual(result["component_scores"]["evidence"], None)
+        self.assertTrue(result["case_passed"])
 
     def test_macro_average_does_not_weight_large_subcategory(self):
         results = [

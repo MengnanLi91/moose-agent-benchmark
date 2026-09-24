@@ -1,42 +1,50 @@
 [
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.2.0",
+    "benchmark_version": "0.3.0",
     "case_id": "F4-POROUS-SOLUTE-001",
-    "submission_sha256": "082a84f9d79a049c9fde1bfc1c82c0070f06703ef7bc860d5d5050d37033b091",
+    "submission_sha256": "d828ed693d263d13b6e99bb3c3614ad370c83bac3aac5d519c6c5d0235faf6be",
     "gate_id": "input_validation",
     "passed": true,
     "detail": "combined-opt c2dfd9fedd reported Syntax OK on September 22, 2026.",
-    "evidence": ["moose_check_input:syntax_ok"]
+    "evidence": [
+      "moose_check_input:syntax_ok"
+    ],
+    "schema_version": "2.0"
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.2.0",
+    "benchmark_version": "0.3.0",
     "case_id": "F4-POROUS-SOLUTE-001",
-    "submission_sha256": "082a84f9d79a049c9fde1bfc1c82c0070f06703ef7bc860d5d5050d37033b091",
+    "submission_sha256": "d828ed693d263d13b6e99bb3c3614ad370c83bac3aac5d519c6c5d0235faf6be",
     "gate_id": "bounded_execution",
     "passed": true,
     "detail": "The authoritative run completed 208 time steps through 86400000 seconds.",
-    "evidence": ["exit_code:0", "final_time:86400000"]
+    "evidence": [
+      "exit_code:0",
+      "final_time:86400000"
+    ],
+    "schema_version": "2.0"
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.2.0",
+    "benchmark_version": "0.3.0",
     "case_id": "F4-POROUS-SOLUTE-001",
-    "submission_sha256": "082a84f9d79a049c9fde1bfc1c82c0070f06703ef7bc860d5d5050d37033b091",
+    "submission_sha256": "d828ed693d263d13b6e99bb3c3614ad370c83bac3aac5d519c6c5d0235faf6be",
     "gate_id": "required_output_generation",
     "passed": true,
     "detail": "CSV output contains both midpoint columns and a final-time row.",
     "evidence": [
       "columns:C_midpoint,Darcy_velocity_midpoint",
       "final_row:86400000,0.002,4.9737123050241e-07"
-    ]
+    ],
+    "schema_version": "2.0"
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.2.0",
+    "benchmark_version": "0.3.0",
     "case_id": "F4-POROUS-SOLUTE-001",
-    "submission_sha256": "082a84f9d79a049c9fde1bfc1c82c0070f06703ef7bc860d5d5050d37033b091",
+    "submission_sha256": "d828ed693d263d13b6e99bb3c3614ad370c83bac3aac5d519c6c5d0235faf6be",
     "gate_id": "semantic_preservation",
     "passed": true,
     "detail": "The submitted input matches the private required structure and supplied values.",
@@ -44,6 +52,7 @@
       "artifact_sha256:cff9fee28b0321e835ec78e9ae8a80b5962e2f620c042a32c6d1ac6553df2bb9",
       "porous_flow_vars:porepressure,C",
       "midpoint:40"
-    ]
+    ],
+    "schema_version": "2.0"
   }
 ]

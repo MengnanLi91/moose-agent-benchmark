@@ -1,10 +1,11 @@
-schema_version: "1.0"
+schema_version: "2.0"
 case_id: FORM-THERMAL-F2-TEMPLATE
 title: Derive a nonlinear radiation boundary residual
 case_kind: atomic
 track: FORM
 subcategory: F2
 difficulty: L2
+scoring_profile: form_capability_v1
 base_problem_id: THERMAL-RADIATION-BASE-TEMPLATE
 physics_domains:
   - thermal_energy_transport
@@ -50,11 +51,9 @@ budget:
   validation_attempts: 0
   execution_attempts: 0
 submission:
-  required_claim_paths:
-    - /claim/residual_terms
-    - /claim/natural_boundary_handling
-  evidence_required: true
-  artifacts_allowed: false
-  required_artifact_roles: []
+  response_mode: free_text
+  required_claim_paths: []
+  evidence_required: false
+  required_artifacts: []
   maximum_artifacts: 0
 required_stages: []

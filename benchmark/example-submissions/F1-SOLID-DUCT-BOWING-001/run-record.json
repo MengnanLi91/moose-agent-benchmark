@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "case_id": "F1-SOLID-DUCT-BOWING-001",
+  "finished_at": "2026-09-24T12:00:05Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "text/markdown",
+    "path": "response.md",
+    "sha256": "ca69d15fefbd461d7638fa17936eaba9bc879efb111031e15eec914dde29b430",
+    "size_bytes": 776
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-09-24T12:00:00Z",
+  "submission_sha256": "22d6e93c8550dfd0062e8f2bf269d1857171bb4941ac825f8ad3d6c1d7962d86",
+  "usage": {
+    "cpu_seconds": 1.0,
+    "execution_attempts": 0,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 0,
+    "wall_time_seconds": 5.0
+  }
+}

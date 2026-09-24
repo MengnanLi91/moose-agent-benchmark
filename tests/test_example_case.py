@@ -10,184 +10,156 @@ from moose_benchmark.loader import (
     load_case,
     load_evaluation,
     load_manifest,
-    load_submission,
-    sha256_model,
+    load_submission_record,
+    sha256_file,
 )
+
+from .fakes import ScriptedLLMClient
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "benchmark/manifest.yaml"
 
 
-def external_gates(filename="external-gates.json", case_id="DIAG-THERMAL-SCHEMA-001"):
+def _external_gates(case_id, filename):
     path = ROOT / f"benchmark/private/cases/{case_id}/{filename}"
     return [ExternalGateResult.model_validate(item) for item in json.loads(path.read_text())]
 
 
-def evaluation_context(submission):
-    manifest = load_manifest(MANIFEST)
-    return EvaluationContext(
-        benchmark_id=manifest.benchmark_id,
-        benchmark_version=manifest.benchmark_version,
-        submission_sha256=sha256_model(submission),
-        artifact_root=ROOT / "benchmark/example-submissions",
-    )
-
-
-def evaluate_case(case_id, submission_filename, gate_filename=None):
+def evaluate_case(case_id, submission_name, *, ratings=None, gate_filename=None):
     case_path, evaluation_path = case_bundle_paths(MANIFEST, case_id)
     case = load_case(case_path)
     evaluation = load_evaluation(evaluation_path)
-    submission = load_submission(ROOT / f"benchmark/example-submissions/{submission_filename}")
-    gates = external_gates(gate_filename, case_id=case_id) if gate_filename is not None else []
-    return get_evaluator(evaluation.evaluator).evaluate(
+    submission_root = ROOT / f"benchmark/example-submissions/{submission_name}"
+    record_path = submission_root / "run-record.json"
+    submission = load_submission_record(record_path)
+    manifest = load_manifest(MANIFEST)
+    context = EvaluationContext(
+        benchmark_id=manifest.benchmark_id,
+        benchmark_version=manifest.benchmark_version,
+        submission_sha256=submission.submission_sha256,
+        run_record_sha256=sha256_file(record_path),
+        submission_root=submission_root,
+        public_case_root=case_path.parent,
+        private_case_root=evaluation_path.parent,
+    )
+    gates = _external_gates(case_id, gate_filename) if gate_filename else []
+    client = None
+    if evaluation.evaluator == "semantic_rubric_v1":
+        selected = ratings or {criterion.id: "full" for criterion in evaluation.capability_criteria}
+        client = ScriptedLLMClient(selected)
+    result = get_evaluator(evaluation.evaluator).evaluate(
         case,
         evaluation,
         submission,
         gates,
-        evaluation_context(submission),
+        context,
+        llm_client=client,
     )
+    return result, client
 
 
 class ExampleCaseTests(unittest.TestCase):
     def test_manifest_is_valid(self):
         self.assertEqual(validate_manifest(MANIFEST), [])
 
-    def test_gold_submission_passes(self):
-        case_path, evaluation_path = case_bundle_paths(MANIFEST, "DIAG-THERMAL-SCHEMA-001")
-        case = load_case(case_path)
-        evaluation = load_evaluation(evaluation_path)
-        submission = load_submission(
-            ROOT / "benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001.json"
+    def test_structured_gold_passes_and_mutant_fails(self):
+        gold, _client = evaluate_case(
+            "DIAG-THERMAL-SCHEMA-001",
+            "DIAG-THERMAL-SCHEMA-001",
         )
-        result = get_evaluator(evaluation.evaluator).evaluate(
-            case,
-            evaluation,
-            submission,
-            external_gates(),
-            evaluation_context(submission),
+        mutant, _client = evaluate_case(
+            "DIAG-THERMAL-SCHEMA-001",
+            "DIAG-THERMAL-SCHEMA-001-mutant",
         )
-        self.assertEqual(result.official_score, 100.0)
-        self.assertTrue(result.case_passed)
+        self.assertEqual(gold.official_score, 100.0)
+        self.assertTrue(gold.case_passed)
+        self.assertFalse(mutant.case_passed)
+        self.assertLess(mutant.official_score, 80.0)
 
-    def test_designated_mutant_fails(self):
-        case_path, evaluation_path = case_bundle_paths(MANIFEST, "DIAG-THERMAL-SCHEMA-001")
-        case = load_case(case_path)
-        evaluation = load_evaluation(evaluation_path)
-        submission = load_submission(
-            ROOT / "benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001-mutant.json"
-        )
-        result = get_evaluator(evaluation.evaluator).evaluate(
-            case,
-            evaluation,
-            submission,
-            external_gates("external-gates-mutant.json"),
-            evaluation_context(submission),
-        )
-        self.assertFalse(result.case_passed)
-        self.assertLess(result.official_score, 80.0)
-
-    def test_missing_external_gate_result_zeroes_official_score(self):
-        case_path, evaluation_path = case_bundle_paths(MANIFEST, "DIAG-THERMAL-SCHEMA-001")
-        case = load_case(case_path)
-        evaluation = load_evaluation(evaluation_path)
-        submission = load_submission(
-            ROOT / "benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001.json"
-        )
-        result = get_evaluator(evaluation.evaluator).evaluate(
-            case,
-            evaluation,
-            submission,
-            [],
-            evaluation_context(submission),
-        )
-        self.assertEqual(result.raw_score, 100.0)
-        self.assertEqual(result.official_score, 0.0)
-        self.assertFalse(result.case_passed)
-
-    def test_submission_identity_mismatch_is_rejected(self):
-        case_path, evaluation_path = case_bundle_paths(MANIFEST, "DIAG-THERMAL-SCHEMA-001")
-        case = load_case(case_path)
-        evaluation = load_evaluation(evaluation_path)
-        submission = load_submission(
-            ROOT / "benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001.json"
-        )
-        data = submission.model_dump(mode="json")
-        data["case_id"] = "OTHER-CASE"
-        mismatched = type(submission).model_validate(data)
-        with self.assertRaisesRegex(ValueError, "identity"):
-            get_evaluator(evaluation.evaluator).evaluate(
-                case,
-                evaluation,
-                mismatched,
-                external_gates(),
-                evaluation_context(mismatched),
-            )
-
-    def test_f1_duct_bowing_gold_passes_and_missing_expansion_mutant_fails(self):
-        gold = evaluate_case(
+    def test_f1_gold_passes_and_missing_expansion_mutant_fails(self):
+        gold, client = evaluate_case(
             "F1-SOLID-DUCT-BOWING-001",
-            "F1-SOLID-DUCT-BOWING-001.json",
-        )
-        mutant = evaluate_case(
             "F1-SOLID-DUCT-BOWING-001",
-            "F1-SOLID-DUCT-BOWING-001-mutant-001.json",
+        )
+        mutant, _ = evaluate_case(
+            "F1-SOLID-DUCT-BOWING-001",
+            "F1-SOLID-DUCT-BOWING-001-mutant-001",
+            ratings={
+                "solved_and_prescribed_fields": "full",
+                "governing_law_and_kinematics": "full",
+                "elastic_constitutive_model": "full",
+                "thermal_expansion_coupling": "none",
+                "boundary_conditions": "full",
+                "quantities_of_interest": "full",
+            },
         )
         self.assertEqual(gold.official_score, 100.0)
-        self.assertTrue(gold.case_passed)
+        self.assertIn("Untrusted participant response", client.last_user_prompt)
         self.assertFalse(mutant.case_passed)
-        self.assertLess(mutant.component_scores.capability, 80.0)
-        self.assertLess(mutant.official_score, 80.0)
+        self.assertEqual(mutant.official_score, 75.0)
 
-    def test_f2_reflector_gold_passes_and_sign_mutant_fails(self):
-        gold = evaluate_case(
+    def test_f2_sign_mutant_fails(self):
+        gold, _ = evaluate_case(
             "F2-THERMAL-REFLECTOR-001",
-            "F2-THERMAL-REFLECTOR-001.json",
-        )
-        mutant = evaluate_case(
             "F2-THERMAL-REFLECTOR-001",
-            "F2-THERMAL-REFLECTOR-001-mutant-001.json",
         )
-        self.assertEqual(gold.official_score, 100.0)
+        mutant, _ = evaluate_case(
+            "F2-THERMAL-REFLECTOR-001",
+            "F2-THERMAL-REFLECTOR-001-mutant-001",
+            ratings={
+                "conduction_volume": "full",
+                "prescribed_flux_boundary": "full",
+                "convection_boundary": "none",
+                "essential_and_insulated_boundaries": "full",
+                "complete_residual": "full",
+            },
+        )
         self.assertTrue(gold.case_passed)
-        self.assertTrue(mutant.gates_passed)
+        self.assertEqual(mutant.official_score, 75.0)
         self.assertFalse(mutant.case_passed)
-        self.assertLess(mutant.official_score, 80.0)
 
-    def test_f3_split_ch_gold_passes_and_time_derivative_mutant_fails(self):
-        gold = evaluate_case(
+    def test_f3_coupled_time_derivative_mutant_fails(self):
+        gold, _ = evaluate_case(
             "F3-PHASEFIELD-SPLITCH-001",
-            "F3-PHASEFIELD-SPLITCH-001.json",
-        )
-        mutant = evaluate_case(
             "F3-PHASEFIELD-SPLITCH-001",
-            "F3-PHASEFIELD-SPLITCH-001-mutant-001.json",
         )
-        self.assertEqual(gold.official_score, 100.0)
+        mutant, _ = evaluate_case(
+            "F3-PHASEFIELD-SPLITCH-001",
+            "F3-PHASEFIELD-SPLITCH-001-mutant-001",
+            ratings={
+                "variable_roles": "full",
+                "coupled_time_derivative": "none",
+                "mobility_gradient": "full",
+                "free_energy_relation": "full",
+                "materials_and_couplings": "full",
+            },
+        )
         self.assertTrue(gold.case_passed)
-        self.assertTrue(mutant.gates_passed)
+        self.assertEqual(mutant.official_score, 65.0)
         self.assertFalse(mutant.case_passed)
-        self.assertLess(mutant.component_scores.capability, 80.0)
-        self.assertLess(mutant.official_score, 80.0)
 
-    def test_f4_porous_solute_gold_passes_and_wiring_mutant_is_gated(self):
-        gold = evaluate_case(
+    def test_f4_gold_passes_and_mutant_is_gated(self):
+        gold, client = evaluate_case(
             "F4-POROUS-SOLUTE-001",
-            "F4-POROUS-SOLUTE-001.json",
-            "external-gates.json",
-        )
-        mutant = evaluate_case(
             "F4-POROUS-SOLUTE-001",
-            "F4-POROUS-SOLUTE-001-mutant-001.json",
-            "external-gates-mutant-001.json",
+            gate_filename="external-gates.json",
         )
-        self.assertEqual(gold.official_score, 100.0)
+        mutant, _ = evaluate_case(
+            "F4-POROUS-SOLUTE-001",
+            "F4-POROUS-SOLUTE-001-mutant-001",
+            ratings={
+                "variables_and_mesh": "full",
+                "porous_flow_configuration": "none",
+                "material_properties": "full",
+                "boundary_conditions": "full",
+                "execution_and_outputs": "full",
+            },
+            gate_filename="external-gates-mutant-001.json",
+        )
         self.assertTrue(gold.case_passed)
+        self.assertIn("PorousFlowDictator", client.last_user_prompt)
         self.assertFalse(mutant.gates_passed)
-        self.assertFalse(mutant.case_passed)
         self.assertEqual(mutant.official_score, 0.0)
-        gate_results = {gate.id: gate.passed for gate in mutant.gate_results}
-        self.assertTrue(gate_results["input_validation"])
-        self.assertFalse(gate_results["semantic_preservation"])
 
 
 if __name__ == "__main__":

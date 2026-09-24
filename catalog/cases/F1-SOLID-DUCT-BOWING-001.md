@@ -56,7 +56,7 @@ execution, and numerical verification are excluded.
 ## Participant contract
 
 The participant may inspect `artifacts/engineering-description.md` and return only a
-structured physics specification with artifact-grounded evidence. MOOSE object names and
+natural Markdown physics specification without benchmark-specific JSON or source IDs. MOOSE object names and
 input files are prohibited.
 
 ## Isolation and acceptance

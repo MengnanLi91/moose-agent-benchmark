@@ -1,0 +1,34 @@
+{
+  "artifacts": [
+    {
+      "path": "artifacts/solution.i",
+      "role": "moose_input",
+      "sha256": "4e7ee25a457b89b3185d184c03d2f5a75b5961d5868c8d3574dd7a9618f26a1e",
+      "size_bytes": 3342
+    }
+  ],
+  "case_id": "F4-POROUS-SOLUTE-001",
+  "finished_at": "2026-09-24T12:00:30Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "text/markdown",
+    "path": "response.md",
+    "sha256": "d701e81feb3c17daa5f7cee5d3a8c0a5d5234fdff5a14910e3b5a05f18f6801f",
+    "size_bytes": 120
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-09-24T12:00:00Z",
+  "submission_sha256": "1719c659badad9b214cc168f26b321a68b823e017bc1c2db38ae421b8b65ba7e",
+  "usage": {
+    "cpu_seconds": 30.0,
+    "execution_attempts": 1,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 1,
+    "wall_time_seconds": 30.0
+  }
+}

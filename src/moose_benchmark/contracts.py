@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from enum import StrEnum
 from pathlib import Path, PurePosixPath
 from typing import Annotated, Any, Literal
@@ -30,6 +31,17 @@ class Difficulty(StrEnum):
     L2 = "L2"
     L3 = "L3"
     L4 = "L4"
+
+
+class ResponseMode(StrEnum):
+    FREE_TEXT = "free_text"
+    ARTIFACT = "artifact"
+    STRUCTURED_JSON = "structured_json"
+
+
+class ScoringProfile(StrEnum):
+    FORM_CAPABILITY = "form_capability_v1"
+    BALANCED = "balanced_v1"
 
 
 AtomicSubcategory = Literal[
@@ -125,40 +137,59 @@ class BudgetSpec(StrictModel):
     execution_attempts: int = Field(ge=0)
 
 
+class RequiredSubmissionArtifact(StrictModel):
+    role: str
+    path: str
+
+    @model_validator(mode="after")
+    def safe_path(self) -> RequiredSubmissionArtifact:
+        self.path = validate_relative_path(self.path)
+        return self
+
+
 class SubmissionContract(StrictModel):
-    required_claim_paths: list[str]
-    evidence_required: bool = True
-    artifacts_allowed: bool = False
-    required_artifact_roles: list[str] = Field(default_factory=list)
+    response_mode: ResponseMode
+    required_claim_paths: list[str] = Field(default_factory=list)
+    evidence_required: bool = False
+    required_artifacts: list[RequiredSubmissionArtifact] = Field(default_factory=list)
     maximum_artifacts: int = Field(default=0, ge=0)
 
     @model_validator(mode="after")
     def validate_artifact_policy(self) -> SubmissionContract:
-        if not self.artifacts_allowed and (
-            self.required_artifact_roles or self.maximum_artifacts != 0
-        ):
-            raise ValueError(
-                "artifact roles and maximum_artifacts must be empty when artifacts are prohibited"
-            )
-        if len(self.required_artifact_roles) != len(set(self.required_artifact_roles)):
+        roles = [item.role for item in self.required_artifacts]
+        paths = [item.path for item in self.required_artifacts]
+        if len(roles) != len(set(roles)):
             raise ValueError("required artifact roles must be unique")
-        if len(self.required_artifact_roles) > self.maximum_artifacts:
+        if len(paths) != len(set(paths)):
+            raise ValueError("required artifact paths must be unique")
+        if len(self.required_artifacts) > self.maximum_artifacts:
             raise ValueError("maximum_artifacts cannot be smaller than required artifact roles")
         if len(self.required_claim_paths) != len(set(self.required_claim_paths)):
             raise ValueError("required claim paths must be unique")
         for pointer in self.required_claim_paths:
             validate_json_pointer(pointer)
+        if self.response_mode != ResponseMode.STRUCTURED_JSON and (
+            self.required_claim_paths or self.evidence_required
+        ):
+            raise ValueError(
+                "claim paths and evidence requirements are valid only for structured_json"
+            )
+        if self.response_mode == ResponseMode.FREE_TEXT and self.maximum_artifacts:
+            raise ValueError("free_text submissions cannot include artifacts")
+        if self.response_mode == ResponseMode.ARTIFACT and not self.required_artifacts:
+            raise ValueError("artifact submissions require at least one artifact")
         return self
 
 
 class CaseContract(StrictModel):
-    schema_version: Literal["1.0"]
+    schema_version: Literal["2.0"]
     case_id: str
     title: str
     case_kind: CaseKind
     track: Track | None = None
     subcategory: AtomicSubcategory | None = None
     difficulty: Difficulty
+    scoring_profile: ScoringProfile
     base_problem_id: str
     physics_domains: list[str] = Field(min_length=1)
     target: TargetSpec
@@ -182,11 +213,17 @@ class CaseContract(StrictModel):
                 raise ValueError("subcategory must match the selected track")
             if self.required_stages:
                 raise ValueError("atomic cases cannot declare integrated workflow stages")
+            if self.track == Track.FORM and self.scoring_profile != ScoringProfile.FORM_CAPABILITY:
+                raise ValueError("FORM cases require the form_capability_v1 scoring profile")
+            if self.track != Track.FORM and self.scoring_profile != ScoringProfile.BALANCED:
+                raise ValueError("non-FORM cases require the balanced_v1 scoring profile")
         else:
             if self.track is not None or self.subcategory is not None:
                 raise ValueError("integrated workflow cases must leave track and subcategory unset")
             if not self.required_stages:
                 raise ValueError("integrated workflow cases require an ordered stage list")
+            if self.scoring_profile != ScoringProfile.BALANCED:
+                raise ValueError("integrated workflows require the balanced_v1 scoring profile")
         ids = [item.id for item in [*self.artifacts, *self.evidence_sources]]
         if len(ids) != len(set(ids)):
             raise ValueError("artifact and evidence IDs must be unique within a case")
@@ -201,45 +238,79 @@ class EvidenceClaim(StrictModel):
     source_id: str
     observation: str
     interpretation: str
-    artifact_sha256: Sha256 | None = None
 
 
-class SubmittedArtifact(StrictModel):
+class StructuredResponse(StrictModel):
+    claim: dict[str, Any]
+    evidence: list[EvidenceClaim]
+
+
+class RecordedResponse(StrictModel):
+    path: str
+    media_type: Literal["text/markdown", "application/json"]
+    sha256: Sha256
+    size_bytes: int = Field(ge=0)
+
+    @model_validator(mode="after")
+    def safe_path(self) -> RecordedResponse:
+        self.path = validate_relative_path(self.path)
+        return self
+
+
+class RecordedArtifact(StrictModel):
     role: str
     path: str
     sha256: Sha256
+    size_bytes: int = Field(ge=0)
 
     @model_validator(mode="after")
-    def safe_path(self) -> SubmittedArtifact:
+    def safe_path(self) -> RecordedArtifact:
         self.path = validate_relative_path(self.path)
+        return self
+
+
+class TokenUsage(StrictModel):
+    input_tokens: int = Field(default=0, ge=0)
+    output_tokens: int = Field(default=0, ge=0)
+    total_tokens: int = Field(default=0, ge=0)
+
+    @model_validator(mode="after")
+    def validate_total(self) -> TokenUsage:
+        if self.total_tokens != self.input_tokens + self.output_tokens:
+            raise ValueError("total_tokens must equal input_tokens plus output_tokens")
         return self
 
 
 class UsageRecord(StrictModel):
     wall_time_seconds: float = Field(ge=0)
     cpu_seconds: float = Field(ge=0)
+    memory_mib: float = Field(ge=0)
     validation_attempts: int = Field(ge=0)
     execution_attempts: int = Field(ge=0)
+    tokens: TokenUsage | None = None
 
 
-class SubmissionEnvelope(StrictModel):
-    schema_version: Literal["1.0"]
+class ModelIdentity(StrictModel):
+    provider: str = Field(min_length=1)
+    model: str = Field(min_length=1)
+    configuration: dict[str, Any] = Field(default_factory=dict)
+
+
+class SubmissionRecord(StrictModel):
+    schema_version: Literal["2.0"]
     case_id: str
-    track: Track | None
-    subcategory: AtomicSubcategory | None
-    claim: dict[str, Any]
-    evidence: list[EvidenceClaim]
-    artifacts: list[SubmittedArtifact]
-    confidence: float = Field(ge=0, le=1)
-    limitations: list[str]
+    model: ModelIdentity
+    started_at: datetime
+    finished_at: datetime
+    response: RecordedResponse | None
+    artifacts: list[RecordedArtifact]
     usage: UsageRecord
+    submission_sha256: Sha256
 
     @model_validator(mode="after")
-    def validate_submission_shape(self) -> SubmissionEnvelope:
-        if (self.track is None) != (self.subcategory is None):
-            raise ValueError("track and subcategory must either both be set or both be null")
-        if self.track is not None and self.subcategory not in TRACK_SUBCATEGORIES[self.track]:
-            raise ValueError("submission subcategory must match its track")
+    def validate_submission_shape(self) -> SubmissionRecord:
+        if self.finished_at < self.started_at:
+            raise ValueError("finished_at cannot precede started_at")
         paths = [item.path for item in self.artifacts]
         roles = [item.role for item in self.artifacts]
         if len(paths) != len(set(paths)):
@@ -262,17 +333,21 @@ ComparatorName = Literal[
 
 class CriterionSpec(StrictModel):
     id: str
-    description: str
-    json_pointer: str
-    comparator: ComparatorName
-    expected: Any
     weight: float = Field(gt=0, le=1)
+    description: str | None = None
+    json_pointer: str | None = None
+    comparator: ComparatorName | None = None
+    expected: Any = None
     absolute_tolerance: float | None = Field(default=None, ge=0)
     relative_tolerance: float | None = Field(default=None, ge=0)
+    full_credit: str | None = None
+    partial_credit: str | None = None
+    common_errors: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_pointer(self) -> CriterionSpec:
-        self.json_pointer = validate_json_pointer(self.json_pointer)
+        if self.json_pointer is not None:
+            self.json_pointer = validate_json_pointer(self.json_pointer)
         return self
 
 
@@ -294,37 +369,59 @@ class GateSpec(StrictModel):
 
 
 class EvaluationSpec(StrictModel):
-    schema_version: Literal["1.0"]
+    schema_version: Literal["2.0"]
     case_id: str
     evaluator: str = Field(min_length=1)
+    reference_solution: str | None = None
     capability_criteria: list[CriterionSpec]
-    evidence_criteria: list[CriterionSpec]
+    evidence_criteria: list[CriterionSpec] = Field(default_factory=list)
     hard_gates: list[GateSpec] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_evaluation(self) -> EvaluationSpec:
-        for label, criteria in (
-            ("capability", self.capability_criteria),
-            ("evidence", self.evidence_criteria),
-        ):
+        groups = [("capability", self.capability_criteria)]
+        if self.evaluator == "structured_claim_v2":
+            groups.append(("evidence", self.evidence_criteria))
+        for label, criteria in groups:
             if not criteria:
                 raise ValueError(f"{label} criteria cannot be empty")
             total = sum(item.weight for item in criteria)
             if abs(total - 1.0) > 1e-9:
                 raise ValueError(f"{label} criterion weights must sum to 1.0, got {total}")
+        if self.evaluator == "semantic_rubric_v1":
+            if self.reference_solution is None:
+                raise ValueError("semantic evaluators require reference_solution")
+            self.reference_solution = validate_relative_path(self.reference_solution)
+            if self.evidence_criteria:
+                raise ValueError("semantic evaluators cannot declare evidence criteria")
+            if any(
+                item.full_credit is None
+                or item.json_pointer is not None
+                or item.comparator is not None
+                for item in self.capability_criteria
+            ):
+                raise ValueError("semantic criteria require full_credit and no JSON comparator")
+        elif self.evaluator == "structured_claim_v2":
+            structured = [*self.capability_criteria, *self.evidence_criteria]
+            if any(
+                item.description is None or item.json_pointer is None or item.comparator is None
+                for item in structured
+            ):
+                raise ValueError("structured criteria require description and JSON comparator")
         criterion_ids = [item.id for item in [*self.capability_criteria, *self.evidence_criteria]]
         if len(criterion_ids) != len(set(criterion_ids)):
             raise ValueError("criterion IDs must be unique")
         gate_ids = [item.id for item in self.hard_gates]
         if len(gate_ids) != len(set(gate_ids)):
             raise ValueError("hard gate IDs must be unique")
-        reserved_gate_ids = {"artifact_policy", "declared_usage_budget"}
+        reserved_gate_ids = {"submission_integrity", "resource_budget"}
         if reserved_gate_ids & set(gate_ids):
             raise ValueError("hard gate IDs cannot use automatic gate names")
         return self
 
 
 class ExternalGateResult(StrictModel):
+    schema_version: Literal["2.0"]
     benchmark_id: str
     benchmark_version: str
     case_id: str
@@ -339,7 +436,10 @@ class EvaluationContext(StrictModel):
     benchmark_id: str
     benchmark_version: str
     submission_sha256: Sha256
-    artifact_root: Path
+    run_record_sha256: Sha256
+    submission_root: Path
+    public_case_root: Path
+    private_case_root: Path
 
 
 class ManifestCaseRef(StrictModel):
@@ -357,7 +457,7 @@ class ManifestCaseRef(StrictModel):
 
 
 class BenchmarkManifest(StrictModel):
-    schema_version: Literal["1.0"]
+    schema_version: Literal["2.0"]
     benchmark_id: str
     benchmark_version: str
     required_atomic_subcategories: list[AtomicSubcategory]
@@ -385,12 +485,32 @@ class GateResult(StrictModel):
 
 class ComponentScores(StrictModel):
     capability: float = Field(ge=0, le=100)
-    evidence: float = Field(ge=0, le=100)
-    contract: float = Field(ge=0, le=100)
+    evidence: float | None = Field(default=None, ge=0, le=100)
+    contract: float | None = Field(default=None, ge=0, le=100)
+
+
+class ScoreWeights(StrictModel):
+    capability: float = Field(ge=0, le=1)
+    evidence: float = Field(ge=0, le=1)
+    contract: float = Field(ge=0, le=1)
+
+    @model_validator(mode="after")
+    def validate_total(self) -> ScoreWeights:
+        if abs(self.capability + self.evidence + self.contract - 1.0) > 1e-9:
+            raise ValueError("score weights must sum to 1.0")
+        return self
+
+
+class EvaluatorProvenance(StrictModel):
+    provider: str
+    model: str
+    configuration_sha256: Sha256
+    request_sha256: Sha256
+    response_sha256: Sha256
 
 
 class CaseResult(StrictModel):
-    schema_version: Literal["1.0"]
+    schema_version: Literal["2.0"]
     benchmark_id: str
     benchmark_version: str
     evaluator: str
@@ -402,7 +522,10 @@ class CaseResult(StrictModel):
     base_problem_id: str
     physics_domains: list[str] = Field(min_length=1)
     submission_sha256: Sha256
-    submitted_artifacts: list[SubmittedArtifact]
+    run_record_sha256: Sha256
+    submitted_artifacts: list[RecordedArtifact]
+    scoring_profile: ScoringProfile
+    score_weights: ScoreWeights
     component_scores: ComponentScores
     raw_score: float = Field(ge=0, le=100)
     official_score: float = Field(ge=0, le=100)
@@ -410,6 +533,7 @@ class CaseResult(StrictModel):
     case_passed: bool
     gate_results: list[GateResult]
     criterion_details: dict[str, Any]
+    evaluator_provenance: EvaluatorProvenance | None = None
     first_failed_stage: str | None = None
 
     @model_validator(mode="after")
@@ -421,8 +545,14 @@ class CaseResult(StrictModel):
                 raise ValueError("result subcategory must match its track")
             if self.first_failed_stage is not None:
                 raise ValueError("atomic results cannot report an integrated failure stage")
+            if self.track == Track.FORM and self.scoring_profile != ScoringProfile.FORM_CAPABILITY:
+                raise ValueError("FORM results require the form_capability_v1 scoring profile")
+            if self.track != Track.FORM and self.scoring_profile != ScoringProfile.BALANCED:
+                raise ValueError("non-FORM results require the balanced_v1 scoring profile")
         elif self.track is not None or self.subcategory is not None:
             raise ValueError("integrated results must leave track and subcategory null")
+        elif self.scoring_profile != ScoringProfile.BALANCED:
+            raise ValueError("integrated results require the balanced_v1 scoring profile")
 
         expected_official = self.raw_score if self.gates_passed else 0.0
         if abs(self.official_score - expected_official) > 1e-4:
@@ -432,9 +562,43 @@ class CaseResult(StrictModel):
             raise ValueError("gate result IDs must be unique")
         if self.gates_passed != all(item.passed for item in self.gate_results):
             raise ValueError("gates_passed is inconsistent with gate results")
-        expected_case_passed = (
-            self.gates_passed and self.component_scores.capability >= 80 and self.raw_score >= 80
+        if self.evaluator == "semantic_rubric_v1" and self.evaluator_provenance is None:
+            raise ValueError("semantic results require evaluator provenance")
+        evidence = self.component_scores.evidence
+        contract = self.component_scores.contract
+        expected_weights = (
+            (1.0, 0.0, 0.0)
+            if self.scoring_profile == ScoringProfile.FORM_CAPABILITY
+            else (0.7, 0.2, 0.1)
         )
+        actual_weights = (
+            self.score_weights.capability,
+            self.score_weights.evidence,
+            self.score_weights.contract,
+        )
+        if any(
+            abs(actual - expected) > 1e-9
+            for actual, expected in zip(actual_weights, expected_weights, strict=True)
+        ):
+            raise ValueError("score weights do not match the scoring profile")
+        if self.scoring_profile == ScoringProfile.FORM_CAPABILITY and (
+            evidence is not None or contract is not None
+        ):
+            raise ValueError("FORM capability results cannot report evidence or contract scores")
+        if self.score_weights.evidence and evidence is None:
+            raise ValueError("weighted evidence component cannot be null")
+        if self.score_weights.contract and contract is None:
+            raise ValueError("weighted contract component cannot be null")
+        expected_raw = (
+            self.score_weights.capability * self.component_scores.capability
+            + self.score_weights.evidence * (evidence or 0.0)
+            + self.score_weights.contract * (contract or 0.0)
+        )
+        if abs(self.raw_score - expected_raw) > 1e-4:
+            raise ValueError("raw_score is inconsistent with score weights")
+        expected_case_passed = self.gates_passed and self.component_scores.capability >= 80
+        if self.scoring_profile == ScoringProfile.BALANCED:
+            expected_case_passed = expected_case_passed and self.raw_score >= 80
         if self.case_passed != expected_case_passed:
             raise ValueError("case_passed is inconsistent with score thresholds")
         if self.case_passed and self.first_failed_stage is not None:

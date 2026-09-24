@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from typing import Any
 
-from .contracts import CaseResult
+from .contracts import CaseResult, ScoringProfile
 
 ATOMIC_SUBCATEGORIES = [
     "F1",
@@ -29,34 +29,45 @@ ATOMIC_SUBCATEGORIES = [
 
 def calculate_case_score(
     capability: float,
-    evidence: float,
-    contract: float,
+    evidence: float | None,
+    contract: float | None,
     gate_results: list[dict[str, Any]],
     *,
+    scoring_profile: ScoringProfile,
     case_pass_threshold: float = 80.0,
     capability_pass_threshold: float = 80.0,
 ) -> dict[str, Any]:
-    for name, value in (
-        ("capability", capability),
-        ("evidence", evidence),
-        ("contract", contract),
-    ):
+    for name, value in (("capability", capability), ("evidence", evidence), ("contract", contract)):
+        if value is None:
+            continue
         if not 0 <= value <= 100:
             raise ValueError(f"{name} must be in [0, 100], got {value}")
-    raw_score = 0.70 * capability + 0.20 * evidence + 0.10 * contract
+    if scoring_profile == ScoringProfile.FORM_CAPABILITY:
+        weights = {"capability": 1.0, "evidence": 0.0, "contract": 0.0}
+    else:
+        if evidence is None or contract is None:
+            raise ValueError("balanced scoring requires evidence and contract scores")
+        weights = {"capability": 0.70, "evidence": 0.20, "contract": 0.10}
+    raw_score = (
+        weights["capability"] * capability
+        + weights["evidence"] * (evidence or 0.0)
+        + weights["contract"] * (contract or 0.0)
+    )
     gates_passed = all(bool(item["passed"]) for item in gate_results)
     official_score = raw_score if gates_passed else 0.0
     case_passed = (
         gates_passed
         and capability >= capability_pass_threshold
-        and raw_score >= case_pass_threshold
+        and (scoring_profile == ScoringProfile.FORM_CAPABILITY or raw_score >= case_pass_threshold)
     )
     return {
         "component_scores": {
             "capability": round(capability, 4),
-            "evidence": round(evidence, 4),
-            "contract": round(contract, 4),
+            "evidence": None if evidence is None else round(evidence, 4),
+            "contract": None if contract is None else round(contract, 4),
         },
+        "scoring_profile": scoring_profile.value,
+        "score_weights": weights,
         "raw_score": round(raw_score, 4),
         "official_score": round(official_score, 4),
         "gates_passed": gates_passed,

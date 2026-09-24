@@ -49,7 +49,7 @@ outflow, midpoint concentration and Darcy-velocity outputs, and CSV reporting.
 ## Participant contract
 
 The participant may inspect `artifacts/assembly-specification.md`, use one validation and one
-execution attempt, and submit exactly one `moose_input` artifact. Changing supplied physics,
+execution attempt, and create `artifacts/solution.i`; the runner records it as the `moose_input` artifact. Changing supplied physics,
 values, objects, or outputs is prohibited.
 
 ## Isolation and acceptance

@@ -10,7 +10,7 @@ from ..loader import (
     load_case,
     load_evaluation,
     load_manifest,
-    load_submission,
+    load_submission_record,
     resolve_inside,
 )
 from .loader import CatalogDocument, catalog_record_paths, load_catalog_document
@@ -97,10 +97,11 @@ def _machine_paths(
 
 
 def _valid_submission(path: Path, case_id: str, errors: list[str]) -> bool:
-    if not path.is_file():
+    record_path = path / "run-record.json"
+    if not record_path.is_file():
         return False
     try:
-        submission = load_submission(path)
+        submission = load_submission_record(record_path)
     except Exception as exc:
         errors.append(f"{case_id}: invalid submission fixture {path}: {exc}")
         return False
@@ -113,7 +114,9 @@ def _valid_submission(path: Path, case_id: str, errors: list[str]) -> bool:
 def _mutant_paths(repo_root: Path, case_id: str) -> list[Path]:
     fixture_dir = repo_root / "benchmark/example-submissions"
     prefix = f"{case_id}-mutant"
-    return sorted(path for path in fixture_dir.glob("*.json") if path.stem.startswith(prefix))
+    return sorted(
+        path for path in fixture_dir.iterdir() if path.is_dir() and path.name.startswith(prefix)
+    )
 
 
 def _validate_machine_record(
@@ -153,7 +156,7 @@ def _validate_machine_record(
 
     fixture_dir = repo_root / "benchmark/example-submissions"
     readiness.gold_submission_valid = _valid_submission(
-        fixture_dir / f"{record.case_id}.json",
+        fixture_dir / record.case_id,
         record.case_id,
         result.errors,
     )

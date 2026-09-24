@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "case_id": "F3-PHASEFIELD-SPLITCH-001",
+  "finished_at": "2026-09-24T12:00:05Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "text/markdown",
+    "path": "response.md",
+    "sha256": "558b8a54e158dad219f92cf56057bad3c93ec6d0580a1e7730f92dabdc6064aa",
+    "size_bytes": 732
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-09-24T12:00:00Z",
+  "submission_sha256": "9ccaed46ddf0bfdbe2a84397c6db1b0ee720e3684aa0fb7511b37a3124fa73d6",
+  "usage": {
+    "cpu_seconds": 1.0,
+    "execution_attempts": 0,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 0,
+    "wall_time_seconds": 5.0
+  }
+}

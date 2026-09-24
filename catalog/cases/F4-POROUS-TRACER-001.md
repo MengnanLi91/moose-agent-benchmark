@@ -111,7 +111,7 @@ keep all expected answers and numeric thresholds private.
 - correct requested outputs;
 - executable validation.
 
-The executable evaluator will define objective criteria, evidence requirements, and hard gates.
+The executable evaluator will define private semantic criteria and any required hard gates.
 
 ## Source and provenance
 
@@ -122,7 +122,7 @@ remain to be recorded when the base model is selected. The case is currently a s
 ## Implementation checklist
 
 - [ ] Public contract and prompt written
-- [ ] Required artifacts and evidence added
+- [ ] Required participant-visible artifacts added
 - [ ] Private evaluator written
 - [ ] Gold and mutant development submissions added
 - [ ] Manifest entry added
@@ -137,7 +137,7 @@ These case-specific artifacts have not been created yet:
 
 - Planned public case (not created): `benchmark/public/cases/F4-POROUS-TRACER-001/`
 - Planned private evaluator (not created): `benchmark/private/cases/F4-POROUS-TRACER-001/`
-- Planned development fixtures (not created): `benchmark/example-submissions/F4-POROUS-TRACER-001*.json`
+- Planned development fixtures (not created): `benchmark/example-submissions/F4-POROUS-TRACER-001/` and mutant sibling directories
 - Planned manifest registration (not added): entry in `benchmark/manifest.yaml`
 
 ## Open questions

@@ -1,0 +1,22 @@
+{
+  "schema_version": "2.0",
+  "case_id": "REPLACE-WITH-CASE-ID",
+  "model": {
+    "provider": "REPLACE-WITH-PROVIDER",
+    "model": "REPLACE-WITH-MODEL",
+    "configuration": {}
+  },
+  "started_at": "REPLACE-WITH-UTC-TIMESTAMP",
+  "finished_at": "REPLACE-WITH-UTC-TIMESTAMP",
+  "response": null,
+  "artifacts": [],
+  "usage": {
+    "wall_time_seconds": 0,
+    "cpu_seconds": 0,
+    "memory_mib": 0,
+    "validation_attempts": 0,
+    "execution_attempts": 0,
+    "tokens": null
+  },
+  "submission_sha256": "REPLACE-WITH-CONTENT-HASH"
+}

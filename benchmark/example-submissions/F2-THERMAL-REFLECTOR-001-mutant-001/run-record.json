@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "case_id": "F2-THERMAL-REFLECTOR-001",
+  "finished_at": "2026-09-24T12:00:05Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "text/markdown",
+    "path": "response.md",
+    "sha256": "4540be757bd91fe1d830b438463ff0844d13891b9955cac44c5f43ce6725b718",
+    "size_bytes": 339
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-09-24T12:00:00Z",
+  "submission_sha256": "0305cd34d6fbd3263fda9d9c95d9c93b269a82cccce7a0df55bb2e6e8129c755",
+  "usage": {
+    "cpu_seconds": 1.0,
+    "execution_attempts": 0,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 0,
+    "wall_time_seconds": 5.0
+  }
+}

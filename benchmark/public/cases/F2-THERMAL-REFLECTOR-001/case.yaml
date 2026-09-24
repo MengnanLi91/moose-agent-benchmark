@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "2.0"
 
 case_id: F2-THERMAL-REFLECTOR-001
 title: Steady Heat Conduction in a PB-FHR Reflector Block
@@ -6,6 +6,7 @@ case_kind: atomic
 track: FORM
 subcategory: F2
 difficulty: L2
+scoring_profile: form_capability_v1
 base_problem_id: VTB-PBFHR-REFLECTOR-CONDUCTION-BASE-001
 
 physics_domains:
@@ -17,7 +18,7 @@ target:
   executable_hint: null
 
 prompt_path: prompt.md
-prompt_sha256: a1f409863fcb8aea12408cf11d0a412952a9ed9e031c70532a8ec64022f89a96
+prompt_sha256: de2346d92e8f077c401b64a1ba326b3087291da0921d74eefe334edb48e14490
 
 artifacts:
   - id: strong_form_artifact
@@ -56,7 +57,7 @@ starting_state:
 actions:
   permitted:
     - Inspect the supplied equation and boundary specification.
-    - Return a structured weak residual.
+    - Return a natural weak-form derivation in response.md.
   prohibited:
     - Select MOOSE objects.
     - Construct or execute a MOOSE input.
@@ -70,17 +71,10 @@ budget:
   execution_attempts: 0
 
 submission:
-  required_claim_paths:
-    - /claim/residual_terms
-    - /claim/volume_terms
-    - /claim/natural_boundary_terms
-    - /claim/essential_boundary_handling
-    - /claim/test_function
-    - /claim/insulated_boundary
-    - /claim/residual_expression
-  evidence_required: true
-  artifacts_allowed: false
-  required_artifact_roles: []
+  response_mode: free_text
+  required_claim_paths: []
+  evidence_required: false
+  required_artifacts: []
   maximum_artifacts: 0
 
 required_stages: []

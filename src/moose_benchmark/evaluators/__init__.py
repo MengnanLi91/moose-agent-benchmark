@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+from .semantic import SemanticRubricEvaluator
 from .structured import StructuredClaimEvaluator
 
-_EVALUATORS = {"structured_claim_v1": StructuredClaimEvaluator()}
+_EVALUATORS = {
+    "semantic_rubric_v1": SemanticRubricEvaluator(),
+    "structured_claim_v2": StructuredClaimEvaluator(),
+}
 
 
 def get_evaluator(name: str):

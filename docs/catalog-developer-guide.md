@@ -71,8 +71,8 @@ Implementation readiness is derived from:
 - valid public contract,
 - valid private evaluation,
 - manifest registration,
-- valid `<case-id>.json` development submission,
-- at least one valid `<case-id>-mutant*.json` submission.
+- valid `<case-id>/run-record.json` development submission,
+- at least one valid `<case-id>-mutant*/run-record.json` submission.
 
 `review` requires implementation readiness and an owner. `complete` additionally requires a
 reviewer, domain review, benchmark-design review, and any declared MOOSE validation.

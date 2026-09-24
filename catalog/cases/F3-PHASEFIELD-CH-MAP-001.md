@@ -48,7 +48,7 @@ This planned atomic case, **Map Split Cahn-Hilliard Formulation**, exercises the
 
 **F3 — MOOSE object and coupling map.**
 
-Term-to-object mapping correctness and coupling completeness.
+Semantic correctness of the object and coupling map, whether presented as prose, a table, or a list.
 
 Capabilities outside F3 are intentionally excluded from the score.
 
@@ -102,9 +102,9 @@ keep all expected answers and numeric thresholds private.
 
 ## Acceptance summary
 
-Term-to-object mapping correctness and coupling completeness.
+Semantic correctness of the object and coupling map, whether presented as prose, a table, or a list.
 
-The executable evaluator will define objective criteria, evidence requirements, and hard gates.
+The executable evaluator will define private semantic criteria and any required hard gates.
 
 ## Source and provenance
 
@@ -115,7 +115,7 @@ remain to be recorded when the base model is selected. The case is currently a s
 ## Implementation checklist
 
 - [ ] Public contract and prompt written
-- [ ] Required artifacts and evidence added
+- [ ] Required participant-visible artifacts added
 - [ ] Private evaluator written
 - [ ] Gold and mutant development submissions added
 - [ ] Manifest entry added
@@ -130,7 +130,7 @@ These case-specific artifacts have not been created yet:
 
 - Planned public case (not created): `benchmark/public/cases/F3-PHASEFIELD-CH-MAP-001/`
 - Planned private evaluator (not created): `benchmark/private/cases/F3-PHASEFIELD-CH-MAP-001/`
-- Planned development fixtures (not created): `benchmark/example-submissions/F3-PHASEFIELD-CH-MAP-001*.json`
+- Planned development fixtures (not created): `benchmark/example-submissions/F3-PHASEFIELD-CH-MAP-001/` and mutant sibling directories
 - Planned manifest registration (not added): entry in `benchmark/manifest.yaml`
 
 ## Open questions

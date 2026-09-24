@@ -10,9 +10,9 @@ end-to-end measure of workflow success. The implementation therefore needs four 
 3. **Private evaluator**: gold criteria, hidden mutants, numerical tolerances, and gate logic.
 4. **Result service**: artifact-bound case results and macro-aggregated reports.
 
-The starter implements the contracts, a deterministic structured evaluator, gated scoring,
-aggregation, a bounded MOOSE check-input runner, five development cases, and CI. It intentionally
-does not treat textual similarity to one reference input as proof of correctness.
+The starter implements schema-v2 runner-owned submission records, a semantic FORM evaluator, a
+transitional structured evaluator, gated scoring, aggregation, a bounded MOOSE check-input
+runner, five development cases, and CI.
 
 ## 2. Code structure
 
@@ -21,7 +21,7 @@ src/moose_benchmark/
   contracts.py
     CaseContract            Public starting state and action boundary
     EvaluationSpec          Private criteria and gate declarations
-    SubmissionEnvelope      Standard participant answer
+    SubmissionRecord        Runner-owned response, artifact, model, and usage record
     BenchmarkManifest       Versioned case registry
     EvaluationContext       Benchmark, submission hash, and artifact workspace binding
     CaseResult              Validated, provenance-bearing evaluator result
@@ -31,10 +31,14 @@ src/moose_benchmark/
     Exact, normalized, set, sequence, subset, and tolerance comparators
   evaluators/
     base.py                 Evaluator protocol
-    structured.py           Generic evaluator for atomic structured claims
+    semantic.py             Criterion-level semantic FORM evaluator
+    structured.py           Transitional evaluator for structured responses
     __init__.py             Evaluator registry
+  llm/
+    config.py               Central provider and model configuration
+    client.py               Native OpenAI, Claude, LiteLLM-proxy, and Ollama adapters
   scoring.py
-    70/20/10 case score, hard-gate application, and macro-aggregation
+    Profile-aware case scores, hard-gate application, and macro-aggregation
   runner.py
     Shell-free subprocess invocation with CPU and wall-time limits, plus Linux memory limits
   cli.py
@@ -64,27 +68,27 @@ Evaluator names are registry keys rather than a closed schema literal.
 2. Materialize only the public case bundle.
 3. Record hashes for every supplied artifact.
 4. Enforce tool permissions and validation/execution budgets.
-5. Store the submitted answer, produced artifacts, tool trace, resource telemetry, target
-   application hash, and random seeds.
+5. Store the exact response bytes and produced artifacts, then create the runner-owned
+   `run-record.json` with model identity, hashes, attempts, timestamps, and measured usage.
 6. Run private structural, executable, semantic, numerical, and preservation gates.
 7. Bind every evaluator result to the submitted artifact hashes.
 
-The scoring CLI rejects case-identity mismatches, rehashes submitted artifacts inside a confined
-artifact root, and accepts external gates only when their benchmark version, case ID, and canonical
-submission hash match the current request.
+The scoring CLI rejects case-identity mismatches, rehashes responses and artifacts inside a
+confined submission root, and accepts external gates only when their benchmark version, case ID,
+and canonical content hash match the current request.
 
 ### Scoring
 
-For atomic case `i`:
+For FORM case `i`:
 
 ```text
-R_i = 0.70 C_i + 0.20 E_i + 0.10 A_i
+R_i = C_i
 S_i = G_i R_i
-pass_i = G_i and C_i >= 80 and R_i >= 80
+pass_i = G_i and C_i >= 80
 ```
 
-`G_i` equals one only when every applicable hard gate passes. The result record retains `R_i`
-for diagnosis, but leaderboard aggregation uses `S_i`.
+Transitional structured cases use the balanced `0.70 C_i + 0.20 E_i + 0.10 A_i` profile.
+`G_i` equals one only when every applicable hard gate passes.
 
 Within subcategory `k`:
 

@@ -50,8 +50,7 @@ verification are excluded.
 
 ## Participant contract
 
-The participant may inspect `artifacts/equation-specification.md` and return only a structured
-weak residual with artifact-grounded evidence. No MOOSE object names are permitted.
+The participant may inspect `artifacts/equation-specification.md` and return a natural Markdown weak-form derivation. Equivalent notation, term ordering, and consistent sign conventions are accepted. No MOOSE object names are permitted.
 
 ## Isolation and acceptance
 

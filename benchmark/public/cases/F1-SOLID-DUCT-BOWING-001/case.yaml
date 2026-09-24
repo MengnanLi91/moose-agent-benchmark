@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "2.0"
 
 case_id: F1-SOLID-DUCT-BOWING-001
 title: Thermally Induced Bowing of a Hexagonal Reactor Duct
@@ -6,6 +6,7 @@ case_kind: atomic
 track: FORM
 subcategory: F1
 difficulty: L3
+scoring_profile: form_capability_v1
 base_problem_id: VTB-IAEA-VP1-DUCT-BOWING-BASE-001
 
 physics_domains:
@@ -18,7 +19,7 @@ target:
   executable_hint: null
 
 prompt_path: prompt.md
-prompt_sha256: bc68849d405537713a5565a70dc3d4e0cf75ef2539b1b46f81680c55babd7bfa
+prompt_sha256: 12bdbc318b1d7b9cfa3ca0000ab716a65ade568f14c4057a671ad04f09a3f7d4
 
 artifacts:
   - id: engineering_description
@@ -58,7 +59,7 @@ starting_state:
 actions:
   permitted:
     - Inspect the supplied engineering specification.
-    - Return a structured physics specification.
+    - Return a natural-language physics specification in response.md.
   prohibited:
     - Construct or execute a MOOSE input.
     - Select MOOSE objects.
@@ -72,18 +73,10 @@ budget:
   execution_attempts: 0
 
 submission:
-  required_claim_paths:
-    - /claim/variables
-    - /claim/prescribed_fields
-    - /claim/governing_laws
-    - /claim/kinematics
-    - /claim/constitutive_relations
-    - /claim/closure_parameters
-    - /claim/boundary_conditions
-    - /claim/quantities_of_interest
-  evidence_required: true
-  artifacts_allowed: false
-  required_artifact_roles: []
+  response_mode: free_text
+  required_claim_paths: []
+  evidence_required: false
+  required_artifacts: []
   maximum_artifacts: 0
 
 required_stages: []

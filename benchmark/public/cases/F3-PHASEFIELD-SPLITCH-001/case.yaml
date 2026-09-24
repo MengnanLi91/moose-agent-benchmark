@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "2.0"
 
 case_id: F3-PHASEFIELD-SPLITCH-001
 title: Map a Split Cahn-Hilliard Formulation to MOOSE Objects
@@ -6,6 +6,7 @@ case_kind: atomic
 track: FORM
 subcategory: F3
 difficulty: L3
+scoring_profile: form_capability_v1
 base_problem_id: MOOSE-PHASEFIELD-SPLITCH-BASE-001
 
 physics_domains:
@@ -17,7 +18,7 @@ target:
   executable_hint: phase_field-opt
 
 prompt_path: prompt.md
-prompt_sha256: 369e75383850e489c3b84c40d354af8dfd7c0d79201a073945cc48fbea5382fe
+prompt_sha256: cc02f7a5c56bfede3b56860afcb63fb16891da0052d53f1dc92351ec1f2dee55
 
 artifacts:
   - id: weak_form_artifact
@@ -56,7 +57,7 @@ starting_state:
 actions:
   permitted:
     - Inspect the supplied weak form and permitted object registry.
-    - Return a structured MOOSE object and coupling map.
+    - Return a prose, table, or list MOOSE object and coupling map in response.md.
   prohibited:
     - Add object types outside the supplied registry.
     - Construct or execute a complete MOOSE input.
@@ -70,14 +71,10 @@ budget:
   execution_attempts: 0
 
 submission:
-  required_claim_paths:
-    - /claim/variables
-    - /claim/residual_object_map
-    - /claim/materials
-    - /claim/couplings
-  evidence_required: true
-  artifacts_allowed: false
-  required_artifact_roles: []
+  response_mode: free_text
+  required_claim_paths: []
+  evidence_required: false
+  required_artifacts: []
   maximum_artifacts: 0
 
 required_stages: []
