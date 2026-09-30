@@ -1,0 +1,18 @@
+{
+  "claim": {
+    "failure_stage": "time_stepper",
+    "terminal_symptom": "timestep_at_or_below_dtmin"
+  },
+  "evidence": [
+    {
+      "source_id": "solver_events",
+      "observation": "The first failure is Linear DIVERGED_ITS at iteration 0.",
+      "interpretation": "This is incorrectly treated as secondary to the time stepper."
+    },
+    {
+      "source_id": "solver_events",
+      "observation": "The run ends with timestep already at or below dtmin.",
+      "interpretation": "The terminal message is incorrectly identified as the first failure."
+    }
+  ]
+}

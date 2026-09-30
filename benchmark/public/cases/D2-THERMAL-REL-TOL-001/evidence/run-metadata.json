@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D2-THERMAL-REL-TOL-001",
+  "captured_on": "2026-09-29",
+  "executable": "modules/combined/combined-opt",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "command": "combined-opt -i failing.i",
+  "process_count": 1,
+  "repetitions": 3,
+  "expected_exit_code": 1,
+  "sha256": {
+    "artifacts/failing.i": "31d9a656acfe96149d849e9a4f3d16374124f26427c1419ffd22d02037055b3c",
+    "evidence/residual-report.json": "61ffc83091a54f7d59143eadf5febcf07cae43705ff1d3612d69d3f1b734eb93"
+  }
+}

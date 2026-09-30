@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D1-SOLVER-DTMIN-001",
+  "validated_on": "2026-09-29",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "process_count": 1,
+  "runs": 3,
+  "exit_codes": [1, 1, 1],
+  "ordering_preserved": [true, true, true],
+  "timestep_attempts": [[2, 1], [2, 1], [2, 1]],
+  "cutback_preserved": [true, true, true],
+  "ordered_signatures": [
+    "Time Step 1, time = 2, dt = 2",
+    "Linear solve did not converge due to DIVERGED_ITS",
+    "Nonlinear solve did not converge",
+    "Time Step 1, time = 1, dt = 1",
+    "Linear solve did not converge due to DIVERGED_ITS",
+    "Nonlinear solve did not converge",
+    "Solve failed and timestep already at or below dtmin"
+  ]
+}

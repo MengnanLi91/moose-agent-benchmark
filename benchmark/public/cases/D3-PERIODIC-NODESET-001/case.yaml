@@ -1,0 +1,93 @@
+schema_version: "2.0"
+case_id: D3-PERIODIC-NODESET-001
+title: Localize Periodic Pairing Failure to Nodeset Boundaries
+case_kind: atomic
+track: DIAG
+subcategory: D3
+difficulty: L2
+scoring_profile: balanced_v1
+base_problem_id: PERIODIC-IMPORTED-MESH-BASE-001
+physics_domains:
+  - thermal_energy_transport
+
+target:
+  application: combined
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+
+prompt_path: prompt.md
+prompt_sha256: f9f7e92e05f5b8ef1a42325944547f7f6c965ccb45a858a4eceb8c930f2d0cff
+
+artifacts:
+  - id: failing_input
+    path: artifacts/failing.i
+    role: immutable_input
+    mutable: false
+    required: true
+    sha256: 57a1c6bfb5c0c12452c983ee8e26fe0db2e493ce8ec631354474a9c98a2655a6
+  - id: imported_mesh
+    path: artifacts/periodic_mesh.e
+    role: immutable_imported_mesh
+    mutable: false
+    required: true
+    sha256: 050dedac37a5c059a1e3eabe446bfa576f4cdaa532ee5015ea60f528e661f141
+
+evidence_sources:
+  - id: mesh_report
+    path: evidence/mesh-report.txt
+    kind: exodus_boundary_metadata
+    description: Node-set and side-set names extracted from the imported mesh
+    sha256: e6ec3f8bb589f0b0de5c863e0c751e7c4b13a1f0eb350a7fbd9b93b9e3fb7ee7
+  - id: periodic_warning
+    path: evidence/periodic-warning.log
+    kind: moose_warning
+    description: Current MOOSE warning emitted while matching the requested pair
+    sha256: 9a18fe881b20b459e58148a1a2abddbd16651ea6ee8ecaa22f97802b08f59155
+  - id: pairing_report
+    path: evidence/pairing-report.json
+    kind: periodic_pairing_result
+    description: Pairing outcome and constrained-DOF result from the faulty run
+    sha256: 1c7512b6998c0f29c8ea77d1de614fbd5f0703ddf5bab6d58de8334379566d60
+  - id: run_metadata
+    path: evidence/run-metadata.json
+    kind: reproducibility_metadata
+    description: Pinned executable, revision, command, process count, and public file hashes
+    sha256: 2f6d8aad255ca4e92c1a242cb3e04f6fbc59b6fb39f4af5545162a61b9643675
+
+starting_state:
+  description: An imported mesh and failed periodic-pairing evidence are supplied.
+  supplied_truth:
+    - The imported mesh is immutable.
+    - The warning is the reproducible current behavior for this fixture.
+  excluded_from_scoring:
+    - Mesh repair
+    - Repaired control execution
+    - Historical fatal signatures
+
+actions:
+  permitted:
+    - Inspect the supplied input, mesh, and evidence reports.
+    - Localize the entity-type mismatch and affected boundaries.
+  prohibited:
+    - Modify or execute the supplied artifacts.
+    - Consult private control or evaluator material.
+
+budget:
+  wall_time_seconds: 90
+  cpu_seconds: 45
+  memory_mib: 1024
+  validation_attempts: 0
+  execution_attempts: 0
+
+submission:
+  response_mode: structured_json
+  required_claim_paths:
+    - /claim/cause_family
+    - /claim/artifact
+    - /claim/boundaries
+    - /claim/defect
+  evidence_required: true
+  required_artifacts: []
+  maximum_artifacts: 0
+
+required_stages: []

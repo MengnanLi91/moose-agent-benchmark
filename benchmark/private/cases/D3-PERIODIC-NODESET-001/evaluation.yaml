@@ -1,0 +1,65 @@
+schema_version: "2.0"
+case_id: D3-PERIODIC-NODESET-001
+evaluator: structured_claim_v2
+
+capability_criteria:
+  - id: cause_family
+    description: Identifies a boundary entity-type mismatch
+    json_pointer: /claim/cause_family
+    comparator: normalized_exact
+    expected: boundary_entity_type_mismatch
+    weight: 0.40
+  - id: localized_artifact
+    description: Localizes the defect to the imported mesh
+    json_pointer: /claim/artifact
+    comparator: normalized_exact
+    expected: imported_mesh
+    weight: 0.25
+  - id: affected_boundaries
+    description: Identifies both requested periodic boundary names
+    json_pointer: /claim/boundaries
+    comparator: set_f1
+    expected:
+      - left_nodes
+      - right_nodes
+    weight: 0.15
+  - id: entity_mismatch
+    description: Identifies node sets where side sets are required
+    json_pointer: /claim/defect
+    comparator: normalized_exact
+    expected: nodeset_instead_of_sideset
+    weight: 0.20
+
+evidence_criteria:
+  - id: mesh_report_source
+    description: Binds entity metadata to the supplied mesh report
+    json_pointer: /evidence/0/source_id
+    comparator: exact
+    expected: mesh_report
+    weight: 0.20
+  - id: mesh_report_observation
+    description: Reports that the boundary names occur only as node sets
+    json_pointer: /evidence/0/observation
+    comparator: contains
+    expected: node-set table
+    weight: 0.20
+  - id: warning_source
+    description: Binds the matching failure to the current warning
+    json_pointer: /evidence/1/source_id
+    comparator: exact
+    expected: periodic_warning
+    weight: 0.20
+  - id: warning_observation
+    description: Reports the observed failed boundary match
+    json_pointer: /evidence/1/observation
+    comparator: contains
+    expected: could not find a match
+    weight: 0.20
+  - id: pairing_source
+    description: Binds the final state to the pairing report
+    json_pointer: /evidence/2/source_id
+    comparator: exact
+    expected: pairing_report
+    weight: 0.20
+
+hard_gates: []

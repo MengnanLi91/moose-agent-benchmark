@@ -1,0 +1,14 @@
+Imported mesh boundary metadata
+================================
+
+Node sets:
+- bottom
+- top
+- left_nodes
+- right_nodes
+
+Side sets:
+- bottom
+- top
+
+The names left_nodes and right_nodes occur only in the node-set table.

@@ -1,0 +1,76 @@
+schema_version: "2.0"
+case_id: D2-THERMAL-REL-TOL-001
+title: Reconstruct Relative-Tolerance Nonconvergence
+case_kind: atomic
+track: DIAG
+subcategory: D2
+difficulty: L2
+scoring_profile: balanced_v1
+base_problem_id: THERMAL-CONDUCTION-REL-TOL-BASE-001
+physics_domains:
+  - thermal_energy_transport
+
+target:
+  application: combined
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+
+prompt_path: prompt.md
+prompt_sha256: 5b9458282749f29997c1ea498858073858be1660b953abdcb8ab682e628c6b02
+
+artifacts:
+  - id: failing_input
+    path: artifacts/failing.i
+    role: immutable_input
+    mutable: false
+    required: true
+    sha256: 31d9a656acfe96149d849e9a4f3d16374124f26427c1419ffd22d02037055b3c
+
+evidence_sources:
+  - id: residual_report
+    path: evidence/residual-report.json
+    kind: nonlinear_residual_report
+    description: Initial and final residuals, active tolerances, and solver reasons
+    sha256: 61ffc83091a54f7d59143eadf5febcf07cae43705ff1d3612d69d3f1b734eb93
+  - id: run_metadata
+    path: evidence/run-metadata.json
+    kind: reproducibility_metadata
+    description: Pinned executable, revision, command, process count, and public file hashes
+    sha256: bed7cdc4e574bc0296a574c633176631b0963396847549562e73e7baa9bad03d
+
+starting_state:
+  description: A thermal solve and its residual measurements are supplied.
+  supplied_truth:
+    - The reported residual values come from the pinned authoritative execution.
+    - The linear solve terminates before the nonlinear iteration limit is reached.
+  excluded_from_scoring:
+    - Input repair
+    - Tolerance retuning
+    - Additional execution
+
+actions:
+  permitted:
+    - Inspect the supplied input and residual report.
+    - Compute the relative target from the recorded values.
+  prohibited:
+    - Modify or execute the input.
+    - Consult private evaluator or reproduction material.
+
+budget:
+  wall_time_seconds: 60
+  cpu_seconds: 30
+  memory_mib: 512
+  validation_attempts: 0
+  execution_attempts: 0
+
+submission:
+  response_mode: structured_json
+  required_claim_paths:
+    - /claim/causal_chain
+    - /claim/computed_relative_target
+    - /claim/terminal_symptom
+  evidence_required: true
+  required_artifacts: []
+  maximum_artifacts: 0
+
+required_stages: []

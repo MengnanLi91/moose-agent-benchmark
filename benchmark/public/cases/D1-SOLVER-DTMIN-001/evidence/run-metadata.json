@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D1-SOLVER-DTMIN-001",
+  "captured_on": "2026-09-29",
+  "executable": "modules/combined/combined-opt",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "command": "combined-opt -i failing.i",
+  "process_count": 1,
+  "repetitions": 3,
+  "expected_exit_code": 1,
+  "timestep_attempts": [2, 1],
+  "sha256": {
+    "artifacts/failing.i": "57456c0778ecd60d2aea885ca7270d476601dd2868f8c91f55a0c6dcc8ae6d59",
+    "evidence/solver-events.json": "209b2ebd19daaa7c49e500e6ff422911162e3c8935036a640d850471b6c4723d"
+  }
+}

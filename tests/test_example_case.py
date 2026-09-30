@@ -19,6 +19,29 @@ from .fakes import ScriptedLLMClient
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "benchmark/manifest.yaml"
 
+DIAG_FIXTURES = [
+    (
+        "D1-SOLVER-DTMIN-001",
+        "D1-SOLVER-DTMIN-001",
+        "D1-SOLVER-DTMIN-001-mutant-001",
+    ),
+    (
+        "D2-THERMAL-REL-TOL-001",
+        "D2-THERMAL-REL-TOL-001",
+        "D2-THERMAL-REL-TOL-001-mutant-001",
+    ),
+    (
+        "D3-PERIODIC-NODESET-001",
+        "D3-PERIODIC-NODESET-001",
+        "D3-PERIODIC-NODESET-001-mutant-001",
+    ),
+    (
+        "D4-COUPLED-JACOBIAN-TEST-001",
+        "D4-COUPLED-JACOBIAN-TEST-001",
+        "D4-COUPLED-JACOBIAN-TEST-001-mutant-001",
+    ),
+]
+
 
 def _external_gates(case_id, filename):
     path = ROOT / f"benchmark/private/cases/{case_id}/{filename}"
@@ -62,19 +85,16 @@ class ExampleCaseTests(unittest.TestCase):
     def test_manifest_is_valid(self):
         self.assertEqual(validate_manifest(MANIFEST), [])
 
-    def test_structured_gold_passes_and_mutant_fails(self):
-        gold, _client = evaluate_case(
-            "DIAG-THERMAL-SCHEMA-001",
-            "DIAG-THERMAL-SCHEMA-001",
-        )
-        mutant, _client = evaluate_case(
-            "DIAG-THERMAL-SCHEMA-001",
-            "DIAG-THERMAL-SCHEMA-001-mutant",
-        )
-        self.assertEqual(gold.official_score, 100.0)
-        self.assertTrue(gold.case_passed)
-        self.assertFalse(mutant.case_passed)
-        self.assertLess(mutant.official_score, 80.0)
+    def test_structured_diag_gold_passes_and_mutant_fails_claim(self):
+        for case_id, gold_name, mutant_name in DIAG_FIXTURES:
+            with self.subTest(case_id=case_id):
+                gold, _client = evaluate_case(case_id, gold_name)
+                mutant, _client = evaluate_case(case_id, mutant_name)
+                self.assertEqual(gold.official_score, 100.0)
+                self.assertTrue(gold.case_passed)
+                self.assertTrue(mutant.gates_passed)
+                self.assertFalse(mutant.case_passed)
+                self.assertLess(mutant.official_score, 80.0)
 
     def test_f1_gold_passes_and_missing_expansion_mutant_fails(self):
         gold, client = evaluate_case(

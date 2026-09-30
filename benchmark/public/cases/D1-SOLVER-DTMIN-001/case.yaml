@@ -1,0 +1,75 @@
+schema_version: "2.0"
+case_id: D1-SOLVER-DTMIN-001
+title: Distinguish Linear Solve Failure from dtmin Termination
+case_kind: atomic
+track: DIAG
+subcategory: D1
+difficulty: L2
+scoring_profile: balanced_v1
+base_problem_id: TRANSIENT-DIFFUSION-DTMIN-BASE-001
+physics_domains:
+  - thermal_energy_transport
+
+target:
+  application: combined
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+
+prompt_path: prompt.md
+prompt_sha256: d01d21510086768d05aa54744fac3ffe14b39df9f0c5845bd0f819d69c9f3f2d
+
+artifacts:
+  - id: failing_input
+    path: artifacts/failing.i
+    role: immutable_input
+    mutable: false
+    required: true
+    sha256: 57456c0778ecd60d2aea885ca7270d476601dd2868f8c91f55a0c6dcc8ae6d59
+
+evidence_sources:
+  - id: solver_events
+    path: evidence/solver-events.json
+    kind: ordered_moose_solver_events
+    description: Ordered first-failure and propagated terminal messages from the pinned run
+    sha256: 209b2ebd19daaa7c49e500e6ff422911162e3c8935036a640d850471b6c4723d
+  - id: run_metadata
+    path: evidence/run-metadata.json
+    kind: reproducibility_metadata
+    description: Pinned executable, revision, command, process count, and public file hashes
+    sha256: 3d652f9125cdd23dfdf49b6df779e8bdc401c2e97c633c5d49f883fe0375c261
+
+starting_state:
+  description: A transient scalar problem and ordered failure evidence are supplied.
+  supplied_truth:
+    - The input is immutable and was executed with the pinned combined application.
+    - The event ordering is preserved from the authoritative run.
+  excluded_from_scoring:
+    - Input repair
+    - Solver retuning
+    - Time-stepper modification
+
+actions:
+  permitted:
+    - Inspect the supplied input and ordered solver events.
+    - Report the earliest failed stage and downstream terminal symptom.
+  prohibited:
+    - Modify or execute the input.
+    - Consult private evaluator or reproduction material.
+
+budget:
+  wall_time_seconds: 60
+  cpu_seconds: 30
+  memory_mib: 512
+  validation_attempts: 0
+  execution_attempts: 0
+
+submission:
+  response_mode: structured_json
+  required_claim_paths:
+    - /claim/failure_stage
+    - /claim/terminal_symptom
+  evidence_required: true
+  required_artifacts: []
+  maximum_artifacts: 0
+
+required_stages: []

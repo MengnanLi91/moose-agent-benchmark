@@ -1,0 +1,25 @@
+{
+  "claim": {
+    "cause_family": "boundary_entity_type_mismatch",
+    "artifact": "imported_mesh",
+    "boundaries": ["left_nodes", "right_nodes"],
+    "defect": "nodeset_instead_of_sideset"
+  },
+  "evidence": [
+    {
+      "source_id": "mesh_report",
+      "observation": "left_nodes and right_nodes occur only in the node-set table.",
+      "interpretation": "The imported mesh lacks matching side boundaries for periodic pairing."
+    },
+    {
+      "source_id": "periodic_warning",
+      "observation": "MOOSE could not find a match between left_nodes and right_nodes.",
+      "interpretation": "The requested boundary pair cannot establish periodicity."
+    },
+    {
+      "source_id": "pairing_report",
+      "observation": "periodic_pairing_established is false and constrained_dofs is 0.",
+      "interpretation": "The mismatch remains observable in the pairing result."
+    }
+  ]
+}

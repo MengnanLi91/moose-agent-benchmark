@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D1-SOLVER-DTMIN-001",
+  "exit_code": 1,
+  "ordered_events": [
+    {
+      "order": 1,
+      "message": "Time Step 1, time = 2, dt = 2"
+    },
+    {
+      "order": 2,
+      "message": "Linear solve did not converge due to DIVERGED_ITS iterations 0"
+    },
+    {
+      "order": 3,
+      "message": "Nonlinear solve did not converge due to DIVERGED_LINE_SEARCH iterations 0"
+    },
+    {
+      "order": 4,
+      "message": "Solve Did NOT Converge!"
+    },
+    {
+      "order": 5,
+      "message": "Aborting as solve did not converge"
+    },
+    {
+      "order": 6,
+      "message": "Time Step 1, time = 1, dt = 1"
+    },
+    {
+      "order": 7,
+      "message": "Linear solve did not converge due to DIVERGED_ITS iterations 0"
+    },
+    {
+      "order": 8,
+      "message": "Nonlinear solve did not converge due to DIVERGED_LINE_SEARCH iterations 0"
+    },
+    {
+      "order": 9,
+      "message": "Solve Did NOT Converge!"
+    },
+    {
+      "order": 10,
+      "message": "Aborting as solve did not converge"
+    },
+    {
+      "order": 11,
+      "message": "Solve failed and timestep already at or below dtmin, cannot continue!"
+    }
+  ]
+}

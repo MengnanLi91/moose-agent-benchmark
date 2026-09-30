@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class ContractTests(unittest.TestCase):
     def test_example_and_templates_validate_as_v2(self):
         paths = [
-            ROOT / "benchmark/public/cases/DIAG-THERMAL-SCHEMA-001/case.yaml",
+            ROOT / "benchmark/public/cases/D1-SOLVER-DTMIN-001/case.yaml",
             ROOT / "templates/atomic-case/case.yaml",
             ROOT / "templates/integrated-workflow-case/case.yaml",
         ]
@@ -28,7 +28,7 @@ class ContractTests(unittest.TestCase):
                 self.assertEqual(load_evaluation(path).schema_version, "2.0")
 
     def test_v1_submission_record_is_rejected(self):
-        path = ROOT / "benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001/run-record.json"
+        path = ROOT / "benchmark/example-submissions/D1-SOLVER-DTMIN-001/run-record.json"
         data = path.read_text(encoding="utf-8").replace(
             '"schema_version": "2.0"',
             '"schema_version": "1.0"',

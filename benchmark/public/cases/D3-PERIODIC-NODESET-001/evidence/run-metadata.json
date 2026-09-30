@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D3-PERIODIC-NODESET-001",
+  "captured_on": "2026-09-29",
+  "executable": "modules/combined/combined-opt",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "command": "combined-opt -i failing.i",
+  "process_count": 1,
+  "repetitions": 3,
+  "expected_exit_code": 0,
+  "sha256": {
+    "artifacts/failing.i": "57a1c6bfb5c0c12452c983ee8e26fe0db2e493ce8ec631354474a9c98a2655a6",
+    "artifacts/periodic_mesh.e": "050dedac37a5c059a1e3eabe446bfa576f4cdaa532ee5015ea60f528e661f141",
+    "evidence/mesh-report.txt": "e6ec3f8bb589f0b0de5c863e0c751e7c4b13a1f0eb350a7fbd9b93b9e3fb7ee7",
+    "evidence/periodic-warning.log": "9a18fe881b20b459e58148a1a2abddbd16651ea6ee8ecaa22f97802b08f59155",
+    "evidence/pairing-report.json": "1c7512b6998c0f29c8ea77d1de614fbd5f0703ddf5bab6d58de8334379566d60"
+  }
+}

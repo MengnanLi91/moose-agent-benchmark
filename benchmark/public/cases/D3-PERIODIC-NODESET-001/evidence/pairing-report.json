@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D3-PERIODIC-NODESET-001",
+  "requested_pair": ["left_nodes", "right_nodes"],
+  "periodic_pairing_established": false,
+  "stored_periodic_dimension_x": false,
+  "constrained_dofs": 0,
+  "warning_emitted": true,
+  "automatic_detection": {
+    "negative_x_boundaries": 0,
+    "positive_x_boundaries": 0
+  }
+}

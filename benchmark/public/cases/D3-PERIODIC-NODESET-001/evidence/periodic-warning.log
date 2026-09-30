@@ -1,0 +1,6 @@
+*** Warning ***
+The following occurred in the MooseMesh 'mesh' of type MeshGeneratorMesh.
+
+Could not find a match between boundary 'left_nodes' and 'right_nodes' to set periodic
+boundary conditions for variable (index:0) in either the X, Y or Z direction. The periodic
+dimension of the mesh for this variable will not be stored.

@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "case_id": "D1-SOLVER-DTMIN-001",
+  "finished_at": "2026-09-29T12:00:05Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "a0fa555f36e3ab796bc4285e2435e52beb95d11e2046a5326b2c0f206df86459",
+    "size_bytes": 571
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-09-29T12:00:00Z",
+  "submission_sha256": "83dafb7d68e95b53823249bb8431ee306cc517099d965a232beb1b3c346e7b6c",
+  "usage": {
+    "cpu_seconds": 1.0,
+    "execution_attempts": 0,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 0,
+    "wall_time_seconds": 5.0
+  }
+}

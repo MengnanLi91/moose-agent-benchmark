@@ -20,21 +20,21 @@ class CatalogValidationTests(unittest.TestCase):
         return root
 
     def record_path(self, root: Path) -> Path:
-        return root / "catalog/cases/DIAG-THERMAL-SCHEMA-001.md"
+        return root / "catalog/cases/D1-SOLVER-DTMIN-001.md"
 
     def case_path(self, root: Path) -> Path:
-        return root / "benchmark/public/cases/DIAG-THERMAL-SCHEMA-001/case.yaml"
+        return root / "benchmark/public/cases/D1-SOLVER-DTMIN-001/case.yaml"
 
     def test_repository_catalog_passes_strict_validation(self):
         result = validate_catalog(ROOT, strict=True)
         self.assertEqual(result.errors, [])
-        self.assertTrue(result.readiness["DIAG-THERMAL-SCHEMA-001"].implemented)
+        self.assertTrue(result.readiness["D1-SOLVER-DTMIN-001"].implemented)
 
     def test_catalog_title_mismatch_fails(self):
         root = self.copy_repository_data()
         path = self.record_path(root)
         text = path.read_text(encoding="utf-8").replace(
-            "title: Classify an unregistered MOOSE object failure",
+            "title: Distinguish Linear Solve Failure from dtmin Termination",
             "title: Different title",
             1,
         )
@@ -90,16 +90,12 @@ class CatalogValidationTests(unittest.TestCase):
             "benchmark_review_complete: true",
             1,
         )
-        text = text.replace(
-            "moose_validation_required: false",
-            "moose_validation_required: true",
-            1,
-        )
+        text = text.replace("moose_validated: true", "moose_validated: false", 1)
         path.write_text(text, encoding="utf-8")
         errors = validate_catalog(root).errors
         self.assertEqual(
             [error for error in errors if "complete case is missing" in error],
-            ["DIAG-THERMAL-SCHEMA-001: complete case is missing MOOSE validation"],
+            ["D1-SOLVER-DTMIN-001: complete case is missing MOOSE validation"],
         )
 
     def test_review_case_requires_mutant_fixture(self):
@@ -113,7 +109,7 @@ class CatalogValidationTests(unittest.TestCase):
             ),
             encoding="utf-8",
         )
-        mutant = root / "benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001-mutant"
+        mutant = root / "benchmark/example-submissions/D1-SOLVER-DTMIN-001-mutant-001"
         shutil.rmtree(mutant)
         errors = validate_catalog(root).errors
         self.assertTrue(any("missing mutant submission fixture" in error for error in errors))

@@ -1,0 +1,51 @@
+Framework Information:
+MOOSE Version:           git commit c2dfd9fedd on 2026-08-18
+LibMesh Version:         
+PETSc Version:           3.25.2
+SLEPc Version:           3.25.0
+Current Time:            Tue Sep 29 11:21:15 2026
+Executable Timestamp:    Mon Sep 28 21:07:40 2026
+
+Input File(s):
+  /Users/lim2/Research/LLM/moose-agent-benchmark/main/benchmark/public/cases/D2-THERMAL-REL-TOL-001/artifacts/failing.i
+
+Checkpoint:
+  Wall Time Interval:      Every 3600 s
+  Checkpoint:              Outputs/checkpoint
+  # Checkpoints Kept:      2
+  Execute On:              TIMESTEP_END 
+
+Parallelism:
+  Num Processors:          1
+  Num Threads:             1
+
+Mesh: 
+  Parallel Type:           replicated
+  Mesh Dimension:          1
+  Spatial Dimension:       1
+  Nodes:                   21
+  Elems:                   20
+  Num Subdomains:          1
+
+Nonlinear System:
+  Num DOFs:                21
+  Num Local DOFs:          21
+  Variables:               "temperature" 
+  Finite Element Types:    "LAGRANGE" 
+  Approximation Orders:    "FIRST" 
+
+Execution Information:
+  Executioner:             Steady
+  Solver Mode:             NEWTON 
+  PETSc Preconditioner:    none 
+  MOOSE Preconditioner:    SMP (auto) 
+
+ 0 Nonlinear |R| = [32m2.179449e-07[39m
+      0 Linear |R| = [32m2.179449e-07[39m
+      1 Linear |R| = [32m2.061553e-07[39m
+    Linear solve converged due to CONVERGED_RTOL iterations 1
+ 1 Nonlinear |R| = [32m2.061553e-07[39m
+  Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1
+[31m Solve Did NOT Converge![39m
+
+Aborting as solve did not converge

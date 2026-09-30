@@ -1,0 +1,26 @@
+{
+  "claim": {
+    "next_action": "finite_difference_jacobian_comparison",
+    "information_gain": [
+      "distinguishes_jacobian_consistency",
+      "localizes_coupling_block",
+      "separates_derivative_error_from_residual_scaling"
+    ],
+    "predictions": {
+      "H1": {
+        "jacobian_comparison": "off_diagonal_mismatch"
+      },
+      "H2": {
+        "jacobian_comparison": "acceptable",
+        "remaining_issue": "residual_scale_imbalance"
+      }
+    }
+  },
+  "evidence": [
+    {
+      "source_id": "diagnostic_context",
+      "observation": "Residual norms differ by orders of magnitude and iteration history cannot distinguish H1 from H2.",
+      "interpretation": "A direct analytic-versus-finite-difference Jacobian comparison separates the hypotheses."
+    }
+  ]
+}

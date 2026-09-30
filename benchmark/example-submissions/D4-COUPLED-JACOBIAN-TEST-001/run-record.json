@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "case_id": "D4-COUPLED-JACOBIAN-TEST-001",
+  "finished_at": "2026-09-29T12:00:05Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "ff8d6de71d997cdf6d670499465edff46d642fb92ba867d17496549306f1a409",
+    "size_bytes": 786
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-09-29T12:00:00Z",
+  "submission_sha256": "bdce797a81880a36979ee3e95012c189f553ca90f1d7265b3869766903ba1d60",
+  "usage": {
+    "cpu_seconds": 1.0,
+    "execution_attempts": 0,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 0,
+    "wall_time_seconds": 5.0
+  }
+}

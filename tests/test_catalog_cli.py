@@ -16,7 +16,7 @@ class CatalogCliTests(unittest.TestCase):
         with redirect_stdout(output), self.assertRaises(SystemExit) as raised:
             main(["catalog", "validate", "--strict", "--repo-root", str(ROOT)])
         self.assertEqual(raised.exception.code, 0)
-        self.assertIn("validated 36 catalog case", output.getvalue())
+        self.assertIn("validated 35 catalog case", output.getvalue())
 
     def test_catalog_report_writes_json(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -36,8 +36,8 @@ class CatalogCliTests(unittest.TestCase):
                 )
             self.assertEqual(raised.exception.code, 0)
             report = json.loads(output_path.read_text(encoding="utf-8"))
-        self.assertEqual(report["totals"]["cataloged"], 36)
-        self.assertEqual(report["track_counts"]["DIAG"]["implemented"], 1)
+        self.assertEqual(report["totals"]["cataloged"], 35)
+        self.assertEqual(report["track_counts"]["DIAG"]["implemented"], 4)
         self.assertEqual(report["track_counts"]["FORM"]["implemented"], 4)
 
     def test_catalog_validate_returns_one_for_invalid_repository(self):

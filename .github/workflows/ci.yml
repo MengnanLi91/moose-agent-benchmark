@@ -32,19 +32,29 @@ jobs:
         run: |
           uv run moose-benchmark catalog validate --strict
           uv run moose-benchmark validate benchmark/manifest.yaml
-          uv run moose-benchmark score \
-            --manifest benchmark/manifest.yaml \
-            --case-id DIAG-THERMAL-SCHEMA-001 \
-            --submission benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001.json \
-            --external-gates external-gates.json \
-            --output /tmp/gold.json
-          uv run moose-benchmark score \
-            --manifest benchmark/manifest.yaml \
-            --case-id DIAG-THERMAL-SCHEMA-001 \
-            --submission benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001-mutant.json \
-            --external-gates external-gates-mutant.json \
-            --output /tmp/mutant.json
-          uv run python ci/assert_example_scores.py /tmp/gold.json /tmp/mutant.json
+          pairs=(
+            "D1-SOLVER-DTMIN-001:D1-SOLVER-DTMIN-001-mutant-001"
+            "D2-THERMAL-REL-TOL-001:D2-THERMAL-REL-TOL-001-mutant-001"
+            "D3-PERIODIC-NODESET-001:D3-PERIODIC-NODESET-001-mutant-001"
+            "D4-COUPLED-JACOBIAN-TEST-001:D4-COUPLED-JACOBIAN-TEST-001-mutant-001"
+          )
+          for pair in "${pairs[@]}"; do
+            case_id="${pair%%:*}"
+            mutant="${pair#*:}"
+            uv run moose-benchmark score \
+              --manifest benchmark/manifest.yaml \
+              --case-id "$case_id" \
+              --submission-dir "benchmark/example-submissions/$case_id" \
+              --output "/tmp/$case_id-gold.json"
+            uv run moose-benchmark score \
+              --manifest benchmark/manifest.yaml \
+              --case-id "$case_id" \
+              --submission-dir "benchmark/example-submissions/$mutant" \
+              --output "/tmp/$case_id-mutant.json"
+            uv run python ci/assert_example_scores.py \
+              "/tmp/$case_id-gold.json" \
+              "/tmp/$case_id-mutant.json"
+          done
 
       - name: Build release artifacts
         run: |

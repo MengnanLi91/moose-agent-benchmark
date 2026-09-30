@@ -1,0 +1,60 @@
+
+[36m
+*** Info ***
+The following paired boundaries were automatically detected for periodicity:
+
+  2D x-direction: left <-> right
+  2D y-direction: bottom <-> top
+[39m
+Framework Information:
+MOOSE Version:           git commit c2dfd9fedd on 2026-08-18
+LibMesh Version:         
+PETSc Version:           3.25.2
+SLEPc Version:           3.25.0
+Current Time:            Tue Sep 29 11:21:16 2026
+Executable Timestamp:    Mon Sep 28 21:07:40 2026
+
+Input File(s):
+  /Users/lim2/Research/LLM/moose-agent-benchmark/main/benchmark/private/cases/D3-PERIODIC-NODESET-001/controls/control.i
+
+Checkpoint:
+  Wall Time Interval:      Every 3600 s
+  Checkpoint:              Outputs/checkpoint
+  # Checkpoints Kept:      2
+  Execute On:              TIMESTEP_END 
+
+Parallelism:
+  Num Processors:          1
+  Num Threads:             1
+
+Mesh: 
+  Parallel Type:           replicated
+  Mesh Dimension:          2
+  Spatial Dimension:       2
+  Nodes:                   25
+  Elems:                   16
+  Num Subdomains:          1
+
+Nonlinear System:
+  Num DOFs:                25
+  Num Local DOFs:          25
+  Num Constrained DOFs:    5
+  Local Constrained DOFs:  5
+  Variables:               "u" 
+  Finite Element Types:    "LAGRANGE" 
+  Approximation Orders:    "FIRST" 
+
+Execution Information:
+  Executioner:             Transient
+  TimeStepper:             ConstantDT
+  TimeIntegrator(s):       ImplicitEuler
+  Solver Mode:             NEWTON 
+  MOOSE Preconditioner:    SMP (auto) 
+
+
+Time Step 0, time = 0
+
+Time Step 1, time = 1, dt = 1
+ 0 Nonlinear |R| = [32m0.000000e+00[39m
+[32m Solve Converged![39m
+

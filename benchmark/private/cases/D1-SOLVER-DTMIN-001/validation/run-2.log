@@ -1,0 +1,84 @@
+Framework Information:
+MOOSE Version:           git commit c2dfd9fedd on 2026-08-18
+LibMesh Version:         
+PETSc Version:           3.25.2
+SLEPc Version:           3.25.0
+Current Time:            Tue Sep 29 12:39:35 2026
+Executable Timestamp:    Mon Sep 28 21:07:40 2026
+
+Input File(s):
+  /Users/lim2/Research/LLM/moose-agent-benchmark/main/benchmark/public/cases/D1-SOLVER-DTMIN-001/artifacts/failing.i
+
+Checkpoint:
+  Wall Time Interval:      Every 3600 s
+  Checkpoint:              Outputs/checkpoint
+  # Checkpoints Kept:      2
+  Execute On:              TIMESTEP_END 
+
+Parallelism:
+  Num Processors:          1
+  Num Threads:             1
+
+Mesh: 
+  Parallel Type:           replicated
+  Mesh Dimension:          1
+  Spatial Dimension:       1
+  Nodes:                   21
+  Elems:                   20
+  Num Subdomains:          1
+
+Nonlinear System:
+  Num DOFs:                21
+  Num Local DOFs:          21
+  Variables:               "u" 
+  Finite Element Types:    "LAGRANGE" 
+  Approximation Orders:    "FIRST" 
+
+Execution Information:
+  Executioner:             Transient
+  TimeStepper:             ConstantDT
+  TimeIntegrator(s):       ImplicitEuler
+  Solver Mode:             NEWTON 
+  MOOSE Preconditioner:    SMP (auto) 
+
+
+Time Step 0, time = 0
+
+Time Step 1, time = 2, dt = 2
+ 0 Nonlinear |R| = [32m2.179449e-01[39m
+      0 Linear |R| = [32m2.179449e-01[39m
+    Linear solve did not converge due to DIVERGED_ITS iterations 0
+  Nonlinear solve did not converge due to DIVERGED_LINE_SEARCH iterations 0
+[31m Solve Did NOT Converge![39m
+
+Aborting as solve did not converge
+
+Time Step 1, time = 1, dt = 1
+ 0 Nonlinear |R| = [32m2.179449e-01[39m
+      0 Linear |R| = [32m2.179449e-01[39m
+    Linear solve did not converge due to DIVERGED_ITS iterations 0
+  Nonlinear solve did not converge due to DIVERGED_LINE_SEARCH iterations 0
+[31m Solve Did NOT Converge![39m
+
+Aborting as solve did not converge
+
+[31m
+*** ERROR ***
+The following occurred in the TimeStepper 'ConstantDT' of type ConstantDT.
+
+Solve failed and timestep already at or below dtmin, cannot continue![39m
+
+Stack frames: 12
+0: 0   libmesh_opt.0.dylib                 0x000000010f0d4cc8 libMesh::print_trace(std::__1::basic_ostream<char, std::__1::char_traits<char>>&) + 1008
+1: 1   libmoose-opt.0.dylib                0x00000001083e8c94 moose::internal::mooseErrorRaw(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, hit::Node const*, bool) + 272
+2: 2   libmoose-opt.0.dylib                0x00000001084ccdc4 MooseBase::callMooseError(MooseApp*, InputParameters const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, bool, hit::Node const*, bool) + 324
+3: 3   libmoose-opt.0.dylib                0x0000000108480b6c MooseBase::callMooseError(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, bool, hit::Node const*, bool) const + 132
+4: 4   libmoose-opt.0.dylib                0x00000001070c41d4 void MooseBase::mooseError<char const (&) [70]>(char const (&) [70]) const + 72
+5: 5   libmoose-opt.0.dylib                0x0000000107f760fc AB2PredictorCorrector::estimateTimeError(libMesh::NumericVector<double>&) + 0
+6: 6   libmoose-opt.0.dylib                0x0000000107f80640 TimeStepper::computeStep() + 160
+7: 7   libmoose-opt.0.dylib                0x000000010728488c TransientBase::execute() + 280
+8: 8   libmoose-opt.0.dylib                0x00000001083e28ac MooseApp::executeExecutioner() + 348
+9: 9   libmoose-opt.0.dylib                0x00000001083dd1a8 MooseApp::run() + 1980
+10: 10  combined-opt                        0x000000010419bcd4 int Moose::main<CombinedTestApp>(int, char**) + 160
+11: 11  dyld                                0x00000001870c04e4 start + 6992
+Abort(1) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0

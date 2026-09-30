@@ -1,0 +1,57 @@
+schema_version: "2.0"
+case_id: D4-COUPLED-JACOBIAN-TEST-001
+evaluator: structured_claim_v2
+
+capability_criteria:
+  - id: discriminating_action
+    description: Selects the direct analytic-versus-finite-difference comparison
+    json_pointer: /claim/next_action
+    comparator: normalized_exact
+    expected: finite_difference_jacobian_comparison
+    weight: 0.50
+  - id: information_gain
+    description: Identifies the distinctions supplied by the selected comparison
+    json_pointer: /claim/information_gain
+    comparator: set_f1
+    expected:
+      - distinguishes_jacobian_consistency
+      - localizes_coupling_block
+      - separates_derivative_error_from_residual_scaling
+    weight: 0.20
+  - id: h1_prediction
+    description: Predicts the missing-coupling signature under H1
+    json_pointer: /claim/predictions/H1
+    comparator: json_subset
+    expected:
+      jacobian_comparison: off_diagonal_mismatch
+    weight: 0.15
+  - id: h2_prediction
+    description: Predicts a consistent Jacobian with scaling imbalance under H2
+    json_pointer: /claim/predictions/H2
+    comparator: json_subset
+    expected:
+      jacobian_comparison: acceptable
+      remaining_issue: residual_scale_imbalance
+    weight: 0.15
+
+evidence_criteria:
+  - id: diagnostic_source
+    description: Binds the decision to the supplied diagnostic context
+    json_pointer: /evidence/0/source_id
+    comparator: exact
+    expected: diagnostic_context
+    weight: 0.40
+  - id: scale_observation
+    description: Reports the artifact-bound residual scale difference
+    json_pointer: /evidence/0/observation
+    comparator: contains
+    expected: orders of magnitude
+    weight: 0.30
+  - id: ambiguity_observation
+    description: Reports that current iteration history does not separate the hypotheses
+    json_pointer: /evidence/0/observation
+    comparator: contains
+    expected: cannot distinguish H1 from H2
+    weight: 0.30
+
+hard_gates: []

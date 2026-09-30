@@ -1,0 +1,51 @@
+schema_version: "2.0"
+case_id: D2-THERMAL-REL-TOL-001
+evaluator: structured_claim_v2
+
+capability_criteria:
+  - id: causal_chain
+    description: Reconstructs the ordered tolerance and iteration-limit chain
+    json_pointer: /claim/causal_chain
+    comparator: sequence_lcs
+    expected:
+      - initial_residual_sets_relative_target
+      - linear_solve_reduces_residual_but_stops
+      - final_residual_exceeds_both_nonlinear_targets
+      - nonlinear_iteration_limit_reached
+    weight: 0.60
+  - id: computed_relative_target
+    description: Computes the active relative target from R0 and nl_rel_tol
+    json_pointer: /claim/computed_relative_target
+    comparator: numeric_tolerance
+    expected: 2.179449e-13
+    weight: 0.25
+    absolute_tolerance: 1.0e-19
+    relative_tolerance: 1.0e-6
+  - id: terminal_symptom
+    description: Identifies the terminal nonlinear outcome
+    json_pointer: /claim/terminal_symptom
+    comparator: normalized_exact
+    expected: nonlinear_nonconvergence
+    weight: 0.15
+
+evidence_criteria:
+  - id: residual_source
+    description: Binds the explanation to the supplied residual report
+    json_pointer: /evidence/0/source_id
+    comparator: exact
+    expected: residual_report
+    weight: 0.40
+  - id: final_residual_observation
+    description: Reports the observed final residual
+    json_pointer: /evidence/0/observation
+    comparator: contains
+    expected: "2.061553e-7"
+    weight: 0.30
+  - id: relative_target_observation
+    description: Reports the computed relative target from the artifact
+    json_pointer: /evidence/0/observation
+    comparator: contains
+    expected: "2.179449e-13"
+    weight: 0.30
+
+hard_gates: []

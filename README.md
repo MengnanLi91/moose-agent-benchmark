@@ -20,9 +20,9 @@ uv sync --extra dev
 uv run moose-benchmark validate benchmark/manifest.yaml
 uv run moose-benchmark score \
   --manifest benchmark/manifest.yaml \
-  --case-id DIAG-THERMAL-SCHEMA-001 \
-  --submission-dir benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001 \
-  --output benchmark-results/diag-thermal-schema-001.json
+  --case-id D1-SOLVER-DTMIN-001 \
+  --submission-dir benchmark/example-submissions/D1-SOLVER-DTMIN-001 \
+  --output benchmark-results/d1-solver-dtmin-001.json
 
 uv run moose-benchmark aggregate \
   --manifest benchmark/manifest.yaml \
@@ -44,6 +44,28 @@ uv run moose-benchmark score \
 
 The central configuration supports `openai`, `claude`, `litellm`, and `ollama`. LiteLLM uses
 its OpenAI-compatible proxy URL; API keys are read from the named environment variable.
+
+## How to read a benchmark case
+
+Each implemented benchmark case has four layers:
+
+1. **Catalog record** — the human-readable purpose, capability boundary, provenance, and
+   implementation status under `catalog/cases/<case-id>.md`.
+2. **Public case bundle** — everything the evaluated agent may see under
+   `benchmark/public/cases/<case-id>/`, including `case.yaml`, the prompt, immutable
+   artifacts, and participant-visible evidence.
+3. **Private evaluator and reproduction material** — scoring truth, expected claims,
+   controls, and validation outputs under `benchmark/private/cases/<case-id>/`.
+4. **Example submissions** — gold and deliberately incorrect development fixtures under
+   `benchmark/example-submissions/`.
+
+For an unbiased evaluation, provide the agent only the public case bundle. Do not expose
+private evaluator material or example submissions. The example submissions are intended to
+test scoring behavior and are not held-out benchmark answers.
+
+When reviewing a case, read the catalog record first, then `case.yaml`, `prompt.md`, and the
+public artifacts and evidence. Benchmark maintainers can then inspect the private evaluator
+and reproduction material to understand scoring and provenance.
 
 ## Quick start: view and edit examples in Obsidian
 
@@ -100,7 +122,7 @@ Open a record from the dashboard or browse `catalog/cases/` directly. For exampl
 - `catalog/cases/F3-PHASEFIELD-SPLITCH-001.md` is an implemented object-mapping case.
 - `catalog/cases/F4-POROUS-SOLUTE-001.md` is an implemented input-assembly case.
 - `catalog/cases/R3-FLUID-PRESSURE-NULLSPACE-001.md` is a planned repair case.
-- `catalog/cases/DIAG-THERMAL-SCHEMA-001.md` documents the implemented example case.
+- `catalog/cases/D1-SOLVER-DTMIN-001.md` documents an implemented diagnostic case.
 
 Each record has YAML frontmatter for searchable project metadata followed by Markdown
 sections describing the benchmark purpose, starting information, required output, capability

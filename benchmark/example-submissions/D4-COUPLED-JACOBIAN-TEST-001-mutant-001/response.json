@@ -1,0 +1,24 @@
+{
+  "claim": {
+    "next_action": "preconditioner_tuning",
+    "information_gain": [
+      "improves_linear_convergence"
+    ],
+    "predictions": {
+      "H1": {
+        "jacobian_comparison": "not_measured"
+      },
+      "H2": {
+        "jacobian_comparison": "not_measured",
+        "remaining_issue": "unknown"
+      }
+    }
+  },
+  "evidence": [
+    {
+      "source_id": "diagnostic_context",
+      "observation": "Residual norms differ by orders of magnitude and iteration history cannot distinguish H1 from H2.",
+      "interpretation": "Preconditioner tuning is incorrectly selected before measuring Jacobian consistency."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D3-PERIODIC-NODESET-001",
+  "validated_on": "2026-09-29",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "process_count": 1,
+  "faulty_runs": {
+    "count": 3,
+    "exit_codes": [0, 0, 0],
+    "warning_present": [true, true, true],
+    "periodic_pairing_established": [false, false, false],
+    "constrained_dofs": [0, 0, 0]
+  },
+  "control_runs": {
+    "count": 3,
+    "exit_codes": [0, 0, 0],
+    "warning_present": [false, false, false],
+    "periodic_pairing_established": [true, true, true],
+    "constrained_dofs": [5, 5, 5]
+  }
+}

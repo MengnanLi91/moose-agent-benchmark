@@ -1,0 +1,45 @@
+schema_version: "2.0"
+case_id: D1-SOLVER-DTMIN-001
+evaluator: structured_claim_v2
+
+capability_criteria:
+  - id: earliest_failure_stage
+    description: Identifies the first failed stage rather than a propagated symptom
+    json_pointer: /claim/failure_stage
+    comparator: normalized_exact
+    expected: linear_solve
+    weight: 0.80
+  - id: terminal_symptom
+    description: Identifies termination after the failed solve reaches the minimum step
+    json_pointer: /claim/terminal_symptom
+    comparator: normalized_exact
+    expected: timestep_at_or_below_dtmin
+    weight: 0.20
+
+evidence_criteria:
+  - id: first_failure_source
+    description: Binds the first failure to the ordered solver evidence
+    json_pointer: /evidence/0/source_id
+    comparator: exact
+    expected: solver_events
+    weight: 0.20
+  - id: first_failure_observation
+    description: Quotes the artifact-bound linear divergence observation
+    json_pointer: /evidence/0/observation
+    comparator: contains
+    expected: DIVERGED_ITS
+    weight: 0.30
+  - id: terminal_source
+    description: Binds the terminal symptom to the ordered solver evidence
+    json_pointer: /evidence/1/source_id
+    comparator: exact
+    expected: solver_events
+    weight: 0.20
+  - id: terminal_observation
+    description: Quotes the artifact-bound minimum-step observation
+    json_pointer: /evidence/1/observation
+    comparator: contains
+    expected: at or below dtmin
+    weight: 0.30
+
+hard_gates: []

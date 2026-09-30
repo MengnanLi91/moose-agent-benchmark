@@ -1,0 +1,25 @@
+{
+  "claim": {
+    "cause_family": "periodic_translation_mismatch",
+    "artifact": "failing_input",
+    "boundaries": ["left_nodes", "right_nodes"],
+    "defect": "incorrect_translation_vector"
+  },
+  "evidence": [
+    {
+      "source_id": "mesh_report",
+      "observation": "left_nodes and right_nodes occur only in the node-set table.",
+      "interpretation": "This is incorrectly dismissed as unrelated to periodic pairing."
+    },
+    {
+      "source_id": "periodic_warning",
+      "observation": "MOOSE could not find a match between left_nodes and right_nodes.",
+      "interpretation": "The warning is incorrectly attributed to the translation vector."
+    },
+    {
+      "source_id": "pairing_report",
+      "observation": "periodic_pairing_established is false and constrained_dofs is 0.",
+      "interpretation": "The failed result is incorrectly localized to the input translation."
+    }
+  ]
+}

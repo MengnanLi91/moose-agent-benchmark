@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "case_id": "D3-PERIODIC-NODESET-001",
+  "finished_at": "2026-09-29T12:00:05Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "e082484f44c330a9eda0978e3b1a61bdbbf6d0b651b7686f80fde3d5d2351e9c",
+    "size_bytes": 909
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-09-29T12:00:00Z",
+  "submission_sha256": "6247306c88f0d1511d9c90c0a6e23e6e632d347c1c5a296c9fcb6c7ebdc9d0b9",
+  "usage": {
+    "cpu_seconds": 1.0,
+    "execution_attempts": 0,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 0,
+    "wall_time_seconds": 5.0
+  }
+}

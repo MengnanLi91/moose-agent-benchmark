@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D2-THERMAL-REL-TOL-001",
+  "validated_on": "2026-09-29",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "process_count": 1,
+  "runs": 3,
+  "exit_codes": [1, 1, 1],
+  "initial_residuals": [2.179449e-7, 2.179449e-7, 2.179449e-7],
+  "final_residuals": [2.061553e-7, 2.061553e-7, 2.061553e-7],
+  "computed_relative_targets": [2.179449e-13, 2.179449e-13, 2.179449e-13],
+  "inequalities_preserved": [true, true, true],
+  "nonlinear_reason": "DIVERGED_MAX_IT"
+}

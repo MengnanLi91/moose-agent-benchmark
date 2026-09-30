@@ -1,0 +1,18 @@
+{
+  "claim": {
+    "failure_stage": "linear_solve",
+    "terminal_symptom": "timestep_at_or_below_dtmin"
+  },
+  "evidence": [
+    {
+      "source_id": "solver_events",
+      "observation": "The first failure is Linear DIVERGED_ITS at iteration 0.",
+      "interpretation": "The linear solve fails before nonlinear and time-stepper propagation."
+    },
+    {
+      "source_id": "solver_events",
+      "observation": "The run ends with timestep already at or below dtmin.",
+      "interpretation": "This is the downstream terminal symptom after the solve failure."
+    }
+  ]
+}

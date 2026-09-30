@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D4-COUPLED-JACOBIAN-TEST-001",
+  "captured_on": "2026-09-29",
+  "executable": "modules/combined/combined-opt",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "command": "combined-opt -i <hypothesis-variant>",
+  "process_count": 1,
+  "repetitions_per_hypothesis": 3,
+  "sha256": {
+    "artifacts/coupled-model-summary.md": "4836079efcc95b830f02004b36458a13ce32bba20c8efd02c2d4cd3d8d2faf48",
+    "evidence/diagnostic-context.json": "fea2b43c164fd13fd4d7c2db8baef35527e671f3d2fdca758cce2c8a1b5e2e4a"
+  }
+}

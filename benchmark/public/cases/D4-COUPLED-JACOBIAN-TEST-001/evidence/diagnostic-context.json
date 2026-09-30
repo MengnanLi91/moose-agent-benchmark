@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D4-COUPLED-JACOBIAN-TEST-001",
+  "symptoms": [
+    "The coupled system's off-diagonal Jacobian consistency has not been measured.",
+    "The initial total residual is large.",
+    "Temperature and displacement residual norms differ by several orders of magnitude.",
+    "Current iteration history cannot distinguish H1 from H2."
+  ],
+  "hypotheses": {
+    "H1": "missing off-diagonal coupling contribution",
+    "H2": "consistent Jacobian with residual-scale imbalance"
+  },
+  "available_actions": [
+    "finite_difference_jacobian_comparison",
+    "nonlinear_iteration_extension",
+    "preconditioner_tuning",
+    "timestep_reduction",
+    "mesh_refinement"
+  ]
+}

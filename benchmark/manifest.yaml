@@ -19,9 +19,24 @@ required_atomic_subcategories:
   - V3
   - V4
 cases:
-  - case_id: DIAG-THERMAL-SCHEMA-001
-    public_case: public/cases/DIAG-THERMAL-SCHEMA-001/case.yaml
-    private_evaluation: private/cases/DIAG-THERMAL-SCHEMA-001/evaluation.yaml
+  - case_id: D1-SOLVER-DTMIN-001
+    public_case: public/cases/D1-SOLVER-DTMIN-001/case.yaml
+    private_evaluation: private/cases/D1-SOLVER-DTMIN-001/evaluation.yaml
+    split: development
+    enabled: true
+  - case_id: D2-THERMAL-REL-TOL-001
+    public_case: public/cases/D2-THERMAL-REL-TOL-001/case.yaml
+    private_evaluation: private/cases/D2-THERMAL-REL-TOL-001/evaluation.yaml
+    split: development
+    enabled: true
+  - case_id: D3-PERIODIC-NODESET-001
+    public_case: public/cases/D3-PERIODIC-NODESET-001/case.yaml
+    private_evaluation: private/cases/D3-PERIODIC-NODESET-001/evaluation.yaml
+    split: development
+    enabled: true
+  - case_id: D4-COUPLED-JACOBIAN-TEST-001
+    public_case: public/cases/D4-COUPLED-JACOBIAN-TEST-001/case.yaml
+    private_evaluation: private/cases/D4-COUPLED-JACOBIAN-TEST-001/evaluation.yaml
     split: development
     enabled: true
   - case_id: F1-SOLID-DUCT-BOWING-001

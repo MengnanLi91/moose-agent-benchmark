@@ -1,0 +1,108 @@
+sh: mpicxx: command not found
+JIT compile failed.
+
+[36m
+*** Info ***
+Failed to JIT compile expression, falling back to byte code interpretation.[39m
+sh: mpicxx: command not found
+JIT compile failed.
+sh: mpicxx: command not found
+JIT compile failed.
+Framework Information:
+MOOSE Version:           git commit c2dfd9fedd on 2026-08-18
+LibMesh Version:         
+PETSc Version:           3.25.2
+SLEPc Version:           3.25.0
+Current Time:            Tue Sep 29 12:53:48 2026
+Executable Timestamp:    Mon Sep 28 21:07:40 2026
+
+Input File(s):
+  /Users/lim2/Research/LLM/moose-agent-benchmark/main/benchmark/private/cases/D4-COUPLED-JACOBIAN-TEST-001/variants/h1-missing-offdiag.i
+
+Checkpoint:
+  Wall Time Interval:      Every 3600 s
+  Checkpoint:              Outputs/checkpoint
+  # Checkpoints Kept:      2
+  Execute On:              TIMESTEP_END 
+
+Parallelism:
+  Num Processors:          1
+  Num Threads:             1
+
+Mesh: 
+  Parallel Type:           replicated
+  Mesh Dimension:          1
+  Spatial Dimension:       1
+  Nodes:                   5
+  Elems:                   4
+  Num Subdomains:          1
+
+Nonlinear System:
+  Num DOFs:                10
+  Num Local DOFs:          10
+  Variables:               { "temperature" "displacement" } 
+  Finite Element Types:    "LAGRANGE" 
+  Approximation Orders:    "FIRST" 
+
+Execution Information:
+  Executioner:             Steady
+  Solver Mode:             NEWTON 
+  MOOSE Preconditioner:    SMP 
+
+    |residual|_2 of individual variables:
+               temperature:  433008
+               displacement: 1.18182
+ 0 Nonlinear |R| = [32m4.330081e+05[39m
+  ---------- Testing Jacobian -------------
+  Testing hand-coded Jacobian, if (for double precision runs) ||J - Jfd||_F/||J||_F is
+    O(1.e-8), the hand-coded Jacobian is probably correct.
+  ||J - Jfd||_F/||J||_F = 0.0116026, ||J - Jfd||_F = 0.279509
+  Hand-coded Jacobian ----------
+Mat Object: (nl0_) 1 MPI process
+  type: seqaij
+row 0: (0, 1.)  (1, 0.)  (2, 0.)  (3, 0.) 
+row 1: (0, 0.)  (1, 1.)  (2, 0.)  (3, 0.) 
+row 2: (0, -4.)  (1, 0.)  (2, 8.)  (3, 0.)  (4, -4.)  (5, 0.) 
+row 3: (0, -0.0625)  (1, -4.)  (2, -0.3125)  (3, 8.)  (4, -0.0833333)  (5, -4.) 
+row 4: (2, -4.)  (3, 0.)  (4, 8.)  (5, 0.)  (6, -4.)  (7, 0.) 
+row 5: (2, -0.0833333)  (3, -4.)  (4, -0.333333)  (5, 8.)  (6, -0.0833333)  (7, -4.) 
+row 6: (4, -4.)  (5, 0.)  (6, 8.)  (7, 0.)  (8, -4.)  (9, 0.) 
+row 7: (4, -0.0833333)  (5, -4.)  (6, -0.3125)  (7, 8.)  (8, -0.0625)  (9, -4.) 
+row 8: (6, 0.)  (7, 0.)  (8, 1.)  (9, 0.) 
+row 9: (6, 0.)  (7, 0.)  (8, 0.)  (9, 1.) 
+  Finite difference Jacobian ----------
+Mat Object: 1 MPI process
+  type: seqaij
+row 0: (0, 1.)  (1, 0.)  (2, 0.)  (3, 0.) 
+row 1: (0, 0.)  (1, 1.)  (2, 0.)  (3, 0.) 
+row 2: (0, -3.99986)  (1, 0.)  (2, 7.99971)  (3, 0.)  (4, -3.99986)  (5, 0.) 
+row 3: (0, -0.0833333)  (1, -4.)  (2, -0.458333)  (3, 8.)  (4, -0.125)  (5, -4.) 
+row 4: (2, -3.99986)  (3, 0.)  (4, 7.99971)  (5, 0.)  (6, -3.99986)  (7, 0.) 
+row 5: (2, -0.125)  (3, -4.)  (4, -0.5)  (5, 8.)  (6, -0.125)  (7, -4.) 
+row 6: (4, -3.99986)  (5, 0.)  (6, 7.99971)  (7, 0.)  (8, -3.99986)  (9, 0.) 
+row 7: (4, -0.125)  (5, -4.)  (6, -0.458333)  (7, 8.)  (8, -0.0833333)  (9, -4.) 
+row 8: (6, 0.)  (7, 0.)  (8, 1.)  (9, 0.) 
+row 9: (6, 0.)  (7, 0.)  (8, 0.)  (9, 1.) 
+  Hand-coded minus finite-difference Jacobian with tolerance 1e-05 ----------
+Mat Object: 1 MPI process
+  type: seqaij
+row 0: (0, 0.)  (1, 0.)  (2, 0.)  (3, 0.) 
+row 1: (0, 0.)  (1, 0.)  (2, 0.)  (3, 0.) 
+row 2: (0, -0.000144278)  (1, 0.)  (2, 0.000288556)  (3, 0.)  (4, -0.000144278)  (5, 0.) 
+row 3: (0, 0.0208333)  (1, 0.)  (2, 0.145833)  (3, 0.)  (4, 0.0416667)  (5, 0.) 
+row 4: (2, -0.000144278)  (3, 0.)  (4, 0.000288556)  (5, 0.)  (6, -0.000144278)  (7, 0.) 
+row 5: (2, 0.0416667)  (3, 0.)  (4, 0.166667)  (5, 0.)  (6, 0.0416667)  (7, 0.) 
+row 6: (4, -0.000144278)  (5, 0.)  (6, 0.000288556)  (7, 0.)  (8, -0.000144278)  (9, 0.) 
+row 7: (4, 0.0416667)  (5, 0.)  (6, 0.145833)  (7, 0.)  (8, 0.0208333)  (9, 0.) 
+row 8: (6, 0.)  (7, 0.)  (8, 0.)  (9, 0.) 
+row 9: (6, 0.)  (7, 0.)  (8, 0.)  (9, 0.) 
+      0 Linear |R| = [32m4.330081e+05[39m
+      1 Linear |R| = [32m1.385466e-10[39m
+    |residual|_2 of individual variables:
+               temperature:  431991
+               displacement: 23600.8
+ 1 Nonlinear |R| = [33m4.326355e+05[39m
+  Nonlinear solve did not converge due to DIVERGED_MAX_IT iterations 1
+[31m Solve Did NOT Converge![39m
+
+Aborting as solve did not converge

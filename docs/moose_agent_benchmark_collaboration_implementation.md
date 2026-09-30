@@ -265,7 +265,7 @@ moose-agent-benchmark/
 │   │   └── V4.md
 │   │
 │   ├── cases/
-│   │   ├── DIAG-THERMAL-SCHEMA-001.md
+│   │   ├── D1-SOLVER-DTMIN-001.md
 │   │   └── ...
 │   │
 │   └── templates/
@@ -306,8 +306,8 @@ Recommended schema:
 ---
 catalog_schema_version: "1.0"
 
-case_id: DIAG-THERMAL-SCHEMA-001
-title: Classify an unregistered MOOSE object failure
+case_id: D1-SOLVER-DTMIN-001
+title: Distinguish Linear Solve Failure from dtmin Termination
 
 case_kind: atomic
 track: DIAG
@@ -324,11 +324,11 @@ priority: normal
 owner: MengnanLi91
 reviewers: []
 
-source_type: synthetic
-source_name: ""
+source_type: discussion_derived
+source_name: DIAG Benchmark Discussion-Derived Case Plan
 source_url: ""
 
-base_problem_id: THERMAL-CONDUCTION-BASE-001
+base_problem_id: TRANSIENT-DIFFUSION-DTMIN-BASE-001
 
 public_contract_ready: true
 private_evaluator_ready: true
@@ -940,7 +940,7 @@ The report should explain why a case cannot yet be complete.
 Example:
 
 ```text
-DIAG-THERMAL-SCHEMA-001
+D1-SOLVER-DTMIN-001
   status: review
   derived readiness: incomplete
   missing:
@@ -1598,7 +1598,7 @@ uv run moose-benchmark changed-cases origin/main HEAD
 Output:
 
 ```text
-DIAG-THERMAL-SCHEMA-001
+D1-SOLVER-DTMIN-001
 R2-SOLID-JACOBIAN-003
 ```
 
@@ -1862,7 +1862,7 @@ Required changes:
 16. Add GitHub issue template.
 17. Add/update PR template.
 18. Add a catalog record for the existing
-    DIAG-THERMAL-SCHEMA-001 example.
+    D1-SOLVER-DTMIN-001 example.
 19. Update README contributor instructions.
 ```
 

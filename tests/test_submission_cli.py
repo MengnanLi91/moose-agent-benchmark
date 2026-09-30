@@ -12,7 +12,7 @@ MANIFEST = ROOT / "benchmark/manifest.yaml"
 
 class SubmissionCliTests(unittest.TestCase):
     def test_record_and_score_structured_submission(self):
-        source = ROOT / "benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001/response.json"
+        source = ROOT / "benchmark/example-submissions/D1-SOLVER-DTMIN-001/response.json"
         with tempfile.TemporaryDirectory() as directory:
             submission_root = Path(directory) / "submission"
             submission_root.mkdir()
@@ -24,7 +24,7 @@ class SubmissionCliTests(unittest.TestCase):
                         "--manifest",
                         str(MANIFEST),
                         "--case-id",
-                        "DIAG-THERMAL-SCHEMA-001",
+                        "D1-SOLVER-DTMIN-001",
                         "--submission-dir",
                         str(submission_root),
                         "--model-provider",
@@ -44,7 +44,7 @@ class SubmissionCliTests(unittest.TestCase):
                         "--manifest",
                         str(MANIFEST),
                         "--case-id",
-                        "DIAG-THERMAL-SCHEMA-001",
+                        "D1-SOLVER-DTMIN-001",
                         "--submission-dir",
                         str(submission_root),
                         "--output",
@@ -85,7 +85,7 @@ class SubmissionCliTests(unittest.TestCase):
             self.assertFalse((submission_root / "run-record.json").exists())
 
     def test_score_detects_content_tampering_after_recording(self):
-        source = ROOT / "benchmark/example-submissions/DIAG-THERMAL-SCHEMA-001/response.json"
+        source = ROOT / "benchmark/example-submissions/D1-SOLVER-DTMIN-001/response.json"
         with tempfile.TemporaryDirectory() as directory:
             submission_root = Path(directory) / "submission"
             submission_root.mkdir()
@@ -97,7 +97,7 @@ class SubmissionCliTests(unittest.TestCase):
                         "--manifest",
                         str(MANIFEST),
                         "--case-id",
-                        "DIAG-THERMAL-SCHEMA-001",
+                        "D1-SOLVER-DTMIN-001",
                         "--submission-dir",
                         str(submission_root),
                         "--model-provider",
@@ -122,7 +122,7 @@ class SubmissionCliTests(unittest.TestCase):
                         "--manifest",
                         str(MANIFEST),
                         "--case-id",
-                        "DIAG-THERMAL-SCHEMA-001",
+                        "D1-SOLVER-DTMIN-001",
                         "--submission-dir",
                         str(submission_root),
                         "--output",

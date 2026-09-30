@@ -1,0 +1,18 @@
+{
+  "claim": {
+    "causal_chain": [
+      "initial_residual_sets_absolute_threshold",
+      "final_residual_is_below_relative_tolerance",
+      "nonlinear_solver_should_converge"
+    ],
+    "computed_relative_target": 1e-6,
+    "terminal_symptom": "solver_reporting_error"
+  },
+  "evidence": [
+    {
+      "source_id": "residual_report",
+      "observation": "Rf=2.061553e-7 is below 1e-6 but above 2.179449e-13 and 1e-12.",
+      "interpretation": "The relative tolerance is incorrectly treated as an absolute threshold."
+    }
+  ]
+}

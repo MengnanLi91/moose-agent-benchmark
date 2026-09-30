@@ -1,0 +1,19 @@
+{
+  "claim": {
+    "causal_chain": [
+      "initial_residual_sets_relative_target",
+      "linear_solve_reduces_residual_but_stops",
+      "final_residual_exceeds_both_nonlinear_targets",
+      "nonlinear_iteration_limit_reached"
+    ],
+    "computed_relative_target": 2.179449e-13,
+    "terminal_symptom": "nonlinear_nonconvergence"
+  },
+  "evidence": [
+    {
+      "source_id": "residual_report",
+      "observation": "Rf=2.061553e-7 is below 1e-6 but above 2.179449e-13 and 1e-12.",
+      "interpretation": "The residual misses both active nonlinear targets before max iteration."
+    }
+  ]
+}

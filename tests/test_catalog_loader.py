@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class CatalogLoaderTests(unittest.TestCase):
     def test_repository_record_and_templates_load(self):
         paths = [
-            ROOT / "catalog/cases/DIAG-THERMAL-SCHEMA-001.md",
+            ROOT / "catalog/cases/D1-SOLVER-DTMIN-001.md",
             ROOT / "catalog/templates/atomic-case-record.md",
             ROOT / "catalog/templates/integrated-case-record.md",
         ]
@@ -41,7 +41,7 @@ class CatalogLoaderTests(unittest.TestCase):
                 load_catalog_document(path)
 
     def test_atomic_subcategory_must_match_track(self):
-        document = load_catalog_document(ROOT / "catalog/cases/DIAG-THERMAL-SCHEMA-001.md")
+        document = load_catalog_document(ROOT / "catalog/cases/D1-SOLVER-DTMIN-001.md")
         data = document.record.model_dump(mode="json")
         data["track"] = "FORM"
         with self.assertRaisesRegex(ValidationError, "subcategory must match"):

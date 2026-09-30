@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "case_id": "D2-THERMAL-REL-TOL-001",
+  "finished_at": "2026-09-29T12:00:05Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "185ad35ee5b06c76350b2da22759ef65bf48f8a2b962170bc8bf90373a041580",
+    "size_bytes": 536
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-09-29T12:00:00Z",
+  "submission_sha256": "55bb96e3b26005598d784f0fb251ea44da630ed3363a6312b732ae9bfa4eae8c",
+  "usage": {
+    "cpu_seconds": 1.0,
+    "execution_attempts": 0,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 0,
+    "wall_time_seconds": 5.0
+  }
+}

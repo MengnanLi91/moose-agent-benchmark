@@ -1,0 +1,79 @@
+schema_version: "2.0"
+case_id: D4-COUPLED-JACOBIAN-TEST-001
+title: Choose a Jacobian Test for Coupled Nonlinear Ambiguity
+case_kind: atomic
+track: DIAG
+subcategory: D4
+difficulty: L3
+scoring_profile: balanced_v1
+base_problem_id: COUPLED-THERMOMECHANICAL-JACOBIAN-BASE-001
+physics_domains:
+  - coupled_engineering_systems
+  - thermal_energy_transport
+  - solid_and_structural_mechanics
+
+target:
+  application: combined
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+
+prompt_path: prompt.md
+prompt_sha256: 8d1c5e9775db8c6896eb40d7a21f070b8c31580cebe323c5a3da57dd6d698942
+
+artifacts:
+  - id: coupled_model_summary
+    path: artifacts/coupled-model-summary.md
+    role: immutable_model_summary
+    mutable: false
+    required: true
+    sha256: 4836079efcc95b830f02004b36458a13ce32bba20c8efd02c2d4cd3d8d2faf48
+
+evidence_sources:
+  - id: diagnostic_context
+    path: evidence/diagnostic-context.json
+    kind: competing_hypothesis_context
+    description: Stable actions, observed symptoms, and the two candidate hypotheses
+    sha256: fea2b43c164fd13fd4d7c2db8baef35527e671f3d2fdca758cce2c8a1b5e2e4a
+  - id: run_metadata
+    path: evidence/run-metadata.json
+    kind: reproducibility_metadata
+    description: Pinned executable, revision, command, process count, and public file hashes
+    sha256: 31a105daac4b91873acd2211cd6b314dc7dc66617446a0d8a7471dc8a6ffc740
+
+starting_state:
+  description: A reduced coupled model and two unresolved hypotheses are supplied.
+  supplied_truth:
+    - The current symptoms are compatible with either H1 or H2.
+    - Stable candidate action identifiers are supplied.
+  excluded_from_scoring:
+    - Model repair
+    - Solver tuning
+    - Performing the selected test
+
+actions:
+  permitted:
+    - Inspect the model summary and diagnostic context.
+    - Select one stable action ID and predict both hypothesis signatures.
+  prohibited:
+    - Modify or execute the model.
+    - Consult private variants, controls, or evaluator material.
+
+budget:
+  wall_time_seconds: 90
+  cpu_seconds: 45
+  memory_mib: 1024
+  validation_attempts: 0
+  execution_attempts: 0
+
+submission:
+  response_mode: structured_json
+  required_claim_paths:
+    - /claim/next_action
+    - /claim/information_gain
+    - /claim/predictions/H1
+    - /claim/predictions/H2
+  evidence_required: true
+  required_artifacts: []
+  maximum_artifacts: 0
+
+required_stages: []

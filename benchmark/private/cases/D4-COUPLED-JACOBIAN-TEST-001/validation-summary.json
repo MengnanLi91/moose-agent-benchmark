@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D4-COUPLED-JACOBIAN-TEST-001",
+  "validated_on": "2026-09-29",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "process_count": 1,
+  "h1_missing_offdiagonal": {
+    "runs": 3,
+    "exit_codes": [1, 1, 1],
+    "relative_jacobian_differences": [0.0116026, 0.0116026, 0.0116026],
+    "initial_temperature_residual": [433008, 433008, 433008],
+    "initial_displacement_residual": [1.18182, 1.18182, 1.18182],
+    "off_diagonal_difference_present": [true, true, true],
+    "residual_scale_imbalance_present": [true, true, true]
+  },
+  "h2_residual_scaling": {
+    "runs": 3,
+    "exit_codes": [0, 0, 0],
+    "relative_jacobian_differences": [2.67899e-10, 2.67899e-10, 2.67899e-10],
+    "initial_temperature_residual": [433013, 433013, 433013],
+    "initial_displacement_residual": [0.433013, 0.433013, 0.433013],
+    "residual_scale_imbalance_present": [true, true, true]
+  }
+}

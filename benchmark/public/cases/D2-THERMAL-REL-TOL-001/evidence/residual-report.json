@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "case_id": "D2-THERMAL-REL-TOL-001",
+  "initial_nonlinear_residual": 2.179449e-7,
+  "final_nonlinear_residual": 2.061553e-7,
+  "nl_rel_tol": 1e-6,
+  "computed_relative_target": 2.179449e-13,
+  "nl_abs_tol": 1e-12,
+  "inequalities": {
+    "final_below_one_e_minus_six": true,
+    "final_above_relative_target": true,
+    "final_above_absolute_target": true
+  },
+  "linear_reason": "CONVERGED_RTOL",
+  "nonlinear_reason": "DIVERGED_MAX_IT",
+  "nonlinear_iterations": 1
+}
