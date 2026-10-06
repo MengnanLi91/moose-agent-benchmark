@@ -1,0 +1,102 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "candidate changes include missing or unauthorized HIT paths",
+    "evidence": [
+      "changed_path:Preconditioning/FSP/concentration/petsc_options_iname",
+      "changed_path:Preconditioning/FSP/concentration/petsc_options_value",
+      "changed_path:Preconditioning/FSP/concentration/vars",
+      "changed_path:Preconditioning/FSP/fluid/splitting",
+      "changed_path:Preconditioning/FSP/fluid/splitting_type",
+      "changed_path:Preconditioning/FSP/pressure/petsc_options_iname",
+      "changed_path:Preconditioning/FSP/pressure/petsc_options_value",
+      "changed_path:Preconditioning/FSP/pressure/vars",
+      "changed_path:Preconditioning/FSP/system/splitting",
+      "changed_path:Preconditioning/FSP/system/splitting_type",
+      "changed_path:Preconditioning/FSP/system/vars",
+      "changed_path:Preconditioning/FSP/topsplit",
+      "changed_path:Preconditioning/FSP/type",
+      "changed_path:Preconditioning/FSP/velocity/petsc_options_iname",
+      "changed_path:Preconditioning/FSP/velocity/petsc_options_value",
+      "changed_path:Preconditioning/FSP/velocity/vars",
+      "changed_path:Preconditioning/direct/full",
+      "changed_path:Preconditioning/direct/petsc_options_iname",
+      "changed_path:Preconditioning/direct/petsc_options_value",
+      "changed_path:Preconditioning/direct/type"
+    ],
+    "gate_id": "authorized_edit_scope",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "3ab6d7dd1a4eca76c7eca251e2841fbf2e6ae303cc8c3b8261c65887e4990b62"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "input_validation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "3ab6d7dd1a4eca76c7eca251e2841fbf2e6ae303cc8c3b8261c65887e4990b62"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "nested split ownership is incomplete or overlapping",
+    "evidence": [
+      "system:ownership_declarations=0"
+    ],
+    "gate_id": "fieldsplit_partition",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "3ab6d7dd1a4eca76c7eca251e2841fbf2e6ae303cc8c3b8261c65887e4990b62"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "bounded_execution",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "3ab6d7dd1a4eca76c7eca251e2841fbf2e6ae303cc8c3b8261c65887e4990b62"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "target_failure_removed",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "3ab6d7dd1a4eca76c7eca251e2841fbf2e6ae303cc8c3b8261c65887e4990b62"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "solver configuration changed outside ownership wiring",
+    "evidence": [],
+    "gate_id": "solver_preservation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "3ab6d7dd1a4eca76c7eca251e2841fbf2e6ae303cc8c3b8261c65887e4990b62"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "reference_quantities",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "3ab6d7dd1a4eca76c7eca251e2841fbf2e6ae303cc8c3b8261c65887e4990b62"
+  }
+]

@@ -1,0 +1,76 @@
+schema_version: '2.0'
+case_id: R4-PHASEFIELD-LAGRANGE-TRANSIENT-001
+title: Recover a Transient Lagrange-Constraint Solver Breakdown
+case_kind: atomic
+track: REPAIR
+subcategory: R4
+difficulty: L3
+scoring_profile: balanced_v1
+base_problem_id: MULTIPHASE-LAGRANGE-CONSTRAINT-BASE-001
+physics_domains:
+- phase_transformation_and_microstructure
+target:
+  application: combined
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+prompt_path: prompt.md
+prompt_sha256: 1d56002bbbb600743afd4358489d7e55fc1eb530d2e7372d2c52395f074236cc
+artifacts:
+- id: failing_input
+  path: artifacts/failing.i
+  role: immutable_faulty_input
+  mutable: false
+  required: true
+  sha256: c91b03a2c9358fc96a29c4b8d54b223bfd8a11c13868cb674fb8c8bcbc530adb
+evidence_sources:
+- id: diagnosis
+  path: evidence/diagnosis.md
+  kind: supplied_repair_diagnosis
+  description: Authoritative transient-breakdown diagnosis and exact two-value edit boundary.
+  sha256: a0a31ee5d6644b65f5b773efa7c8d7a2862621ae447edbb5f632757720b974c9
+- id: failure_evidence
+  path: evidence/failure-events.json
+  kind: normalized_failure_events
+  description: Normalized zero-pivot failure after successful transient progress.
+  sha256: 9daa1806537f953da93d2347d908b05dcd3ae31ffa1b4580aff650dd26274456
+- id: run_metadata
+  path: evidence/run-metadata.json
+  kind: reproducibility_metadata
+  description: Pinned revision, executable hash, command, and public hashes.
+  sha256: 241fc35a799f340abdce1428638e22244c7bce3ce3d1d83ac6b34c6d66c14db4
+starting_state:
+  description: The faulty transient input, diagnosis, and normalized failure evidence are supplied.
+  supplied_truth:
+  - The formulation advances before the zero-regularization breakdown.
+  - Only multiplier initialization and constraint epsilon are authorized.
+  excluded_from_scoring:
+  - Root-cause discovery
+  - Solver, timestep, or physics changes
+actions:
+  permitted:
+  - Inspect the public artifacts and evidence.
+  - Create one repaired MOOSE input with exactly two changed values.
+  - Use at most one validation and one execution attempt.
+  prohibited:
+  - Modify timestep, solver, tolerances, phase fields, free energies, or mesh.
+  - Disable or retarget the constraint.
+  - Submit undeclared artifacts.
+budget:
+  wall_time_seconds: 600
+  cpu_seconds: 480
+  memory_mib: 4096
+  validation_attempts: 1
+  execution_attempts: 1
+submission:
+  response_mode: structured_json
+  required_claim_paths:
+  - /claim/repair_class
+  - /claim/changed_paths
+  - /claim/changed_regions
+  - /claim/expected_failure_removed
+  evidence_required: true
+  required_artifacts:
+  - role: repaired_moose_input
+    path: artifacts/solution.i
+  maximum_artifacts: 1
+required_stages: []

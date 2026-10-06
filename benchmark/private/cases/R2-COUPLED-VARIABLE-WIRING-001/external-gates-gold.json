@@ -1,0 +1,91 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "candidate changes are confined to the authorized HIT paths",
+    "evidence": [
+      "changed_path:Materials/dependent_diffusivity/coupled_variables"
+    ],
+    "gate_id": "authorized_edit_scope",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "843849f765807fd7265efee3dba94ec8239dec7a499d22ac78fc804f1db23d15"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "check_input completed within evaluator limits",
+    "evidence": [
+      "command:check_input",
+      "exit_code:0",
+      "wall_time_seconds:1.6023",
+      "timed_out:false",
+      "output_limit_exceeded:false",
+      "process_limit_exceeded:false"
+    ],
+    "gate_id": "input_validation",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "843849f765807fd7265efee3dba94ec8239dec7a499d22ac78fc804f1db23d15"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "the required variable is declared on the dependent material",
+    "evidence": [
+      "Materials/dependent_diffusivity/coupled_variables:actual=temperature",
+      "Materials/dependent_diffusivity/coupled_variables:expected=temperature"
+    ],
+    "gate_id": "coupling_configuration",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "843849f765807fd7265efee3dba94ec8239dec7a499d22ac78fc804f1db23d15"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "run completed within evaluator limits",
+    "evidence": [
+      "command:run",
+      "exit_code:0",
+      "wall_time_seconds:0.5609",
+      "timed_out:false",
+      "output_limit_exceeded:false",
+      "process_limit_exceeded:false"
+    ],
+    "gate_id": "bounded_execution",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "843849f765807fd7265efee3dba94ec8239dec7a499d22ac78fc804f1db23d15"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "the declared dependency parses and the solve converges",
+    "evidence": [],
+    "gate_id": "target_failure_removed",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "843849f765807fd7265efee3dba94ec8239dec7a499d22ac78fc804f1db23d15"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "frozen input paths and reference quantities are preserved",
+    "evidence": [
+      "reference.temperature_average:actual=450,expected=450,passed=true",
+      "reference.concentration_average:actual=0.47357497439831,expected=0.47357497439831,passed=true",
+      "reference.diffusivity_average:actual=1.9,expected=1.9,passed=true"
+    ],
+    "gate_id": "physics_preservation",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "843849f765807fd7265efee3dba94ec8239dec7a499d22ac78fc804f1db23d15"
+  }
+]

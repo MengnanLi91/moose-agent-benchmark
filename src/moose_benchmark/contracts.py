@@ -231,6 +231,16 @@ class CaseContract(StrictModel):
             raise ValueError("physics domains must be unique")
         if len(self.required_stages) != len(set(self.required_stages)):
             raise ValueError("required workflow stages must be unique")
+        if self.track == Track.REPAIR:
+            required = self.submission.required_artifacts
+            if (
+                len(required) != 1
+                or required[0].role != "repaired_moose_input"
+                or PurePosixPath(required[0].path).suffix != ".i"
+            ):
+                raise ValueError(
+                    "REPAIR cases require exactly one repaired_moose_input .i artifact"
+                )
         return self
 
 

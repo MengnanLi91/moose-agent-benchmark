@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+  "events": [
+    {
+      "stage": "parsed_material_configuration",
+      "status": "failed",
+      "signature": "Syntax error: Unknown identifier",
+      "tag": "missing_variable_coupling"
+    }
+  ]
+}

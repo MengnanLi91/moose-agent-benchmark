@@ -1,0 +1,15 @@
+{
+  "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+  "private_acceptance_floors": {
+    "early_evolution_absolute": 1e-06,
+    "phase_sum_absolute": 1e-06
+  },
+  "reference_quantities": {
+    "eta1_time_1": 0.60074517697285,
+    "eta1_time_2": 0.75700776983797,
+    "eta2_time_1": 0.39925447918136,
+    "eta2_time_2": 0.24299205311787,
+    "final_phase_sum_error": 1.4059561551094e-07
+  },
+  "schema_version": "1.0"
+}

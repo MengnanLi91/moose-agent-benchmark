@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+  "events": [
+    {
+      "stage": "periodic_neighbor_construction",
+      "status": "failed",
+      "signature": "Periodic boundary neighbor not found",
+      "tag": "unmatched_periodic_sideset"
+    }
+  ]
+}

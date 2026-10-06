@@ -1,0 +1,34 @@
+{
+  "artifacts": [
+    {
+      "path": "artifacts/solution.i",
+      "role": "repaired_moose_input",
+      "sha256": "4ffb4b670c8abecab86ca459127fae2393bcaba0526485dd13c32cc9b370d513",
+      "size_bytes": 1505
+    }
+  ],
+  "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+  "finished_at": "2026-10-06T03:00:01Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "69a6b35ef40c0e8670c7efe9767acd32ba04cdaff98795f9e3c0025be50b20e5",
+    "size_bytes": 809
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-06T03:00:00Z",
+  "submission_sha256": "843849f765807fd7265efee3dba94ec8239dec7a499d22ac78fc804f1db23d15",
+  "usage": {
+    "cpu_seconds": 1.0,
+    "execution_attempts": 1,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 1,
+    "wall_time_seconds": 1.0
+  }
+}

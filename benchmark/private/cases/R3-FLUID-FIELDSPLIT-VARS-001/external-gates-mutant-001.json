@@ -1,0 +1,84 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "candidate changes are confined to the authorized HIT paths",
+    "evidence": [
+      "changed_path:Preconditioning/FSP/fluid/vars"
+    ],
+    "gate_id": "authorized_edit_scope",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "5ca91f55b99ac09c6ba98a3d65367e58a53e58372ebe95acaa0b63d18736af10"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "not evaluated because fieldsplit_partition failed",
+    "evidence": [],
+    "gate_id": "input_validation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "5ca91f55b99ac09c6ba98a3d65367e58a53e58372ebe95acaa0b63d18736af10"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "nested split ownership is incomplete or overlapping",
+    "evidence": [
+      "system:vars=concentration,pressure,velocity",
+      "fluid:vars=concentration,pressure,velocity"
+    ],
+    "gate_id": "fieldsplit_partition",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "5ca91f55b99ac09c6ba98a3d65367e58a53e58372ebe95acaa0b63d18736af10"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "not evaluated because fieldsplit_partition failed",
+    "evidence": [],
+    "gate_id": "bounded_execution",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "5ca91f55b99ac09c6ba98a3d65367e58a53e58372ebe95acaa0b63d18736af10"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "not evaluated because fieldsplit_partition failed",
+    "evidence": [],
+    "gate_id": "target_failure_removed",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "5ca91f55b99ac09c6ba98a3d65367e58a53e58372ebe95acaa0b63d18736af10"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "the intended field-split solver is preserved",
+    "evidence": [],
+    "gate_id": "solver_preservation",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "5ca91f55b99ac09c6ba98a3d65367e58a53e58372ebe95acaa0b63d18736af10"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+    "detail": "not evaluated because fieldsplit_partition failed",
+    "evidence": [],
+    "gate_id": "reference_quantities",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "5ca91f55b99ac09c6ba98a3d65367e58a53e58372ebe95acaa0b63d18736af10"
+  }
+]

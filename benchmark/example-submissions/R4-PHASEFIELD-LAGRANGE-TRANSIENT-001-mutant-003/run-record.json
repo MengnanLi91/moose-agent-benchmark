@@ -1,0 +1,34 @@
+{
+  "artifacts": [
+    {
+      "path": "artifacts/solution.i",
+      "role": "repaired_moose_input",
+      "sha256": "2e22783a4e265e01bcc6ce2041223bc077f01198fc06c48c9cf48ed345720ffd",
+      "size_bytes": 4570
+    }
+  ],
+  "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+  "finished_at": "2026-10-04T20:00:01Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "47a931c76314262763d58e9a83bf8b01a9a3148b8920744180ebac59d63a0406",
+    "size_bytes": 848
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-04T20:00:00Z",
+  "submission_sha256": "e2b1ff8b461607d392eedeb6961cb4d06b7261f5709cfda955cdc19b46ded9c2",
+  "usage": {
+    "cpu_seconds": 1.0,
+    "execution_attempts": 1,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 1,
+    "wall_time_seconds": 1.0
+  }
+}

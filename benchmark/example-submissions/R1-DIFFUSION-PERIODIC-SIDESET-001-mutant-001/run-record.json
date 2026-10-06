@@ -1,0 +1,34 @@
+{
+  "artifacts": [
+    {
+      "path": "artifacts/solution.i",
+      "role": "repaired_moose_input",
+      "sha256": "ae0caf8e2f9dd72d5d62eefb9b2a305b9a4b6bcfb1cc8eff41055deffbd64629",
+      "size_bytes": 1292
+    }
+  ],
+  "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+  "finished_at": "2026-10-04T20:00:01Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "85e1132db928f71d5608b50a131a572f34c01a212f5d628feb79cf5dfbb1fbcf",
+    "size_bytes": 788
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-04T20:00:00Z",
+  "submission_sha256": "36841c6d30e1b0eeef00590a503ab824248f786c9a2c82b24b9e8a84b8a0ca3d",
+  "usage": {
+    "cpu_seconds": 1.0,
+    "execution_attempts": 1,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 1,
+    "wall_time_seconds": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+schema_version: '1.0'
+expected_moose_revision: c2dfd9fedd3193740a5278ec32269450c618e3b7
+expected_executable_sha256: 3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472
+case_id: R4-PHASEFIELD-LAGRANGE-TRANSIENT-001
+case_type: r4_lagrange_transient
+fixture_dir: fixture
+overlay_path: solution.i
+input_path: solution.i
+authorized_hit_paths:
+- Variables/lambda/initial_condition
+- Kernels/lagrange/epsilon
+required_gates:
+- authorized_edit_scope
+- input_validation
+- progress_beyond_failure
+- bounded_completion
+- target_failure_removed
+- phase_sum_constraint
+- early_evolution_preservation
+commands:
+  check_input:
+    argv:
+    - '{executable}'
+    - --check-input
+    - -i
+    - '{input}'
+    cwd: .
+  run:
+    argv:
+    - '{executable}'
+    - -i
+    - '{input}'
+    cwd: .
+failure_signatures:
+- DIVERGED_PC_FAILED
+- FACTOR_NUMERIC_ZEROPIVOT
+- SUBPC_ERROR
+csv_path: solution_out.csv
+metric_expectations:
+  phase_constraint.final:
+    column: phase_sum_error
+    row: -1
+    expected: 1.405956e-07
+    tolerance:
+      absolute: 1.0e-06
+      relative: 1.0e-05
+  early_evolution.eta1_t1:
+    column: eta1_average
+    row: 0
+    expected: 0.6007452
+    tolerance:
+      absolute: 1.0e-06
+      relative: 1.0e-06
+  early_evolution.eta2_t1:
+    column: eta2_average
+    row: 0
+    expected: 0.3992545
+    tolerance:
+      absolute: 1.0e-06
+      relative: 1.0e-06
+  early_evolution.eta1_t2:
+    column: eta1_average
+    row: 1
+    expected: 0.7570078
+    tolerance:
+      absolute: 1.0e-06
+      relative: 1.0e-06
+  early_evolution.eta2_t2:
+    column: eta2_average
+    row: 1
+    expected: 0.2429921
+    tolerance:
+      absolute: 1.0e-06
+      relative: 1.0e-06
+accepted_ranges:
+  Variables/lambda/initial_condition:
+  - 1.0e-06
+  - 0.1
+  Kernels/lagrange/epsilon:
+  - 1.0e-08
+  - 0.0001
+minimum_progress_time: 4.0
+minimum_final_time: 10.0
+limits:
+  wall_time_seconds: 600
+  cpu_seconds: 480
+  memory_mib: 4096
+  max_output_bytes: 4194304
+  max_processes: 32

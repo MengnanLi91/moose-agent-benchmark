@@ -1,0 +1,76 @@
+schema_version: '2.0'
+case_id: R1-DIFFUSION-PERIODIC-SIDESET-001
+title: Repair a Partially Overlapping Periodic Sideset
+case_kind: atomic
+track: REPAIR
+subcategory: R1
+difficulty: L2
+scoring_profile: balanced_v1
+base_problem_id: DIFFUSION-PERIODIC-TRANSLATION-BASE-001
+physics_domains:
+- thermal_energy_transport
+target:
+  application: combined
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+prompt_path: prompt.md
+prompt_sha256: 2bf09086de88581ac60e5a23527658fce5a78fda86cd7cbc1868e21011ecf1f6
+artifacts:
+- id: failing_input
+  path: artifacts/failing.i
+  role: immutable_faulty_input
+  mutable: false
+  required: true
+  sha256: ae0caf8e2f9dd72d5d62eefb9b2a305b9a4b6bcfb1cc8eff41055deffbd64629
+evidence_sources:
+- id: diagnosis
+  path: evidence/diagnosis.md
+  kind: supplied_repair_diagnosis
+  description: Authoritative diagnosis and authorized edit surface.
+  sha256: ab5282dcbac01a2752707356fcc91b495d8e58eb3b89b00721bcba4ef3cf45de
+- id: failure_evidence
+  path: evidence/failure-events.json
+  kind: normalized_failure_events
+  description: Normalized periodic-neighbor construction failure.
+  sha256: 75f76c90b137a50d4d20f2ec623a0506d5d73550827935875ef64b66cebb9f0f
+- id: run_metadata
+  path: evidence/run-metadata.json
+  kind: reproducibility_metadata
+  description: Pinned revision, executable hash, command, and public hashes.
+  sha256: 69bb07d63f6efd7fca4e6c2710cd0834a9316e0e7a2d545260db01dad59f791a
+starting_state:
+  description: The faulty input, diagnosis, and normalized failure evidence are supplied.
+  supplied_truth:
+  - The diagnosis is authoritative for this REPAIR case.
+  - Physics and translation outside the permitted sideset repair are correct and frozen.
+  excluded_from_scoring:
+  - Root-cause discovery
+  - Changes outside the authorized repair surface
+actions:
+  permitted:
+  - Inspect the public artifacts and evidence.
+  - Create one repaired MOOSE input.
+  - Use at most one validation and one execution attempt.
+  prohibited:
+  - Modify the immutable starting artifact.
+  - Change physics, translation, solver, or outputs.
+  - Submit undeclared artifacts.
+budget:
+  wall_time_seconds: 180
+  cpu_seconds: 120
+  memory_mib: 2048
+  validation_attempts: 1
+  execution_attempts: 1
+submission:
+  response_mode: structured_json
+  required_claim_paths:
+  - /claim/repair_class
+  - /claim/changed_paths
+  - /claim/changed_regions
+  - /claim/expected_failure_removed
+  evidence_required: true
+  required_artifacts:
+  - role: repaired_moose_input
+    path: artifacts/solution.i
+  maximum_artifacts: 1
+required_stages: []

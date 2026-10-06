@@ -1,0 +1,11 @@
+{
+  "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+  "private_acceptance_floors": {
+    "reference_qoi_absolute": 1e-06
+  },
+  "reference_quantities": {
+    "concentration_average": 0.52444073862197,
+    "pressure_average": 0.041666666724357
+  },
+  "schema_version": "1.0"
+}

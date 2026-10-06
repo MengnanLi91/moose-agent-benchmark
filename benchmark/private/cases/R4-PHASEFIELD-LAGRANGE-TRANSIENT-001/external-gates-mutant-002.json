@@ -1,0 +1,107 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "candidate changes are confined to the authorized HIT paths",
+    "evidence": [
+      "changed_path:Kernels/lagrange/epsilon",
+      "changed_path:Variables/lambda/initial_condition"
+    ],
+    "gate_id": "authorized_edit_scope",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "1328b4aec5fcbac923d935b2207c2581bcece4fc0a6cf23790d3f4058ecb22b8"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "check_input completed within evaluator limits",
+    "evidence": [
+      "command:check_input",
+      "exit_code:0",
+      "wall_time_seconds:1.0747",
+      "timed_out:false",
+      "output_limit_exceeded:false",
+      "process_limit_exceeded:false"
+    ],
+    "gate_id": "input_validation",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "1328b4aec5fcbac923d935b2207c2581bcece4fc0a6cf23790d3f4058ecb22b8"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "transient advanced beyond the faulty breakdown time",
+    "evidence": [
+      "final_reported_time:10.0"
+    ],
+    "gate_id": "progress_beyond_failure",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "1328b4aec5fcbac923d935b2207c2581bcece4fc0a6cf23790d3f4058ecb22b8"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "transient completed within evaluator limits",
+    "evidence": [
+      "command:run",
+      "exit_code:0",
+      "wall_time_seconds:0.7663",
+      "timed_out:false",
+      "output_limit_exceeded:false",
+      "process_limit_exceeded:false"
+    ],
+    "gate_id": "bounded_completion",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "1328b4aec5fcbac923d935b2207c2581bcece4fc0a6cf23790d3f4058ecb22b8"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "the transient SUBPC failure is absent",
+    "evidence": [],
+    "gate_id": "target_failure_removed",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "1328b4aec5fcbac923d935b2207c2581bcece4fc0a6cf23790d3f4058ecb22b8"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "constraint or private repair ranges are violated",
+    "evidence": [
+      "Variables/lambda/initial_condition:value=0.001,in_range=true",
+      "Kernels/lagrange/epsilon:value=0.1,in_range=false",
+      "phase_constraint.final:actual=0.0067148024867996,expected=1.405956e-07,passed=false"
+    ],
+    "gate_id": "phase_sum_constraint",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "1328b4aec5fcbac923d935b2207c2581bcece4fc0a6cf23790d3f4058ecb22b8"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "early transient evolution changed",
+    "evidence": [
+      "early_evolution.eta1_t1:actual=0.58545462527567,expected=0.6007452,passed=false",
+      "early_evolution.eta2_t1:actual=0.38195460190789,expected=0.3992545,passed=false",
+      "early_evolution.eta1_t2:actual=0.74480887939315,expected=0.7570078,passed=false",
+      "early_evolution.eta2_t2:actual=0.23492530402018,expected=0.2429921,passed=false"
+    ],
+    "gate_id": "early_evolution_preservation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "1328b4aec5fcbac923d935b2207c2581bcece4fc0a6cf23790d3f4058ecb22b8"
+  }
+]

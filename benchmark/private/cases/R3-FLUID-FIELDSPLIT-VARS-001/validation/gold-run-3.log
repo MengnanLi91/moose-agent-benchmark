@@ -1,0 +1,71 @@
+Framework Information:
+MOOSE Version:           git commit c2dfd9fedd on 2026-08-18
+LibMesh Version:         
+PETSc Version:           3.25.2
+SLEPc Version:           3.25.0
+Current Time:            Sat Oct  3 21:59:55 2026
+Executable Timestamp:    Mon Sep 28 21:07:40 2026
+
+Input File(s):
+  /Users/lim2/Research/LLM/moose-agent-benchmark/main/benchmark/private/cases/R3-FLUID-FIELDSPLIT-VARS-001/reference/solution.i
+
+Checkpoint:
+  Wall Time Interval:      Every 3600 s
+  Checkpoint:              Outputs/checkpoint
+  # Checkpoints Kept:      2
+  Execute On:              TIMESTEP_END 
+
+Parallelism:
+  Num Processors:          1
+  Num Threads:             1
+
+Mesh: 
+  Parallel Type:           distributed
+  Mesh Dimension:          2
+  Spatial Dimension:       2
+  Nodes:                   81
+  Elems:                   16
+  Num Subdomains:          1
+
+Nonlinear System:
+  Num DOFs:                212
+  Num Local DOFs:          212
+  Variables:               "velocity" { "pressure" "concentration" } 
+  Finite Element Types:    "LAGRANGE_VEC" "LAGRANGE" 
+  Approximation Orders:    "SECOND" "FIRST" 
+
+Execution Information:
+  Executioner:             Steady
+  Solver Mode:             NEWTON 
+  PETSc Preconditioner:    [fieldsplit_fluid_fieldsplit_velocity]: jacobi [fieldsplit_fluid_fieldsplit_pressure]: jacobi [fieldsplit_concentration]: jacobi 
+  MOOSE Preconditioner:    FSP 
+
+
+Postprocessor Values:
++----------------+-----------------------+------------------+
+| time           | concentration_average | pressure_average |
++----------------+-----------------------+------------------+
+|   0.000000e+00 |          0.000000e+00 |     0.000000e+00 |
++----------------+-----------------------+------------------+
+
+ 0 Nonlinear |R| = [32m4.219330e+00[39m
+    Linear solve did not converge due to DIVERGED_ITS iterations 200
+ 1 Nonlinear |R| = [32m1.226804e-01[39m
+    Linear solve did not converge due to DIVERGED_ITS iterations 200
+ 2 Nonlinear |R| = [32m2.020120e-05[39m
+    Linear solve did not converge due to DIVERGED_ITS iterations 200
+ 3 Nonlinear |R| = [32m3.763720e-10[39m
+[32m Solve Converged![39m
+
+
+Outlier Variable Residual Norms:
+  velocity: [31m3.702709e-10[39m
+
+Postprocessor Values:
++----------------+-----------------------+------------------+
+| time           | concentration_average | pressure_average |
++----------------+-----------------------+------------------+
+|   0.000000e+00 |          0.000000e+00 |     0.000000e+00 |
+|   1.000000e+00 |          5.244407e-01 |     4.166667e-02 |
++----------------+-----------------------+------------------+
+

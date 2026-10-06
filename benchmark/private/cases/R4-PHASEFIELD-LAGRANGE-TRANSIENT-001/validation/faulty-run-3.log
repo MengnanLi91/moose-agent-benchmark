@@ -1,0 +1,116 @@
+
+[36m
+*** Info ***
+The following paired boundaries were automatically detected for periodicity:
+
+  2D x-direction: left <-> right
+  2D y-direction: bottom <-> top
+[39m
+sh: mpicxx: command not found
+JIT compile failed.
+Framework Information:
+MOOSE Version:           git commit c2dfd9fedd on 2026-08-18
+LibMesh Version:         
+PETSc Version:           3.25.2
+SLEPc Version:           3.25.0
+Current Time:            Sat Oct  3 22:00:21 2026
+Executable Timestamp:    Mon Sep 28 21:07:40 2026
+
+Input File(s):
+  /Users/lim2/Research/LLM/moose-agent-benchmark/main/benchmark/private/cases/R4-PHASEFIELD-LAGRANGE-TRANSIENT-001/fixture/solution.i
+
+Checkpoint:
+  Wall Time Interval:      Every 3600 s
+  Checkpoint:              Outputs/checkpoint
+  # Checkpoints Kept:      2
+  Execute On:              TIMESTEP_END 
+
+Parallelism:
+  Num Processors:          1
+  Num Threads:             1
+
+Mesh: 
+  Parallel Type:           replicated
+  Mesh Dimension:          2
+  Spatial Dimension:       2
+  Nodes:                   63
+  Elems:                   48
+  Num Subdomains:          1
+
+Nonlinear System:
+  Num DOFs:                315
+  Num Local DOFs:          315
+  Num Constrained DOFs:    75
+  Local Constrained DOFs:  75
+  Variables:               { "c" "w" "eta1" "eta2" "lambda" } 
+  Finite Element Types:    "LAGRANGE" 
+  Approximation Orders:    "FIRST" 
+
+Execution Information:
+  Executioner:             Transient
+  TimeStepper:             ConstantDT
+  TimeIntegrator(s):       BDF2
+  Solver Mode:             Preconditioned JFNK 
+  MOOSE Preconditioner:    SMP 
+
+
+Time Step 1, time = 1, dt = 1
+    Linear solve did not converge due to DIVERGED_ITS iterations 15
+    Linear solve did not converge due to DIVERGED_ITS iterations 15
+    Linear solve did not converge due to DIVERGED_ITS iterations 15
+    Linear solve did not converge due to DIVERGED_ITS iterations 15
+[32m Solve Converged![39m
+
+
+Outlier Variable Residual Norms:
+  lambda: [33m1.146797e-12[39m
+
+Postprocessor Values:
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | eta1_average   | eta2_average   | h1_average     | h2_average     | lambda_average | phase_sum_error|
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   1.000000e+00 |   6.007453e-01 |   3.992547e-01 |   6.473092e-01 |   3.526908e-01 |  -4.138440e-01 |   4.052314e-15 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+
+
+Time Step 2, time = 2, dt = 1
+[32m Solve Converged![39m
+
+
+Postprocessor Values:
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+| time           | eta1_average   | eta2_average   | h1_average     | h2_average     | lambda_average | phase_sum_error|
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+|   1.000000e+00 |   6.007453e-01 |   3.992547e-01 |   6.473092e-01 |   3.526908e-01 |  -4.138440e-01 |   4.052314e-15 |
+|   2.000000e+00 |   7.570079e-01 |   2.429921e-01 |   8.000037e-01 |   1.999963e-01 |  -1.078536e-01 |   1.276756e-15 |
++----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+
+
+Time Step 3, time = 3, dt = 1
+    Linear solve did not converge due to DIVERGED_PC_FAILED iterations 0
+                   PC failed due to FACTOR_NUMERIC_ZEROPIVOT
+  Nonlinear solve did not converge due to DIVERGED_FUNCTION_NANORINF iterations 1
+[31m Solve Did NOT Converge![39m
+
+Aborting as solve did not converge
+
+[31m
+*** ERROR ***
+The following occurred in the TimeStepper 'ConstantDT' of type ConstantDT.
+
+Solve failed and timestep already at or below dtmin, cannot continue![39m
+
+Stack frames: 12
+0: 0   libmesh_opt.0.dylib                 0x000000010f8f4cc8 libMesh::print_trace(std::__1::basic_ostream<char, std::__1::char_traits<char>>&) + 1008
+1: 1   libmoose-opt.0.dylib                0x000000010851cc94 moose::internal::mooseErrorRaw(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, hit::Node const*, bool) + 272
+2: 2   libmoose-opt.0.dylib                0x0000000108600dc4 MooseBase::callMooseError(MooseApp*, InputParameters const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, bool, hit::Node const*, bool) + 324
+3: 3   libmoose-opt.0.dylib                0x00000001085b4b6c MooseBase::callMooseError(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, bool, hit::Node const*, bool) const + 132
+4: 4   libmoose-opt.0.dylib                0x00000001071f81d4 void MooseBase::mooseError<char const (&) [70]>(char const (&) [70]) const + 72
+5: 5   libmoose-opt.0.dylib                0x00000001080aa0fc AB2PredictorCorrector::estimateTimeError(libMesh::NumericVector<double>&) + 0
+6: 6   libmoose-opt.0.dylib                0x00000001080b4640 TimeStepper::computeStep() + 160
+7: 7   libmoose-opt.0.dylib                0x00000001073b888c TransientBase::execute() + 280
+8: 8   libmoose-opt.0.dylib                0x00000001085168ac MooseApp::executeExecutioner() + 348
+9: 9   libmoose-opt.0.dylib                0x00000001085111a8 MooseApp::run() + 1980
+10: 10  combined-opt                        0x000000010425fcd4 int Moose::main<CombinedTestApp>(int, char**) + 160
+11: 11  dyld                                0x00000001870c04e4 start + 6992
+Abort(1) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0

@@ -1,0 +1,25 @@
+{
+  "adaptation": "original reduced fixture; no discussion attachment copied",
+  "captured_on": "2026-10-03",
+  "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+  "command": "combined-opt -i failing.i",
+  "compiler": "clang 19.1.7 (arm64-apple-darwin20.0.0)",
+  "environment": {
+    "FI_PROVIDER": "tcp"
+  },
+  "executable": "modules/combined/combined-opt",
+  "executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "expected_faulty_exit_code": 1,
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "process_count": 1,
+  "public_file_sha256": {
+    "artifacts/failing.i": "ae0caf8e2f9dd72d5d62eefb9b2a305b9a4b6bcfb1cc8eff41055deffbd64629",
+    "evidence/diagnosis.md": "ab5282dcbac01a2752707356fcc91b495d8e58eb3b89b00721bcba4ef3cf45de",
+    "evidence/failure-events.json": "75f76c90b137a50d4d20f2ec623a0506d5d73550827935875ef64b66cebb9f0f"
+  },
+  "repetitions": 3,
+  "schema_version": "1.0",
+  "source_retrieved_on": "2026-09-30",
+  "source_url": "https://github.com/idaholab/moose/discussions/33207"
+}

@@ -1,0 +1,79 @@
+schema_version: '2.0'
+case_id: R2-COUPLED-VARIABLE-WIRING-001
+title: Repair a Missing Coupled-Variable Declaration
+case_kind: atomic
+track: REPAIR
+subcategory: R2
+difficulty: L2
+scoring_profile: balanced_v1
+base_problem_id: COUPLED-MATERIAL-VARIABLE-BASE-001
+physics_domains:
+- coupled_engineering_systems
+- thermal_energy_transport
+target:
+  application: combined
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+prompt_path: prompt.md
+prompt_sha256: 80e83fa655df70c3915b898bac859dd4e0794ef4b1ad0a2e36884f302f42cd17
+artifacts:
+- id: failing_input
+  path: artifacts/failing.i
+  role: immutable_faulty_moose_input
+  mutable: false
+  required: true
+  sha256: 30cd0f4c3746b268f0d7534bf157a074f0a60f0513b26f71ac8010863d3b949b
+evidence_sources:
+- id: diagnosis
+  path: evidence/diagnosis.md
+  kind: supplied_repair_diagnosis
+  description: Authoritative diagnosis and input-level edit boundary.
+  sha256: b8e3756e6b4a793bd6dec48bac623a48ece68720ec4eddc0edbfcc931725cb33
+- id: failure_evidence
+  path: evidence/failure-events.json
+  kind: normalized_failure_events
+  description: Normalized parsed-material configuration failure.
+  sha256: bd79b37743e22e8e20d67413092073719b7d0abb072044f8345513be2b342190
+- id: run_metadata
+  path: evidence/run-metadata.json
+  kind: reproducibility_metadata
+  description: Pinned revision, executable hash, command, provenance, and public hashes.
+  sha256: 3ec258908d43acb805e4dcb5c741e60d4b363903956bb6771e76cbd7c008ef17
+starting_state:
+  description: The faulty input, diagnosis, and normalized parser failure are supplied.
+  supplied_truth:
+  - The parsed material expression and dependent temperature variable are correct.
+  - Only the material's coupled-variable declaration is missing.
+  excluded_from_scoring:
+  - Root-cause discovery
+  - Source-code or solver changes
+actions:
+  permitted:
+  - Inspect the public input and evidence.
+  - Create one complete repaired MOOSE input file.
+  - Use at most one validation and one execution attempt.
+  prohibited:
+  - Modify source, build, application, or plugin files.
+  - Change the expression, object types, variables, kernels, coefficients, mesh, or BCs.
+  - Change solver settings, tolerances, outputs, or postprocessors.
+  - Replace or remove the temperature dependency.
+  - Submit undeclared artifacts.
+budget:
+  wall_time_seconds: 180
+  cpu_seconds: 120
+  memory_mib: 2048
+  validation_attempts: 1
+  execution_attempts: 1
+submission:
+  response_mode: structured_json
+  required_claim_paths:
+  - /claim/repair_class
+  - /claim/changed_paths
+  - /claim/changed_regions
+  - /claim/expected_failure_removed
+  evidence_required: true
+  required_artifacts:
+  - role: repaired_moose_input
+    path: artifacts/solution.i
+  maximum_artifacts: 1
+required_stages: []

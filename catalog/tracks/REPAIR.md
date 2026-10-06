@@ -12,6 +12,9 @@ REPAIR evaluates bounded changes that restore a supplied failing MOOSE model.
 Atomic REPAIR cases should supply the relevant diagnosis and contain one independent primary
 defect. Unrelated model changes must not receive credit.
 
+For the current benchmark release, REPAIR submissions are complete MOOSE `.i` files only.
+Source-code edits, custom application builds, and plugin compilation are out of scope.
+
 ## Cases
 
 Open the `REPAIR` view in [[../benchmark.base|Benchmark Cases]].

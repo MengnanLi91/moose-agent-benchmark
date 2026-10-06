@@ -1,0 +1,74 @@
+schema_version: '2.0'
+case_id: R2-COUPLED-VARIABLE-WIRING-001
+evaluator: structured_claim_v2
+capability_criteria:
+- id: repair_class
+  description: Classifies the supplied repair mechanism.
+  json_pointer: /claim/repair_class
+  comparator: normalized_exact
+  expected: coupled_variable_wiring
+  weight: 0.35
+- id: changed_paths
+  description: Declares only the required submitted artifact.
+  json_pointer: /claim/changed_paths
+  comparator: set_f1
+  expected:
+  - artifacts/solution.i
+  weight: 0.2
+- id: changed_regions
+  description: Declares the authorized repair region.
+  json_pointer: /claim/changed_regions
+  comparator: set_f1
+  expected:
+  - material_variable_coupling
+  weight: 0.3
+- id: expected_failure_removed
+  description: Identifies the failure the repair is intended to remove.
+  json_pointer: /claim/expected_failure_removed
+  comparator: normalized_exact
+  expected: missing_coupled_variable
+  weight: 0.15
+evidence_criteria:
+- id: failure_evidence_source
+  description: Binds the explanation to supplied failure evidence.
+  json_pointer: /evidence/0/source_id
+  comparator: exact
+  expected: failure_evidence
+  weight: 0.15
+- id: failure_observation
+  description: Uses the stable supplied-failure tag.
+  json_pointer: /evidence/0/observation
+  comparator: contains
+  expected: missing_variable_coupling
+  weight: 0.35
+- id: repair_evidence_source
+  description: Binds the explanation to the submitted artifact.
+  json_pointer: /evidence/1/source_id
+  comparator: exact
+  expected: repaired_moose_input
+  weight: 0.15
+- id: repair_observation
+  description: Uses the stable repair tag.
+  json_pointer: /evidence/1/observation
+  comparator: contains
+  expected: declared_variable_dependency
+  weight: 0.35
+hard_gates:
+- id: authorized_edit_scope
+  description: Authorized edit scope.
+  kind: external
+- id: input_validation
+  description: Input validation.
+  kind: external
+- id: coupling_configuration
+  description: Coupled-variable configuration.
+  kind: external
+- id: bounded_execution
+  description: Bounded execution.
+  kind: external
+- id: target_failure_removed
+  description: Target failure removed.
+  kind: external
+- id: physics_preservation
+  description: Physics preservation.
+  kind: external

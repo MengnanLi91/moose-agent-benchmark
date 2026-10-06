@@ -1,0 +1,25 @@
+{
+  "claim": {
+    "changed_paths": [
+      "artifacts/solution.i"
+    ],
+    "changed_regions": [
+      "lambda_initial_condition",
+      "constraint_regularization"
+    ],
+    "expected_failure_removed": "lagrange_transient_subpc_failure",
+    "repair_class": "lagrange_transient_regularization"
+  },
+  "evidence": [
+    {
+      "interpretation": "the zero multiplier and zero regularization leave a singular constraint block",
+      "observation": "transient_zero_regularization_breakdown: the supplied run fails after transient progress",
+      "source_id": "failure_evidence"
+    },
+    {
+      "interpretation": "small nonzero values preserve the transient formulation",
+      "observation": "nonzero_multiplier_and_regularization: the submitted input changes the two authorized values",
+      "source_id": "repaired_moose_input"
+    }
+  ]
+}

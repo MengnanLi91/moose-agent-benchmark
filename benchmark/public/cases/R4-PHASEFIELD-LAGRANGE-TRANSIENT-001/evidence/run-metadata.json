@@ -1,0 +1,25 @@
+{
+  "adaptation": "original reduced fixture; no discussion attachment copied",
+  "captured_on": "2026-10-03",
+  "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+  "command": "combined-opt -i failing.i",
+  "compiler": "clang 19.1.7 (arm64-apple-darwin20.0.0)",
+  "environment": {
+    "FI_PROVIDER": "tcp"
+  },
+  "executable": "modules/combined/combined-opt",
+  "executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "expected_faulty_exit_code": 1,
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "process_count": 1,
+  "public_file_sha256": {
+    "artifacts/failing.i": "c91b03a2c9358fc96a29c4b8d54b223bfd8a11c13868cb674fb8c8bcbc530adb",
+    "evidence/diagnosis.md": "a0a31ee5d6644b65f5b773efa7c8d7a2862621ae447edbb5f632757720b974c9",
+    "evidence/failure-events.json": "9daa1806537f953da93d2347d908b05dcd3ae31ffa1b4580aff650dd26274456"
+  },
+  "repetitions": 3,
+  "schema_version": "1.0",
+  "source_retrieved_on": "2026-09-30",
+  "source_url": "https://github.com/idaholab/moose/discussions/28937"
+}

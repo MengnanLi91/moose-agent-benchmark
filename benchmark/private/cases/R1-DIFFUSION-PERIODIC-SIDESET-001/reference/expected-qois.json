@@ -1,0 +1,14 @@
+{
+  "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+  "private_acceptance_floors": {
+    "reference_qoi_absolute": 1e-06,
+    "translated_point_absolute": 1e-08
+  },
+  "reference_quantities": {
+    "left_value": 0.62552084320326,
+    "right_value": 0.6255208432033,
+    "solution_average": 0.86380394137535,
+    "solution_integral": 2.5914118241261
+  },
+  "schema_version": "1.0"
+}

@@ -1,0 +1,34 @@
+{
+  "artifacts": [
+    {
+      "path": "artifacts/solution.i",
+      "role": "repaired_moose_input",
+      "sha256": "da0a9f69c1b26da5c9606e503466b853592b037b5c224a9c423eb440c0830545",
+      "size_bytes": 3242
+    }
+  ],
+  "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+  "finished_at": "2026-10-04T20:00:01Z",
+  "model": {
+    "configuration": {},
+    "model": "development-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "1149fd4b02e5e13d37c601e744b1f54faf4104ce12d6d6e9d43079951d91bdc1",
+    "size_bytes": 764
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-04T20:00:00Z",
+  "submission_sha256": "7376623c8883e532af957cff1a5d09143f893a8577c2f53e7cf9106f613b8184",
+  "usage": {
+    "cpu_seconds": 1.0,
+    "execution_attempts": 1,
+    "memory_mib": 64.0,
+    "tokens": null,
+    "validation_attempts": 1,
+    "wall_time_seconds": 1.0
+  }
+}

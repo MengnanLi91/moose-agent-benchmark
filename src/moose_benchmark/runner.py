@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import ctypes
 import os
 import platform
 import resource
 import signal
 import subprocess
+import tempfile
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
@@ -34,6 +36,8 @@ class RunLimits:
     wall_time_seconds: int
     cpu_seconds: int
     memory_mib: int
+    max_output_bytes: int = 10 * 1024 * 1024
+    max_processes: int = 32
 
     def __post_init__(self) -> None:
         for name, value in asdict(self).items():
@@ -50,6 +54,9 @@ class RunResult:
     stdout: str
     stderr: str
     memory_limit_enforced: bool
+    output_limit_exceeded: bool
+    process_limit_exceeded: bool
+    process_limit_enforced: bool
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -57,6 +64,98 @@ class RunResult:
 
 def _memory_limit_supported() -> bool:
     return platform.system() == "Linux" and hasattr(resource, "RLIMIT_AS")
+
+
+def _darwin_child_pids(pid: int) -> list[int] | None:
+    try:
+        libproc = ctypes.CDLL("/usr/lib/libproc.dylib")
+        proc_listchildpids = libproc.proc_listchildpids
+    except (AttributeError, OSError):
+        return None
+    proc_listchildpids.argtypes = [ctypes.c_int, ctypes.c_void_p, ctypes.c_int]
+    proc_listchildpids.restype = ctypes.c_int
+    required_bytes = proc_listchildpids(pid, None, 0)
+    if required_bytes < 0:
+        return None
+    capacity = max(1, required_bytes // ctypes.sizeof(ctypes.c_int))
+    child_pids = (ctypes.c_int * capacity)()
+    count = proc_listchildpids(pid, child_pids, ctypes.sizeof(child_pids))
+    if count < 0:
+        return None
+    return [child_pids[index] for index in range(count)]
+
+
+def _process_limit_supported() -> bool:
+    if platform.system() == "Linux" and Path("/proc").is_dir():
+        return True
+    if platform.system() == "Darwin":
+        return _darwin_child_pids(os.getpid()) is not None
+    if not Path("/bin/ps").is_file():
+        return False
+    try:
+        completed = subprocess.run(
+            ["/bin/ps", "-axo", "pgid="],
+            check=False,
+            capture_output=True,
+            timeout=2,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return completed.returncode == 0
+
+
+def _linux_process_count(pid: int) -> int:
+    pending = [pid]
+    descendants: set[int] = set()
+    while pending:
+        current = pending.pop()
+        children_path = Path(f"/proc/{current}/task/{current}/children")
+        try:
+            children = [int(value) for value in children_path.read_text().split()]
+        except (FileNotFoundError, PermissionError, ProcessLookupError):
+            continue
+        for child in children:
+            if child not in descendants:
+                descendants.add(child)
+                pending.append(child)
+    return 1 + len(descendants)
+
+
+def _darwin_process_count(pid: int) -> int:
+    pending = [pid]
+    descendants: set[int] = set()
+    while pending:
+        children = _darwin_child_pids(pending.pop())
+        if children is None:
+            return 0
+        for child in children:
+            if child not in descendants:
+                descendants.add(child)
+                pending.append(child)
+    return 1 + len(descendants)
+
+
+def _process_count(pid: int) -> int:
+    if platform.system() == "Linux" and Path("/proc").is_dir():
+        return _linux_process_count(pid)
+    if platform.system() == "Darwin":
+        return _darwin_process_count(pid)
+    try:
+        completed = subprocess.run(
+            ["/bin/ps", "-axo", "pgid="],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except OSError:
+        return 0
+    if completed.returncode != 0:
+        return 0
+    try:
+        process_group = str(os.getpgid(pid))
+    except ProcessLookupError:
+        return 0
+    return sum(line.strip() == process_group for line in completed.stdout.splitlines())
 
 
 def _resource_limiter(limits: RunLimits):
@@ -89,42 +188,62 @@ def run_command(
 
     started = time.monotonic()
     memory_limit_enforced = _memory_limit_supported()
-    process = subprocess.Popen(
-        argv,
-        cwd=cwd,
-        env=environment if environment is not None else {"PATH": os.environ.get("PATH", "")},
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        start_new_session=True,
-        preexec_fn=_resource_limiter(limits),
+    process_limit_enforced = _process_limit_supported()
+    timed_out = False
+    output_limit_exceeded = False
+    process_limit_exceeded = False
+    with tempfile.TemporaryFile() as stdout_stream, tempfile.TemporaryFile() as stderr_stream:
+        process = subprocess.Popen(
+            argv,
+            cwd=cwd,
+            env=environment if environment is not None else {"PATH": os.environ.get("PATH", "")},
+            stdout=stdout_stream,
+            stderr=stderr_stream,
+            start_new_session=True,
+            preexec_fn=_resource_limiter(limits),
+        )
+        while process.poll() is None:
+            elapsed = time.monotonic() - started
+            output_size = (
+                os.fstat(stdout_stream.fileno()).st_size + os.fstat(stderr_stream.fileno()).st_size
+            )
+            timed_out = elapsed >= limits.wall_time_seconds
+            output_limit_exceeded = output_size > limits.max_output_bytes
+            process_limit_exceeded = (
+                process_limit_enforced and _process_count(process.pid) > limits.max_processes
+            )
+            if timed_out or output_limit_exceeded or process_limit_exceeded:
+                break
+            time.sleep(0.02)
+
+        if process.poll() is None:
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+        process.wait()
+        output_size = (
+            os.fstat(stdout_stream.fileno()).st_size + os.fstat(stderr_stream.fileno()).st_size
+        )
+        output_limit_exceeded = output_limit_exceeded or output_size > limits.max_output_bytes
+        stdout_stream.seek(0)
+        stderr_stream.seek(0)
+        stdout = stdout_stream.read(limits.max_output_bytes).decode("utf-8", errors="replace")
+        remaining_bytes = max(0, limits.max_output_bytes - len(stdout.encode("utf-8")))
+        stderr = stderr_stream.read(remaining_bytes).decode("utf-8", errors="replace")
+
+    return RunResult(
+        argv=argv,
+        exit_code=None if timed_out else process.returncode,
+        timed_out=timed_out,
+        wall_time_seconds=round(time.monotonic() - started, 4),
+        stdout=stdout,
+        stderr=stderr,
+        memory_limit_enforced=memory_limit_enforced,
+        output_limit_exceeded=output_limit_exceeded,
+        process_limit_exceeded=process_limit_exceeded,
+        process_limit_enforced=process_limit_enforced,
     )
-    try:
-        stdout, stderr = process.communicate(timeout=limits.wall_time_seconds)
-        return RunResult(
-            argv=argv,
-            exit_code=process.returncode,
-            timed_out=False,
-            wall_time_seconds=round(time.monotonic() - started, 4),
-            stdout=stdout,
-            stderr=stderr,
-            memory_limit_enforced=memory_limit_enforced,
-        )
-    except subprocess.TimeoutExpired:
-        try:
-            os.killpg(process.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-        stdout, stderr = process.communicate()
-        return RunResult(
-            argv=argv,
-            exit_code=None,
-            timed_out=True,
-            wall_time_seconds=round(time.monotonic() - started, 4),
-            stdout=stdout,
-            stderr=stderr,
-            memory_limit_enforced=memory_limit_enforced,
-        )
 
 
 def run_moose_check(

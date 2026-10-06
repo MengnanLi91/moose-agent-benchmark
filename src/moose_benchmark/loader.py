@@ -126,13 +126,23 @@ def sha256_submission_content(
     return digest.hexdigest()
 
 
-def case_bundle_paths(manifest_path: str | Path, case_id: str) -> tuple[Path, Path]:
+def case_bundle_paths(
+    manifest_path: str | Path,
+    case_id: str,
+    *,
+    include_disabled: bool = False,
+) -> tuple[Path, Path]:
     manifest_path = Path(manifest_path).resolve()
     manifest = load_manifest(manifest_path)
     try:
-        ref = next(item for item in manifest.cases if item.case_id == case_id and item.enabled)
+        ref = next(
+            item
+            for item in manifest.cases
+            if item.case_id == case_id and (item.enabled or include_disabled)
+        )
     except StopIteration as exc:
-        raise KeyError(f"enabled case not found in manifest: {case_id}") from exc
+        qualifier = "case" if include_disabled else "enabled case"
+        raise KeyError(f"{qualifier} not found in manifest: {case_id}") from exc
     root = manifest_path.parent
     return (
         resolve_inside(root, ref.public_case),

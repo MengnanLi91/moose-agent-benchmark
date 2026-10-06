@@ -1,0 +1,82 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "candidate changes include missing or unauthorized HIT paths",
+    "evidence": [
+      "changed_path:Executioner/dt",
+      "changed_path:Executioner/dtmin"
+    ],
+    "gate_id": "authorized_edit_scope",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "e2b1ff8b461607d392eedeb6961cb4d06b7261f5709cfda955cdc19b46ded9c2"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "input_validation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "e2b1ff8b461607d392eedeb6961cb4d06b7261f5709cfda955cdc19b46ded9c2"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "progress_beyond_failure",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "e2b1ff8b461607d392eedeb6961cb4d06b7261f5709cfda955cdc19b46ded9c2"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "bounded_completion",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "e2b1ff8b461607d392eedeb6961cb4d06b7261f5709cfda955cdc19b46ded9c2"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "target_failure_removed",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "e2b1ff8b461607d392eedeb6961cb4d06b7261f5709cfda955cdc19b46ded9c2"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "phase_sum_constraint",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "e2b1ff8b461607d392eedeb6961cb4d06b7261f5709cfda955cdc19b46ded9c2"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "early_evolution_preservation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "e2b1ff8b461607d392eedeb6961cb4d06b7261f5709cfda955cdc19b46ded9c2"
+  }
+]

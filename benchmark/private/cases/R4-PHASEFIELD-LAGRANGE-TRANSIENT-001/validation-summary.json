@@ -1,0 +1,52 @@
+{
+  "base_executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+  "compiler": "clang 19.1.7 (arm64-apple-darwin20.0.0)",
+  "faulty_result": "exit 1 at time step 3 in all three runs",
+  "gold_result": "exit 0 at time 10 in all three runs",
+  "maximum_gold_run_to_run_spread": {
+    "eta1_time_1": 0.0,
+    "eta1_time_2": 0.0,
+    "eta2_time_1": 0.0,
+    "eta2_time_2": 0.0,
+    "final_phase_sum_error": 0.0
+  },
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "private_acceptance_floors": {
+    "early_evolution_absolute": 1e-06,
+    "phase_sum_absolute": 1e-06
+  },
+  "process_count": 1,
+  "repetitions": {
+    "faulty": 3,
+    "gold": 3
+  },
+  "required_mutant_failed_gates": {
+    "mutant-001": [
+      "authorized_edit_scope",
+      "input_validation",
+      "progress_beyond_failure",
+      "bounded_completion",
+      "target_failure_removed",
+      "phase_sum_constraint",
+      "early_evolution_preservation"
+    ],
+    "mutant-002": [
+      "phase_sum_constraint",
+      "early_evolution_preservation"
+    ],
+    "mutant-003": [
+      "authorized_edit_scope",
+      "input_validation",
+      "progress_beyond_failure",
+      "bounded_completion",
+      "target_failure_removed",
+      "phase_sum_constraint",
+      "early_evolution_preservation"
+    ]
+  },
+  "schema_version": "1.0",
+  "tolerance_rule": "max(private domain floor, 10 * maximum three-run spread); relative floor 1e-8 where configured",
+  "validated_on": "2026-10-03"
+}

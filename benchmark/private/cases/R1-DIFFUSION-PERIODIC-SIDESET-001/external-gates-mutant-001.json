@@ -1,0 +1,86 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "candidate changes are confined to the authorized HIT paths",
+    "evidence": [],
+    "gate_id": "authorized_edit_scope",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "36841c6d30e1b0eeef00590a503ab824248f786c9a2c82b24b9e8a84b8a0ca3d"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "check_input failed or exceeded evaluator limits",
+    "evidence": [
+      "command:check_input",
+      "exit_code:1",
+      "wall_time_seconds:0.4941",
+      "timed_out:false",
+      "output_limit_exceeded:false",
+      "process_limit_exceeded:false"
+    ],
+    "gate_id": "input_validation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "36841c6d30e1b0eeef00590a503ab824248f786c9a2c82b24b9e8a84b8a0ca3d"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "not evaluated because input_validation failed",
+    "evidence": [],
+    "gate_id": "bounded_execution",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "36841c6d30e1b0eeef00590a503ab824248f786c9a2c82b24b9e8a84b8a0ca3d"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "not evaluated because input_validation failed",
+    "evidence": [],
+    "gate_id": "target_failure_removed",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "36841c6d30e1b0eeef00590a503ab824248f786c9a2c82b24b9e8a84b8a0ca3d"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "not evaluated because input_validation failed",
+    "evidence": [],
+    "gate_id": "translated_point_equality",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "36841c6d30e1b0eeef00590a503ab824248f786c9a2c82b24b9e8a84b8a0ca3d"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "not evaluated because input_validation failed",
+    "evidence": [],
+    "gate_id": "integral_average_preservation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "36841c6d30e1b0eeef00590a503ab824248f786c9a2c82b24b9e8a84b8a0ca3d"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "all frozen physics paths are unchanged",
+    "evidence": [],
+    "gate_id": "physics_preservation",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "36841c6d30e1b0eeef00590a503ab824248f786c9a2c82b24b9e8a84b8a0ca3d"
+  }
+]

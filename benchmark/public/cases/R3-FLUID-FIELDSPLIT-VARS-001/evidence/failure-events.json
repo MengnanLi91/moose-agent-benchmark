@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+  "events": [
+    {
+      "stage": "fieldsplit_setup",
+      "status": "failed",
+      "signature": "parent split expected a different size",
+      "tag": "incomplete_parent_split"
+    }
+  ]
+}

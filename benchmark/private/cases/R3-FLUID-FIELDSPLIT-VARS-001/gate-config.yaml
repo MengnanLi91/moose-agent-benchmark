@@ -1,0 +1,87 @@
+schema_version: '1.0'
+expected_moose_revision: c2dfd9fedd3193740a5278ec32269450c618e3b7
+expected_executable_sha256: 3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472
+case_id: R3-FLUID-FIELDSPLIT-VARS-001
+case_type: r3_fieldsplit_partition
+fixture_dir: fixture
+overlay_path: solution.i
+input_path: solution.i
+authorized_hit_paths:
+- Preconditioning/FSP/system/vars
+- Preconditioning/FSP/system/splitting
+- Preconditioning/FSP/fluid/vars
+- Preconditioning/FSP/fluid/splitting
+- Preconditioning/FSP/fluid/splitting_type
+- Preconditioning/FSP/velocity/vars
+- Preconditioning/FSP/pressure/vars
+- Preconditioning/FSP/concentration/vars
+required_gates:
+- authorized_edit_scope
+- input_validation
+- fieldsplit_partition
+- bounded_execution
+- target_failure_removed
+- solver_preservation
+- reference_quantities
+commands:
+  check_input:
+    argv:
+    - '{executable}'
+    - --check-input
+    - -i
+    - '{input}'
+    cwd: .
+  run:
+    argv:
+    - '{executable}'
+    - -i
+    - '{input}'
+    cwd: .
+failure_signatures:
+- parent split expected size
+- has size 237 but the parent split expected size 212
+success_signatures:
+- Solve Converged
+csv_path: solution_out.csv
+metric_expectations:
+  reference.pressure_average:
+    column: pressure_average
+    row: -1
+    expected: 0.04166667
+    tolerance:
+      absolute: 1.0e-06
+      relative: 1.0e-06
+  reference.concentration_average:
+    column: concentration_average
+    row: -1
+    expected: 0.5244407
+    tolerance:
+      absolute: 1.0e-06
+      relative: 1.0e-06
+partition_variables:
+  system:
+  - velocity
+  - pressure
+  - concentration
+  fluid:
+  - velocity
+  - pressure
+  velocity:
+  - velocity
+  pressure:
+  - pressure
+  concentration:
+  - concentration
+partition_children:
+  system:
+  - fluid
+  - concentration
+  fluid:
+  - velocity
+  - pressure
+limits:
+  wall_time_seconds: 300
+  cpu_seconds: 240
+  memory_mib: 3072
+  max_output_bytes: 4194304
+  max_processes: 32

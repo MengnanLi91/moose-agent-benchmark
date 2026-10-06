@@ -1,0 +1,94 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "candidate changes include missing or unauthorized HIT paths",
+    "evidence": [
+      "changed_path:BCs/Periodic/translated/primary",
+      "changed_path:BCs/Periodic/translated/secondary",
+      "changed_path:BCs/Periodic/translated/translation",
+      "changed_path:BCs/Periodic/translated/variable",
+      "changed_path:BCs/periodic_replacement/boundary",
+      "changed_path:BCs/periodic_replacement/type",
+      "changed_path:BCs/periodic_replacement/value",
+      "changed_path:BCs/periodic_replacement/variable",
+      "changed_path:Mesh/right_periodic/combinatorial_geometry",
+      "changed_path:Mesh/right_periodic/enable_jit",
+      "changed_path:Mesh/right_periodic/included_boundaries",
+      "changed_path:Mesh/right_periodic/input",
+      "changed_path:Mesh/right_periodic/new_sideset_name",
+      "changed_path:Mesh/right_periodic/type"
+    ],
+    "gate_id": "authorized_edit_scope",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "180d336b34f25396a490a669fca04393853c4627f36d03986f6156467e83c1a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "input_validation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "180d336b34f25396a490a669fca04393853c4627f36d03986f6156467e83c1a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "bounded_execution",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "180d336b34f25396a490a669fca04393853c4627f36d03986f6156467e83c1a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "target_failure_removed",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "180d336b34f25396a490a669fca04393853c4627f36d03986f6156467e83c1a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "translated_point_equality",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "180d336b34f25396a490a669fca04393853c4627f36d03986f6156467e83c1a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "integral_average_preservation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "180d336b34f25396a490a669fca04393853c4627f36d03986f6156467e83c1a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+    "detail": "frozen paths changed",
+    "evidence": [],
+    "gate_id": "physics_preservation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "180d336b34f25396a490a669fca04393853c4627f36d03986f6156467e83c1a0"
+  }
+]

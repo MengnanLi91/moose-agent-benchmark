@@ -1,0 +1,74 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "candidate changes include missing or unauthorized HIT paths",
+    "evidence": [
+      "changed_path:Materials/dependent_diffusivity/coupled_variables",
+      "changed_path:Materials/dependent_diffusivity/expression"
+    ],
+    "gate_id": "authorized_edit_scope",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "b676baed67a9b878f96a818101a3ff105f303c35b3f4071dad4cd4cc78a0667a"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "input_validation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "b676baed67a9b878f96a818101a3ff105f303c35b3f4071dad4cd4cc78a0667a"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "the required variable is declared on the dependent material",
+    "evidence": [
+      "Materials/dependent_diffusivity/coupled_variables:actual=temperature",
+      "Materials/dependent_diffusivity/coupled_variables:expected=temperature"
+    ],
+    "gate_id": "coupling_configuration",
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "b676baed67a9b878f96a818101a3ff105f303c35b3f4071dad4cd4cc78a0667a"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "bounded_execution",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "b676baed67a9b878f96a818101a3ff105f303c35b3f4071dad4cd4cc78a0667a"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "not evaluated because authorized_edit_scope failed",
+    "evidence": [],
+    "gate_id": "target_failure_removed",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "b676baed67a9b878f96a818101a3ff105f303c35b3f4071dad4cd4cc78a0667a"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.4.0",
+    "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+    "detail": "candidate changes extend beyond the coupling declaration",
+    "evidence": [],
+    "gate_id": "physics_preservation",
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "b676baed67a9b878f96a818101a3ff105f303c35b3f4071dad4cd4cc78a0667a"
+  }
+]

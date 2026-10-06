@@ -1,0 +1,25 @@
+{
+  "adaptation": "original reduced fixture; no discussion input or attachment copied",
+  "captured_on": "2026-10-06",
+  "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
+  "command": "combined-opt -i failing.i",
+  "compiler": "clang 19.1.7 (arm64-apple-darwin20.0.0)",
+  "environment": {
+    "FI_PROVIDER": "tcp"
+  },
+  "executable": "modules/combined/combined-opt",
+  "executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "expected_faulty_exit_code": 1,
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "process_count": 1,
+  "public_file_sha256": {
+    "artifacts/failing.i": "30cd0f4c3746b268f0d7534bf157a074f0a60f0513b26f71ac8010863d3b949b",
+    "evidence/diagnosis.md": "b8e3756e6b4a793bd6dec48bac623a48ece68720ec4eddc0edbfcc931725cb33",
+    "evidence/failure-events.json": "bd79b37743e22e8e20d67413092073719b7d0abb072044f8345513be2b342190"
+  },
+  "repetitions": 3,
+  "schema_version": "1.0",
+  "source_retrieved_on": "2026-10-06",
+  "source_url": "https://github.com/idaholab/moose/discussions/28157"
+}

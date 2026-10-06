@@ -1,0 +1,66 @@
+schema_version: '1.0'
+expected_moose_revision: c2dfd9fedd3193740a5278ec32269450c618e3b7
+expected_executable_sha256: 3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472
+case_id: R2-COUPLED-VARIABLE-WIRING-001
+case_type: r2_coupled_variable_wiring
+fixture_dir: fixture
+overlay_path: solution.i
+input_path: solution.i
+authorized_hit_paths:
+- Materials/dependent_diffusivity/coupled_variables
+coupling_path: Materials/dependent_diffusivity/coupled_variables
+coupling_variable: temperature
+required_gates:
+- authorized_edit_scope
+- input_validation
+- coupling_configuration
+- bounded_execution
+- target_failure_removed
+- physics_preservation
+commands:
+  check_input:
+    argv:
+    - '{executable}'
+    - --check-input
+    - -i
+    - '{input}'
+    cwd: .
+  run:
+    argv:
+    - '{executable}'
+    - -i
+    - '{input}'
+    cwd: .
+failure_signatures:
+- 'Syntax error: Unknown identifier'
+success_signatures:
+- Solve Converged
+csv_path: solution_out.csv
+metric_expectations:
+  reference.temperature_average:
+    column: temperature_average
+    row: -1
+    expected: 450.0
+    tolerance:
+      absolute: 1.0e-08
+      relative: 1.0e-08
+  reference.concentration_average:
+    column: concentration_average
+    row: -1
+    expected: 0.47357497439831
+    tolerance:
+      absolute: 1.0e-08
+      relative: 1.0e-08
+  reference.diffusivity_average:
+    column: diffusivity_average
+    row: -1
+    expected: 1.9
+    tolerance:
+      absolute: 1.0e-08
+      relative: 1.0e-08
+limits:
+  wall_time_seconds: 180
+  cpu_seconds: 120
+  memory_mib: 2048
+  max_output_bytes: 2097152
+  max_processes: 32

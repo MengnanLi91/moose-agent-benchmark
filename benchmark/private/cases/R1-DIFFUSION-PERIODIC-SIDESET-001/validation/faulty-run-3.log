@@ -1,0 +1,51 @@
+
+[36m
+*** Info ***
+The following paired boundaries were automatically detected for periodicity:
+
+  2D x-direction: left <-> right
+  2D y-direction: bottom <-> top
+[39m
+
+[36m
+*** Info ***
+Periodicity information for the variables
+  - u
+will only be stored in the system's DoF map, not on the MooseMesh[39m
+
+[31m
+*** ERROR ***
+The following occurred in the main Application of type CombinedTestApp.
+
+Periodic boundary neighbor not found
+Stack frames: 17
+0: 0   libmesh_opt.0.dylib                 0x000000010bab8cc8 libMesh::print_trace(std::__1::basic_ostream<char, std::__1::char_traits<char>>&) + 1008
+1: 1   libmesh_opt.0.dylib                 0x000000010bab5b64 libMesh::MacroFunctions::report_error(char const*, int, char const*, char const*, std::__1::basic_ostream<char, std::__1::char_traits<char>>&) + 296
+2: 2   libmesh_opt.0.dylib                 0x000000010bab79e4 libMesh::PeriodicBoundaries::neighbor(short, libMesh::PointLocatorBase const&, libMesh::Elem const*, unsigned int, unsigned int*) const + 832
+3: 3   libmesh_opt.0.dylib                 0x000000010bbd3b94 libMesh::FEGenericBase<double>::compute_periodic_constraints(libMesh::DofConstraints&, libMesh::DofMap&, libMesh::PeriodicBoundaries const&, libMesh::MeshBase const&, libMesh::PointLocatorBase const*, unsigned int, libMesh::Elem const*) + 880
+4: 4   libmesh_opt.0.dylib                 0x000000010ba76000 (anonymous namespace)::ComputeConstraints::operator()(libMesh::StoredRange<libMesh::MeshBase::const_element_iterator, libMesh::Elem const*> const&) const + 244
+5: 5   libmesh_opt.0.dylib                 0x000000010ba72820 libMesh::DofMap::create_dof_constraints(libMesh::MeshBase const&, double) + 744
+6: 6   libmesh_opt.0.dylib                 0x000000010c255f58 libMesh::System::reinit_constraints() + 52
+7: 7   libmesh_opt.0.dylib                 0x000000010c25747c libMesh::System::init_data() + 96
+8: 8   libmesh_opt.0.dylib                 0x000000010c25607c libMesh::System::reinit_mesh() + 56
+9: 9   libmesh_opt.0.dylib                 0x000000010c22476c libMesh::EquationSystems::reinit_mesh() + 1752
+10: 10  libmoose-opt.0.dylib                0x0000000104337124 FEProblemBase::init() + 1536
+11: 11  libmoose-opt.0.dylib                0x00000001049aff84 ActionWarehouse::executeActionsWithAction(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) + 1304
+12: 12  libmoose-opt.0.dylib                0x00000001049af8d8 ActionWarehouse::executeAllActions() + 256
+13: 13  libmoose-opt.0.dylib                0x0000000104dc61fc MooseApp::runInputFile() + 160
+14: 14  libmoose-opt.0.dylib                0x0000000104dc1064 MooseApp::run() + 1656
+15: 15  combined-opt                        0x0000000100bd3cd4 int Moose::main<CombinedTestApp>(int, char**) + 160
+16: 16  dyld                                0x00000001870c04e4 start + 6992
+[0] ../src/base/periodic_boundaries.C, line 109, compiled Jul 31 2026 at 08:55:16
+[39m
+
+Stack frames: 8
+0: 0   libmesh_opt.0.dylib                 0x000000010bab8cc8 libMesh::print_trace(std::__1::basic_ostream<char, std::__1::char_traits<char>>&) + 1008
+1: 1   libmoose-opt.0.dylib                0x0000000104dccc94 moose::internal::mooseErrorRaw(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, hit::Node const*, bool) + 272
+2: 2   libmoose-opt.0.dylib                0x0000000104eb0dc4 MooseBase::callMooseError(MooseApp*, InputParameters const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, bool, hit::Node const*, bool) + 324
+3: 3   libmoose-opt.0.dylib                0x0000000104e64b6c MooseBase::callMooseError(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, bool, hit::Node const*, bool) const + 132
+4: 4   libmoose-opt.0.dylib                0x0000000103e926e4 void MooseBase::mooseError<char const*>(char const*&&) const + 72
+5: 5   libmoose-opt.0.dylib                0x0000000104dc1380 MooseApp::run() + 2452
+6: 6   combined-opt                        0x0000000100bd3cd4 int Moose::main<CombinedTestApp>(int, char**) + 160
+7: 7   dyld                                0x00000001870c04e4 start + 6992
+Abort(1) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0

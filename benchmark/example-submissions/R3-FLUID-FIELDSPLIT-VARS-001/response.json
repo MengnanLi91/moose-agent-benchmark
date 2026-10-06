@@ -1,0 +1,24 @@
+{
+  "claim": {
+    "changed_paths": [
+      "artifacts/solution.i"
+    ],
+    "changed_regions": [
+      "preconditioning_fieldsplit_ownership"
+    ],
+    "expected_failure_removed": "fieldsplit_parent_child_size_mismatch",
+    "repair_class": "fieldsplit_variable_partition"
+  },
+  "evidence": [
+    {
+      "interpretation": "children must form the declared parent partition",
+      "observation": "incomplete_parent_split: the intermediate fluid split lacks explicit ownership",
+      "source_id": "failure_evidence"
+    },
+    {
+      "interpretation": "this preserves the intended hierarchy",
+      "observation": "complete_nonoverlapping_partition: the submitted fluid split owns velocity and pressure",
+      "source_id": "repaired_moose_input"
+    }
+  ]
+}

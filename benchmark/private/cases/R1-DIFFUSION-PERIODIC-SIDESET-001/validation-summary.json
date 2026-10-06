@@ -1,0 +1,45 @@
+{
+  "base_executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
+  "compiler": "clang 19.1.7 (arm64-apple-darwin20.0.0)",
+  "faulty_result": "exit 1 with Periodic boundary neighbor not found in all three runs",
+  "gold_result": "exit 0 with Solve Converged in all three runs",
+  "maximum_gold_run_to_run_spread": {
+    "left_value": 0.0,
+    "right_value": 0.0,
+    "solution_average": 0.0,
+    "solution_integral": 0.0
+  },
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "private_acceptance_floors": {
+    "reference_qoi_absolute": 1e-06,
+    "translated_point_absolute": 1e-08
+  },
+  "process_count": 1,
+  "repetitions": {
+    "faulty": 3,
+    "gold": 3
+  },
+  "required_mutant_failed_gates": {
+    "mutant-001": [
+      "input_validation",
+      "bounded_execution",
+      "target_failure_removed",
+      "translated_point_equality",
+      "integral_average_preservation"
+    ],
+    "mutant-002": [
+      "authorized_edit_scope",
+      "input_validation",
+      "bounded_execution",
+      "target_failure_removed",
+      "translated_point_equality",
+      "integral_average_preservation",
+      "physics_preservation"
+    ]
+  },
+  "schema_version": "1.0",
+  "tolerance_rule": "max(private domain floor, 10 * maximum three-run spread); relative floor 1e-8 where configured",
+  "validated_on": "2026-10-03"
+}

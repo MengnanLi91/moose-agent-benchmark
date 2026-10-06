@@ -30,6 +30,25 @@ uv run moose-benchmark aggregate \
 uv run pytest -q
 ```
 
+Protected REPAIR evaluators generate hash-bound gates from a recorded submission in a clean
+temporary fixture:
+
+The current REPAIR scope is input-only: participants submit a complete MOOSE `.i` file, not C++
+source or a custom application build.
+
+```bash
+uv run moose-benchmark generate-gates \
+  --manifest benchmark/manifest.yaml \
+  --case-id R1-DIFFUSION-PERIODIC-SIDESET-001 \
+  --submission-dir benchmark/example-submissions/R1-DIFFUSION-PERIODIC-SIDESET-001 \
+  --moose-dir /path/to/moose \
+  --executable /path/to/moose/modules/combined/combined-opt \
+  --output benchmark/private/cases/R1-DIFFUSION-PERIODIC-SIDESET-001/external-gates-gold.json
+```
+
+Use `--include-disabled` with `validate`, `record-submission`, `generate-gates`, or `score`
+while authoring disabled development cases.
+
 To score FORM cases, install the optional judge adapters and provide a private configuration:
 
 ```bash
@@ -220,7 +239,8 @@ src/moose_benchmark/
   llm/                          OpenAI, Claude, LiteLLM-proxy, and Ollama judge adapters
   scoring.py                    Gated case score and suite aggregation
   runner.py                     Bounded, shell-free MOOSE command runner
-  cli.py                        Validate, score, aggregate, and run-check commands
+  moose_gates/                  Protected MOOSE workspace, parsing, and case gate orchestration
+  cli.py                        Validate, score, gate generation, aggregate, and run-check commands
 tests/                           Contract, scoring, aggregation, and security tests
 ci/                              Optional real-MOOSE smoke test
 docs/implementation-plan.md      Incremental implementation and release plan

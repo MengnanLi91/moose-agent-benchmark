@@ -1,0 +1,24 @@
+{
+  "claim": {
+    "changed_paths": [
+      "artifacts/solution.i"
+    ],
+    "changed_regions": [
+      "material_variable_coupling"
+    ],
+    "expected_failure_removed": "missing_coupled_variable",
+    "repair_class": "coupled_variable_wiring"
+  },
+  "evidence": [
+    {
+      "interpretation": "the parsed expression can only resolve declared variable symbols",
+      "observation": "missing_variable_coupling: the supplied material reports an unknown temperature identifier",
+      "source_id": "failure_evidence"
+    },
+    {
+      "interpretation": "declaring the existing dependency is the minimal input-only repair",
+      "observation": "declared_variable_dependency: the submitted material couples temperature without changing its expression",
+      "source_id": "repaired_moose_input"
+    }
+  ]
+}

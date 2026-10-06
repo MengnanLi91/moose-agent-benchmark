@@ -30,15 +30,23 @@ from .loader import (
     load_case,
     load_evaluation,
     load_manifest,
+    load_model,
     load_submission_record,
     resolve_inside,
     sha256_file,
+)
+from .moose_gates import (
+    GateInfrastructureError,
+    MooseGateConfig,
+    generate_case_gates,
+    prepare_workspace,
+    verify_tools,
 )
 from .runner import RunLimits, build_submission_record, run_moose_check
 from .scoring import aggregate_results
 
 
-def _write_json(data: BaseModel | dict, output: str | None) -> None:
+def _write_json(data: BaseModel | dict | list, output: str | None) -> None:
     if isinstance(data, BaseModel):
         data = data.model_dump(mode="json")
     text = json.dumps(data, indent=2, sort_keys=True) + "\n"
@@ -59,14 +67,18 @@ def _write_text(text: str, output: str | None) -> None:
         print(text, end="")
 
 
-def validate_manifest(manifest_path: str | Path) -> list[str]:
+def validate_manifest(
+    manifest_path: str | Path,
+    *,
+    include_disabled: bool = False,
+) -> list[str]:
     manifest_path = Path(manifest_path).resolve()
     manifest = load_manifest(manifest_path)
     errors: list[str] = []
     root = manifest_path.parent
     base_problem_splits: dict[str, set[str]] = defaultdict(set)
     for ref in manifest.cases:
-        if not ref.enabled:
+        if not ref.enabled and not include_disabled:
             continue
         try:
             if not ref.public_case.startswith("public/"):
@@ -78,6 +90,18 @@ def validate_manifest(manifest_path: str | Path) -> list[str]:
             case = load_case(case_path)
             evaluation = load_evaluation(evaluation_path)
             get_evaluator(evaluation.evaluator)
+            gate_config_path = evaluation_path.parent / "gate-config.yaml"
+            if gate_config_path.is_file():
+                gate_config = load_model(gate_config_path, MooseGateConfig)
+                external_ids = [
+                    gate.id for gate in evaluation.hard_gates if gate.kind == "external"
+                ]
+                if gate_config.case_id != ref.case_id:
+                    errors.append(f"{ref.case_id}: gate configuration case ID differs")
+                if gate_config.required_gates != external_ids:
+                    errors.append(
+                        f"{ref.case_id}: gate configuration and evaluation hard gates differ"
+                    )
             if (
                 evaluation.evaluator == "semantic_rubric_v1"
                 and case.submission.response_mode == ResponseMode.STRUCTURED_JSON
@@ -147,23 +171,32 @@ def _load_external_gates(
 
 
 def command_validate(args: argparse.Namespace) -> int:
-    errors = validate_manifest(args.manifest)
+    errors = validate_manifest(args.manifest, include_disabled=args.include_disabled)
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
         return 1
     manifest = load_manifest(args.manifest)
-    enabled = sum(item.enabled for item in manifest.cases)
-    print(f"validated {enabled} enabled case(s) in {manifest.benchmark_id}")
+    count = (
+        len(manifest.cases)
+        if args.include_disabled
+        else sum(item.enabled for item in manifest.cases)
+    )
+    qualifier = "registered" if args.include_disabled else "enabled"
+    print(f"validated {count} {qualifier} case(s) in {manifest.benchmark_id}")
     return 0
 
 
 def command_score(args: argparse.Namespace) -> int:
-    errors = validate_manifest(args.manifest)
+    errors = validate_manifest(args.manifest, include_disabled=args.include_disabled)
     if errors:
         raise ValueError("manifest validation failed: " + "; ".join(errors))
     manifest = load_manifest(args.manifest)
-    case_path, evaluation_path = case_bundle_paths(args.manifest, args.case_id)
+    case_path, evaluation_path = case_bundle_paths(
+        args.manifest,
+        args.case_id,
+        include_disabled=args.include_disabled,
+    )
     case = load_case(case_path)
     evaluation = load_evaluation(evaluation_path)
     submission_root = Path(args.submission_dir).resolve()
@@ -212,7 +245,11 @@ def _parse_timestamp(value: str | None) -> datetime:
 
 
 def command_record_submission(args: argparse.Namespace) -> int:
-    case_path, _evaluation_path = case_bundle_paths(args.manifest, args.case_id)
+    case_path, _evaluation_path = case_bundle_paths(
+        args.manifest,
+        args.case_id,
+        include_disabled=args.include_disabled,
+    )
     case = load_case(case_path)
     token_usage = None
     if any((args.input_tokens, args.output_tokens, args.total_tokens)):
@@ -274,7 +311,64 @@ def command_run_check(args: argparse.Namespace) -> int:
         RunLimits(args.wall_time, args.cpu_time, args.memory_mib),
     )
     _write_json(result.to_dict(), args.output)
-    return 0 if result.exit_code == 0 and not result.timed_out else 1
+    return (
+        0
+        if result.exit_code == 0
+        and not result.timed_out
+        and not result.output_limit_exceeded
+        and not result.process_limit_exceeded
+        else 1
+    )
+
+
+def command_generate_gates(args: argparse.Namespace) -> int:
+    output_path = Path(args.output)
+    errors = validate_manifest(args.manifest, include_disabled=args.include_disabled)
+    if errors:
+        raise ValueError("manifest validation failed: " + "; ".join(errors))
+    manifest = load_manifest(args.manifest)
+    case_path, evaluation_path = case_bundle_paths(
+        args.manifest,
+        args.case_id,
+        include_disabled=args.include_disabled,
+    )
+    case = load_case(case_path)
+    evaluation = load_evaluation(evaluation_path)
+    config_path = evaluation_path.parent / "gate-config.yaml"
+    if not config_path.is_file():
+        raise GateInfrastructureError(f"private gate configuration is missing: {config_path}")
+    config = load_model(config_path, MooseGateConfig)
+    external_ids = [gate.id for gate in evaluation.hard_gates if gate.kind == "external"]
+    if external_ids != config.required_gates:
+        raise GateInfrastructureError(
+            "evaluation hard gates do not match gate-config required_gates"
+        )
+    if len(case.submission.required_artifacts) != 1:
+        raise ValueError("gate generation requires exactly one submission artifact")
+    submission_root = Path(args.submission_dir).resolve()
+    run_record_path = submission_root / "run-record.json"
+    submission = load_submission_record(run_record_path)
+    context = EvaluationContext(
+        benchmark_id=manifest.benchmark_id,
+        benchmark_version=manifest.benchmark_version,
+        submission_sha256=submission.submission_sha256,
+        run_record_sha256=sha256_file(run_record_path),
+        submission_root=submission_root,
+        public_case_root=case_path.parent,
+        private_case_root=evaluation_path.parent,
+    )
+    tools = verify_tools(Path(args.moose_dir), Path(args.executable), config)
+    artifact_path = case.submission.required_artifacts[0].path
+    with prepare_workspace(
+        evaluation_path.parent,
+        submission_root,
+        submission,
+        artifact_path,
+        config,
+    ) as workspace:
+        gates = generate_case_gates(config, workspace, tools, context, submission)
+    _write_json([gate.model_dump(mode="json") for gate in gates], str(output_path))
+    return 0
 
 
 def command_catalog_validate(args: argparse.Namespace) -> int:
@@ -330,6 +424,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     validate = subparsers.add_parser("validate", help="validate a benchmark manifest")
     validate.add_argument("manifest")
+    validate.add_argument(
+        "--include-disabled",
+        action="store_true",
+        help="also validate disabled development cases",
+    )
     validate.set_defaults(handler=command_validate)
 
     score = subparsers.add_parser("score", help="score one submission")
@@ -346,6 +445,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="evaluator-only gate file relative to the private case directory",
     )
     score.add_argument("--output")
+    score.add_argument(
+        "--include-disabled",
+        action="store_true",
+        help="allow scoring a disabled development case",
+    )
     score.set_defaults(handler=command_score)
 
     record = subparsers.add_parser(
@@ -369,7 +473,29 @@ def build_parser() -> argparse.ArgumentParser:
     record.add_argument("--output-tokens", type=int, default=0)
     record.add_argument("--total-tokens", type=int, default=0)
     record.add_argument("--output")
+    record.add_argument(
+        "--include-disabled",
+        action="store_true",
+        help="allow recording a disabled development case",
+    )
     record.set_defaults(handler=command_record_submission)
+
+    generate = subparsers.add_parser(
+        "generate-gates",
+        help="run protected MOOSE gates for one recorded submission",
+    )
+    generate.add_argument("--manifest", required=True)
+    generate.add_argument("--case-id", required=True)
+    generate.add_argument("--submission-dir", required=True)
+    generate.add_argument("--moose-dir", required=True)
+    generate.add_argument("--executable", required=True)
+    generate.add_argument("--output", required=True)
+    generate.add_argument(
+        "--include-disabled",
+        action="store_true",
+        help="allow gate generation for a disabled development case",
+    )
+    generate.set_defaults(handler=command_generate_gates)
 
     aggregate = subparsers.add_parser("aggregate", help="aggregate case-result JSON files")
     aggregate.add_argument("results", nargs="+")
@@ -394,6 +520,13 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
     try:
         raise SystemExit(args.handler(args))
-    except (EvaluatorInfrastructureError, ValidationError, ValueError, KeyError, OSError) as exc:
+    except (
+        EvaluatorInfrastructureError,
+        GateInfrastructureError,
+        ValidationError,
+        ValueError,
+        KeyError,
+        OSError,
+    ) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         raise SystemExit(2) from exc

@@ -1,6 +1,6 @@
 schema_version: "2.0"
 benchmark_id: moose-agent-benchmark-development
-benchmark_version: 0.3.0
+benchmark_version: 0.4.0
 required_atomic_subcategories:
   - F1
   - F2
@@ -57,5 +57,25 @@ cases:
   - case_id: F4-POROUS-SOLUTE-001
     public_case: public/cases/F4-POROUS-SOLUTE-001/case.yaml
     private_evaluation: private/cases/F4-POROUS-SOLUTE-001/evaluation.yaml
+    split: development
+    enabled: true
+  - case_id: R1-DIFFUSION-PERIODIC-SIDESET-001
+    public_case: public/cases/R1-DIFFUSION-PERIODIC-SIDESET-001/case.yaml
+    private_evaluation: private/cases/R1-DIFFUSION-PERIODIC-SIDESET-001/evaluation.yaml
+    split: development
+    enabled: true
+  - case_id: R2-COUPLED-VARIABLE-WIRING-001
+    public_case: public/cases/R2-COUPLED-VARIABLE-WIRING-001/case.yaml
+    private_evaluation: private/cases/R2-COUPLED-VARIABLE-WIRING-001/evaluation.yaml
+    split: development
+    enabled: true
+  - case_id: R3-FLUID-FIELDSPLIT-VARS-001
+    public_case: public/cases/R3-FLUID-FIELDSPLIT-VARS-001/case.yaml
+    private_evaluation: private/cases/R3-FLUID-FIELDSPLIT-VARS-001/evaluation.yaml
+    split: development
+    enabled: true
+  - case_id: R4-PHASEFIELD-LAGRANGE-TRANSIENT-001
+    public_case: public/cases/R4-PHASEFIELD-LAGRANGE-TRANSIENT-001/case.yaml
+    private_evaluation: private/cases/R4-PHASEFIELD-LAGRANGE-TRANSIENT-001/evaluation.yaml
     split: development
     enabled: true

@@ -1,0 +1,67 @@
+schema_version: '1.0'
+expected_moose_revision: c2dfd9fedd3193740a5278ec32269450c618e3b7
+expected_executable_sha256: 3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472
+case_id: R1-DIFFUSION-PERIODIC-SIDESET-001
+case_type: r1_periodic_sideset
+fixture_dir: fixture
+overlay_path: solution.i
+input_path: solution.i
+authorized_hit_paths:
+- Mesh/right_periodic/*
+- BCs/Periodic/translated/primary
+required_gates:
+- authorized_edit_scope
+- input_validation
+- bounded_execution
+- target_failure_removed
+- translated_point_equality
+- integral_average_preservation
+- physics_preservation
+commands:
+  check_input:
+    argv:
+    - '{executable}'
+    - --check-input
+    - -i
+    - '{input}'
+    cwd: .
+  run:
+    argv:
+    - '{executable}'
+    - -i
+    - '{input}'
+    cwd: .
+failure_signatures:
+- Periodic boundary neighbor not found
+success_signatures:
+- Solve Converged
+csv_path: solution_out.csv
+metric_expectations:
+  integral_average.average:
+    column: solution_average
+    row: -1
+    expected: 0.8638039
+    tolerance:
+      absolute: 1.0e-06
+      relative: 1.0e-06
+  integral_average.integral:
+    column: solution_integral
+    row: -1
+    expected: 2.591412
+    tolerance:
+      absolute: 1.0e-06
+      relative: 1.0e-06
+metric_equalities:
+  translated.boundary_values:
+    left_column: left_value
+    right_column: right_value
+    row: -1
+    tolerance:
+      absolute: 1.0e-08
+      relative: 1.0e-08
+limits:
+  wall_time_seconds: 180
+  cpu_seconds: 120
+  memory_mib: 2048
+  max_output_bytes: 2097152
+  max_processes: 32

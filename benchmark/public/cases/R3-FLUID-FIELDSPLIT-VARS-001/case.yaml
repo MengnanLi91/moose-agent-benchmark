@@ -1,0 +1,77 @@
+schema_version: '2.0'
+case_id: R3-FLUID-FIELDSPLIT-VARS-001
+title: Repair an Incomplete Nested Field-Split Partition
+case_kind: atomic
+track: REPAIR
+subcategory: R3
+difficulty: L2
+scoring_profile: balanced_v1
+base_problem_id: COUPLED-STOKES-SPECIES-FSP-BASE-001
+physics_domains:
+- fluid_dynamics
+- species_transport
+target:
+  application: combined
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+prompt_path: prompt.md
+prompt_sha256: bd5c902a8a43d8d85fe5b6bb09b617573c7f75f90367feedfb824ec918d90f09
+artifacts:
+- id: failing_input
+  path: artifacts/failing.i
+  role: immutable_faulty_input
+  mutable: false
+  required: true
+  sha256: 06040a9e644303369abc5eb45bb8fab644d66f428220f44d68d0db3f0aa00767
+evidence_sources:
+- id: diagnosis
+  path: evidence/diagnosis.md
+  kind: supplied_repair_diagnosis
+  description: Authoritative diagnosis and field-split edit boundary.
+  sha256: 5735ec49fc1e3e77bd3b2bdc0e5e18a069684985a3febcc9b91835931be72a81
+- id: failure_evidence
+  path: evidence/failure-events.json
+  kind: normalized_failure_events
+  description: Normalized parent-child split size failure.
+  sha256: d8bf418120479dac8c1581a7ec9d81d013ea9b96bfbe5e90aa0f8159d127b6a9
+- id: run_metadata
+  path: evidence/run-metadata.json
+  kind: reproducibility_metadata
+  description: Pinned revision, executable hash, command, and public hashes.
+  sha256: 53fccebc44459aeaf20b500bf285764aec16939eff7391c7964796901353b3eb
+starting_state:
+  description: The faulty input, diagnosis, and normalized failure evidence are supplied.
+  supplied_truth:
+  - The diagnosis is authoritative for this REPAIR case.
+  - The intended nested field-split hierarchy and physics are correct and frozen.
+  excluded_from_scoring:
+  - Root-cause discovery
+  - Changes outside field-split ownership wiring
+actions:
+  permitted:
+  - Inspect the public artifacts and evidence.
+  - Create one repaired MOOSE input.
+  - Use at most one validation and one execution attempt.
+  prohibited:
+  - Modify the immutable starting artifact.
+  - Replace the field split or change physics, tolerances, or outputs.
+  - Submit undeclared artifacts.
+budget:
+  wall_time_seconds: 300
+  cpu_seconds: 240
+  memory_mib: 3072
+  validation_attempts: 1
+  execution_attempts: 1
+submission:
+  response_mode: structured_json
+  required_claim_paths:
+  - /claim/repair_class
+  - /claim/changed_paths
+  - /claim/changed_regions
+  - /claim/expected_failure_removed
+  evidence_required: true
+  required_artifacts:
+  - role: repaired_moose_input
+    path: artifacts/solution.i
+  maximum_artifacts: 1
+required_stages: []

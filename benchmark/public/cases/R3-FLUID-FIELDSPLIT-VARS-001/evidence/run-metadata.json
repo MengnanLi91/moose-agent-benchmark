@@ -1,0 +1,25 @@
+{
+  "adaptation": "original reduced fixture; no discussion attachment copied",
+  "captured_on": "2026-10-03",
+  "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
+  "command": "combined-opt -i failing.i",
+  "compiler": "clang 19.1.7 (arm64-apple-darwin20.0.0)",
+  "environment": {
+    "FI_PROVIDER": "tcp"
+  },
+  "executable": "modules/combined/combined-opt",
+  "executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "expected_faulty_exit_code": 1,
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "petsc_version": "3.25.2",
+  "process_count": 1,
+  "public_file_sha256": {
+    "artifacts/failing.i": "06040a9e644303369abc5eb45bb8fab644d66f428220f44d68d0db3f0aa00767",
+    "evidence/diagnosis.md": "5735ec49fc1e3e77bd3b2bdc0e5e18a069684985a3febcc9b91835931be72a81",
+    "evidence/failure-events.json": "d8bf418120479dac8c1581a7ec9d81d013ea9b96bfbe5e90aa0f8159d127b6a9"
+  },
+  "repetitions": 3,
+  "schema_version": "1.0",
+  "source_retrieved_on": "2026-09-30",
+  "source_url": "https://github.com/idaholab/moose/discussions/32033"
+}

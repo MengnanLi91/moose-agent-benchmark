@@ -1,0 +1,25 @@
+{
+  "claim": {
+    "changed_paths": [
+      "artifacts/solution.i"
+    ],
+    "changed_regions": [
+      "mesh_periodic_sideset",
+      "periodic_boundary_reference"
+    ],
+    "expected_failure_removed": "periodic_neighbor_lookup_failure",
+    "repair_class": "periodic_sideset_restriction"
+  },
+  "evidence": [
+    {
+      "interpretation": "the periodic pair must cover only the translated overlap",
+      "observation": "unmatched_periodic_sideset: the supplied right boundary contains unmatched faces",
+      "source_id": "failure_evidence"
+    },
+    {
+      "interpretation": "this is the minimal authorized repair",
+      "observation": "restricted_periodic_sideset: the submitted input narrows the right boundary reference",
+      "source_id": "repaired_moose_input"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+Framework Information:
+MOOSE Version:           git commit c2dfd9fedd on 2026-08-18
+LibMesh Version:         
+PETSc Version:           3.25.2
+SLEPc Version:           3.25.0
+Current Time:            Sat Oct  3 21:59:54 2026
+Executable Timestamp:    Mon Sep 28 21:07:40 2026
+
+Input File(s):
+  /Users/lim2/Research/LLM/moose-agent-benchmark/main/benchmark/private/cases/R3-FLUID-FIELDSPLIT-VARS-001/fixture/solution.i
+
+Checkpoint:
+  Wall Time Interval:      Every 3600 s
+  Checkpoint:              Outputs/checkpoint
+  # Checkpoints Kept:      2
+  Execute On:              TIMESTEP_END 
+
+Parallelism:
+  Num Processors:          1
+  Num Threads:             1
+
+Mesh: 
+  Parallel Type:           distributed
+  Mesh Dimension:          2
+  Spatial Dimension:       2
+  Nodes:                   81
+  Elems:                   16
+  Num Subdomains:          1
+
+Nonlinear System:
+  Num DOFs:                212
+  Num Local DOFs:          212
+  Variables:               "velocity" { "pressure" "concentration" } 
+  Finite Element Types:    "LAGRANGE_VEC" "LAGRANGE" 
+  Approximation Orders:    "SECOND" "FIRST" 
+
+Execution Information:
+  Executioner:             Steady
+  Solver Mode:             NEWTON 
+  PETSc Preconditioner:    [fieldsplit_fluid_fieldsplit_velocity]: jacobi [fieldsplit_fluid_fieldsplit_pressure]: jacobi [fieldsplit_concentration]: jacobi 
+  MOOSE Preconditioner:    FSP 
+
+
+Postprocessor Values:
++----------------+-----------------------+------------------+
+| time           | concentration_average | pressure_average |
++----------------+-----------------------+------------------+
+|   0.000000e+00 |          0.000000e+00 |     0.000000e+00 |
++----------------+-----------------------+------------------+
+
+ 0 Nonlinear |R| = [32m4.219330e+00[39m
+
+[31m
+*** ERROR ***
+Split 'system' has size 237 but the parent split expected size 212. Make sure that you have non-overlapping complete sets for variables and blocks as well as consistency in sides/unsides, contacts/uncontacts, etc.[39m
+
+Stack frames: 24
+0: 0   libmesh_opt.0.dylib                 0x000000010d3f4cc8 libMesh::print_trace(std::__1::basic_ostream<char, std::__1::char_traits<char>>&) + 1008
+1: 1   libmoose-opt.0.dylib                0x0000000106708c94 moose::internal::mooseErrorRaw(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, hit::Node const*, bool) + 272
+2: 2   libmoose-opt.0.dylib                0x0000000105e864dc void mooseError<char const (&) [8], std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, char const (&) [12], unsigned long long, char const (&) [37], unsigned long long, char const (&) [148]>(char const (&) [8], std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, char const (&) [12], unsigned long long&&, char const (&) [37], unsigned long long&&, char const (&) [148]) + 308
+3: 3   libmoose-opt.0.dylib                0x0000000105e91c30 DMCreateFieldDecomposition_Moose(_p_DM*, long long*, char***, _p_IS***, _p_DM***) + 2820
+4: 4   libpetsc.3.25.2.dylib               0x0000000111895778 DMCreateFieldDecomposition + 132
+5: 5   libpetsc.3.25.2.dylib               0x0000000111afb0cc PCSetUp_FieldSplit + 1352
+6: 6   libpetsc.3.25.2.dylib               0x0000000111bd357c PCSetUp + 468
+7: 7   libpetsc.3.25.2.dylib               0x00000001119f55f8 KSPSetUp + 1220
+8: 8   libpetsc.3.25.2.dylib               0x00000001119f7fb0 KSPSolve_Private + 492
+9: 9   libpetsc.3.25.2.dylib               0x00000001119f7c50 KSPSolve + 44
+10: 10  libpetsc.3.25.2.dylib               0x0000000111c027ac SNESSolve_NEWTONLS + 1220
+11: 11  libpetsc.3.25.2.dylib               0x0000000111c488b8 SNESSolve + 1396
+12: 12  libmesh_opt.0.dylib                 0x000000010db3d93c libMesh::PetscNonlinearSolver<double>::solve(libMesh::SparseMatrix<double>&, libMesh::NumericVector<double>&, libMesh::NumericVector<double>&, double, unsigned int) + 1012
+13: 13  libmesh_opt.0.dylib                 0x000000010db8e52c libMesh::NonlinearImplicitSystem::solve() + 368
+14: 14  libmoose-opt.0.dylib                0x0000000106490bb4 NonlinearSystem::solve() + 820
+15: 15  libmoose-opt.0.dylib                0x0000000105c99b38 FEProblemBase::solve(unsigned int) + 512
+16: 16  libmoose-opt.0.dylib                0x000000010559a4a8 FEProblemSolve::solve() + 568
+17: 17  libmoose-opt.0.dylib                0x000000010559fbe4 FixedPointSolve::solveStep(std::__1::set<unsigned long long, std::__1::less<unsigned long long>, std::__1::allocator<unsigned long long>> const&) + 1372
+18: 18  libmoose-opt.0.dylib                0x000000010559f030 FixedPointSolve::solve() + 1760
+19: 19  libmoose-opt.0.dylib                0x00000001055a2d68 SteadyBase::execute() + 448
+20: 20  libmoose-opt.0.dylib                0x00000001067028ac MooseApp::executeExecutioner() + 348
+21: 21  libmoose-opt.0.dylib                0x00000001066fd1a8 MooseApp::run() + 1980
+22: 22  combined-opt                        0x000000010267bcd4 int Moose::main<CombinedTestApp>(int, char**) + 160
+23: 23  dyld                                0x00000001870c04e4 start + 6992
+Abort(1) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0

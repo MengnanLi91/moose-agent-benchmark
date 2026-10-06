@@ -3,7 +3,12 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from moose_benchmark.contracts import ArtifactSpec, EvaluationSpec, RecordedArtifact
+from moose_benchmark.contracts import (
+    ArtifactSpec,
+    CaseContract,
+    EvaluationSpec,
+    RecordedArtifact,
+)
 from moose_benchmark.loader import load_case, load_evaluation, load_submission_record
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -64,6 +69,14 @@ class ContractTests(unittest.TestCase):
         )
         self.assertEqual(record.schema_version, "2.0")
         self.assertEqual(record.model.provider, "fixture")
+
+    def test_repair_contract_rejects_source_submission(self):
+        case = load_case(ROOT / "benchmark/public/cases/R2-COUPLED-VARIABLE-WIRING-001/case.yaml")
+        data = case.model_dump(mode="json")
+        data["submission"]["required_artifacts"][0]["path"] = "artifacts/solution.C"
+        data["submission"]["required_artifacts"][0]["role"] = "repaired_cpp_source"
+        with self.assertRaises(ValidationError):
+            CaseContract.model_validate(data)
 
     def test_evaluation_rejects_duplicate_gate_ids(self):
         data = {

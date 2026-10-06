@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
+  "events": [
+    {
+      "stage": "transient_nonlinear_solve",
+      "status": "failed_after_progress",
+      "signature": "DIVERGED_PC_FAILED / FACTOR_NUMERIC_ZEROPIVOT",
+      "tag": "transient_zero_regularization_breakdown"
+    }
+  ]
+}

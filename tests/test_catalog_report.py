@@ -23,9 +23,9 @@ class CatalogReportTests(unittest.TestCase):
         self.assertEqual(report["target_total"], 120)
         self.assertEqual(report["totals"]["cataloged"], 35)
         self.assertEqual(report["totals"]["atomic"], 35)
-        self.assertEqual(report["totals"]["implemented"], 8)
+        self.assertEqual(report["totals"]["implemented"], 12)
         self.assertEqual(report["totals"]["complete"], 0)
-        self.assertEqual(report["status_counts"]["planned"], 27)
+        self.assertEqual(report["status_counts"]["planned"], 23)
         self.assertEqual(report["track_counts"]["FORM"]["cataloged"], 12)
         self.assertEqual(report["track_counts"]["DIAG"]["cataloged"], 7)
         self.assertTrue(
@@ -46,6 +46,7 @@ class CatalogReportTests(unittest.TestCase):
             )
         )
         self.assertEqual(report["track_counts"]["DIAG"]["implemented"], 4)
+        self.assertEqual(report["track_counts"]["REPAIR"]["implemented"], 4)
         self.assertEqual(report["subcategory_counts"]["D1"]["implemented"], 1)
         self.assertTrue(
             all(
@@ -57,6 +58,12 @@ class CatalogReportTests(unittest.TestCase):
             all(
                 report["subcategory_counts"][subcategory]["implemented"] == 1
                 for subcategory in ("F1", "F2", "F3", "F4")
+            )
+        )
+        self.assertTrue(
+            all(
+                report["subcategory_counts"][subcategory]["implemented"] == 1
+                for subcategory in ("R1", "R2", "R3", "R4")
             )
         )
 
