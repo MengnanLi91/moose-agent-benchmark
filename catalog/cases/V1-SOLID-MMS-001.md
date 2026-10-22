@@ -5,138 +5,50 @@ title: "Linear-Elasticity MMS"
 case_kind: atomic
 track: VERIFY
 subcategory: V1
+mms_task: derivation
 physics_domains:
   - solid_mechanics
 difficulty: L3
 base_problem_id: LINEAR-ELASTICITY-BASE-001
-status: planned
-priority: normal
+status: in_progress
+priority: high
 owner: null
 reviewers: []
 source_type: synthetic
-source_name: "MOOSE Agent Benchmark Seed Problems"
+source_name: "Deriving an MMS Benchmark from the MOOSEnger Verification Runs"
 source_url: ""
 domain_review_complete: false
 benchmark_review_complete: false
 moose_validation_required: true
-moose_validated: false
+moose_validated: true
 github_issue: ""
 github_pr: ""
-tags:
-  - benchmark-case
-  - seed-case
-  - verify
-  - v1
+tags: [benchmark-case, verify, v1, mms]
 ---
 
 # Linear-Elasticity MMS
 
 ## Benchmark purpose
 
-This case is a planned atomic benchmark for **V1 — Exact-solution and MMS verification**. It measures
-the requested behavior without awarding cross-credit for upstream or downstream work.
+Evaluate derivation of strains, stresses, body forces, and displacement boundary data for a
+two-dimensional linear-elasticity manufactured solution.
 
-> [!NOTE]
-> This is a planning record only. The referenced public/private case directories, inputs,
-> logs, evaluator, and submission fixtures have not been created yet.
+## Capability boundary
 
-## Problem description
-
-This planned atomic case, **Linear-Elasticity MMS**, exercises the V1 capability.
-
-## What this case tests
-
-**V1 — Exact-solution and MMS verification.**
-
-Correct numerical evidence and interpretation.
-
-Capabilities outside V1 are intentionally excluded from the score.
-
-## Starting information
-
-The planned benchmark will provide:
-
-- accepted 2D or 3D elasticity model;
-- manufactured displacement field;
-- body-force expressions;
-- boundary data;
-- mesh sequence;
-- expected convergence behavior.
+MOOSE construction and execution are excluded. The participant derives sources, boundary and initial data, and applicable compatibility or constitutive conditions.
 
 ## Required output
 
-The agent must compute:
+Submit `response.md` containing the requested derivation and enough intermediate work to audit signs and coefficients.
 
-- displacement error norm;
-- observed convergence order;
-- optional stress error as secondary evidence;
-- implementation-verification conclusion.
+## Implementation status
 
-## Permitted actions
+The public contract, private evaluator, development fixtures, and manifest registration are complete. The case remains disabled until live derivation-judge calibration and domain and benchmark-design reviews are complete.
 
-Once implemented, run the accepted model and the controlled verification or comparison study.
+## Review checklist
 
-## Prohibited actions
-
-- formulation repair;
-- object selection;
-- solver repair.
-
-## Isolation rationale
-
-Upstream truth is supplied and downstream work is excluded so the case scores only V1.
-
-
-## Case construction
-
-Develop this synthetic case from `LINEAR-ELASTICITY-BASE-001`. Preserve the clean reference
-model. For mutation-based variants, place hidden mutation details in the private evaluator;
-keep all expected answers and numeric thresholds private.
-
-## Evidence available to the participant
-
-- The participant-visible inputs and evidence described under Starting information.
-- Concrete artifact names and captured outputs will be finalized during implementation.
-
-## Acceptance summary
-
-Correct numerical evidence and interpretation.
-
-The executable evaluator will define objective criteria, evidence requirements, and hard gates.
-
-## Source and provenance
-
-Imported from the synthetic design document *MOOSE Agent Benchmark Seed Problems*. The
-concrete MOOSE application, revision, source citations, licenses, and redistribution notes
-remain to be recorded when the base model is selected. The case is currently a synthetic benchmark proposal.
-
-## Implementation checklist
-
-- [ ] Public contract and prompt written
-- [ ] Required artifacts and evidence added
-- [ ] Private evaluator written
-- [ ] Gold and mutant development submissions added
-- [ ] Manifest entry added
-- [ ] Local validation passes
-- [ ] Required MOOSE validation completed
+- [ ] Exact solution and forcing independently re-derived
+- [x] Gold response accepted and mutant rejected
+- [ ] Live derivation-judge calibration complete
 - [ ] Domain review complete
 - [ ] Benchmark-design review complete
-
-## Planned files
-
-These case-specific artifacts have not been created yet:
-
-- Planned public case (not created): `benchmark/public/cases/V1-SOLID-MMS-001/`
-- Planned private evaluator (not created): `benchmark/private/cases/V1-SOLID-MMS-001/`
-- Planned development fixtures (not created): `benchmark/example-submissions/V1-SOLID-MMS-001*.json`
-- Planned manifest registration (not added): entry in `benchmark/manifest.yaml`
-
-## Open questions
-
-Finalize the reference model, participant-visible artifacts, objective evaluator, and
-reviewed tolerances before implementation begins.
-
-## Development notes
-
-This planned record captures the seed design only; it is not yet a runnable benchmark case.
-The proposal used `L2-L3`; this record selects `L3` because the catalog schema requires one difficulty.

@@ -1,0 +1,25 @@
+{
+  "canonical_input_sha256": "2698c7ca27b3723640570ad82a313910d7491ce8141c3c9b2656f4866f1edb94",
+  "canonical_physics_conforms": true,
+  "canonical_physics_evidence": [
+    "Variables/p/order:expected=['FIRST'],actual=['FIRST'],passed=true",
+    "Kernels/*/type:expected=['BodyForce', 'PorousFlowFullySaturatedDarcyFlow'],actual=['BodyForce', 'PorousFlowFullySaturatedDarcyFlow'],passed=true",
+    "UserObjects/*/type:expected=['PorousFlowDictator'],actual=['PorousFlowDictator'],passed=true",
+    "Materials/*/type:expected=['PorousFlowPermeabilityTensorFromVar'],actual=['PorousFlow1PhaseFullySaturated', 'PorousFlowMassFraction', 'PorousFlowPermeabilityTensorFromVar', 'PorousFlowPorosity', 'PorousFlowSingleComponentFluid', 'PorousFlowTemperature'],passed=true",
+    "BCs/*/type:expected=['FunctionDirichletBC'],actual=['FunctionDirichletBC'],passed=true",
+    "Executioner/type:expected=['Steady'],actual=['Steady'],passed=true"
+  ],
+  "case_id": "V1-POROUS-DARCY-MMS-001",
+  "executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "protected_instrumentation_evidence": [
+    "Functions/exact/type:passed=true",
+    "Functions/exact/expression:passed=true",
+    "Postprocessors/p_l2/**:passed=true",
+    "Outputs/csv:passed=true",
+    "Outputs/file_base:passed=true"
+  ],
+  "protected_instrumentation_unchanged": true,
+  "public_scaffold_sha256": "b70bef68cc595afb82ac6c67168bae37831a6986f8735aeaf874727ca2c79ad5",
+  "schema_version": "1.0"
+}

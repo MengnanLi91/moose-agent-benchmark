@@ -1,7 +1,7 @@
 [
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "candidate changes are confined to the authorized HIT paths",
     "evidence": [
@@ -14,7 +14,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "check_input failed or exceeded evaluator limits",
     "evidence": [
@@ -32,7 +32,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "the dependent material has a missing or incorrect variable declaration",
     "evidence": [
@@ -46,7 +46,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "not evaluated because input_validation failed",
     "evidence": [],
@@ -57,7 +57,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "the missing-variable diagnostic remains",
     "evidence": [],
@@ -68,7 +68,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "all frozen input paths remain unchanged",
     "evidence": [],

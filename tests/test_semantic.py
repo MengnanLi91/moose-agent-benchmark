@@ -23,10 +23,17 @@ MANIFEST = ROOT / "benchmark/manifest.yaml"
 FIXTURES = ROOT / "tests/fixtures/semantic_invariance"
 
 
-def _evaluate_response(response_text, llm_client, *, memory_mib=0):
+def _evaluate_response(
+    response_text,
+    llm_client,
+    *,
+    memory_mib=0,
+    case_id="F2-THERMAL-REFLECTOR-001",
+):
     case_path, evaluation_path = case_bundle_paths(
         MANIFEST,
-        "F2-THERMAL-REFLECTOR-001",
+        case_id,
+        include_disabled=case_id.startswith("V1-"),
     )
     case = load_case(case_path)
     evaluation = load_evaluation(evaluation_path)
@@ -99,6 +106,14 @@ def test_judge_must_return_exact_criterion_ids():
             ScriptedLLMClient(ratings),
         )
 
+    ratings = _full_f2_ratings()
+    ratings["unexpected"] = "full"
+    with pytest.raises(ValueError, match="criterion IDs"):
+        _evaluate_response(
+            (FIXTURES / "standard.md").read_text(encoding="utf-8"),
+            ScriptedLLMClient(ratings),
+        )
+
 
 def test_equivalent_response_formats_receive_the_same_scripted_score():
     scores = []
@@ -136,3 +151,25 @@ def test_live_judge_is_invariant_across_equivalent_responses():
     scores = [result.raw_score for result in results]
     assert all(result.case_passed for result in results)
     assert max(scores) - min(scores) <= 1.0
+
+
+@pytest.mark.llm
+def test_live_mms_derivation_judge_accepts_gold_and_rejects_sign_mutant():
+    config_path = os.environ.get("MOOSE_BENCHMARK_LLM_CONFIG")
+    if not config_path:
+        pytest.skip("set MOOSE_BENCHMARK_LLM_CONFIG to run live semantic calibration")
+    client = LLMClient(load_llm_config(config_path))
+    case_id = "V1-DIFFUSION-STEADY-DIRICHLET-MMS-001"
+    fixture_root = ROOT / "benchmark/example-submissions"
+    gold = _evaluate_response(
+        (fixture_root / case_id / "response.md").read_text(encoding="utf-8"),
+        client,
+        case_id=case_id,
+    )
+    mutant = _evaluate_response(
+        (fixture_root / f"{case_id}-mutant-001/response.md").read_text(encoding="utf-8"),
+        client,
+        case_id=case_id,
+    )
+    assert gold.case_passed
+    assert not mutant.case_passed

@@ -12,6 +12,7 @@ views:
       - title
       - track
       - subcategory
+      - mms_task
       - physics_domains
       - difficulty
       - status
@@ -81,6 +82,7 @@ views:
       - case_id
       - title
       - subcategory
+      - mms_task
       - difficulty
       - status
       - owner

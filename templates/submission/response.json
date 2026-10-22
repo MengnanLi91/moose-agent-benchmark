@@ -1,0 +1,44 @@
+{
+  "claim": {
+    "norm": "spatial_l2",
+    "refinement_parameter": "mesh_h",
+    "runs": [
+      {
+        "level": 0,
+        "parameter": 0.125,
+        "controls": {"n": 8},
+        "errors": {"field_name": 0.01}
+      },
+      {
+        "level": 1,
+        "parameter": 0.0625,
+        "controls": {"n": 16},
+        "errors": {"field_name": 0.0025}
+      },
+      {
+        "level": 2,
+        "parameter": 0.03125,
+        "controls": {"n": 32},
+        "errors": {"field_name": 0.000625}
+      },
+      {
+        "level": 3,
+        "parameter": 0.015625,
+        "controls": {"n": 64},
+        "errors": {"field_name": 0.00015625}
+      }
+    ],
+    "observed_orders": {"field_name": [2.0, 2.0, 2.0]},
+    "expected_order": {"field_name": 2.0},
+    "asymptotic_regime": {"field_name": true},
+    "verdict": "verified",
+    "interpretation": "Replace this example with the measured case-specific result."
+  },
+  "evidence": [
+    {
+      "source_id": "replace_with_declared_source_id",
+      "observation": "Describe the source-bound observation.",
+      "interpretation": "Explain how the observation supports the claim."
+    }
+  ]
+}

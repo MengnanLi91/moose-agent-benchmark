@@ -1,0 +1,34 @@
+{
+  "artifacts": [
+    {
+      "path": "artifacts/solution.i",
+      "role": "mms_moose_input",
+      "sha256": "34b869b0e08e8f622a4c3d1a10ce095a54f2f04e7ad155761b722f5d2fbd7036",
+      "size_bytes": 1069
+    }
+  ],
+  "case_id": "V1-THERMAL-MMS-001",
+  "finished_at": "2026-10-08T12:05:00Z",
+  "model": {
+    "configuration": {},
+    "model": "mms-implementation-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "b0e8b64bd4eff40f668be2a79b1ea3fc94e372ccb03e0ef30e57c01b9bd38e23",
+    "size_bytes": 1970
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-08T12:00:00Z",
+  "submission_sha256": "3a541f767071bc9d68d480880f7dd0292cd51fd294c687a8eaf167a6f7692250",
+  "usage": {
+    "cpu_seconds": 240.0,
+    "execution_attempts": 4,
+    "memory_mib": 1024.0,
+    "tokens": null,
+    "validation_attempts": 1,
+    "wall_time_seconds": 300.0
+  }
+}

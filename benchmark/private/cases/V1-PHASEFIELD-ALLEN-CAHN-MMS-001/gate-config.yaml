@@ -1,0 +1,53 @@
+schema_version: '1.0'
+case_id: V1-PHASEFIELD-ALLEN-CAHN-MMS-001
+case_type: mms_refinement
+public_scaffold_path: artifacts/input-scaffold.i
+submitted_input_path: artifacts/solution.i
+canonical_input_path: reference/canonical.i
+reference_data: reference/metrics.json
+expected_moose_revision: c2dfd9fedd3193740a5278ec32269450c618e3b7
+expected_executable_sha256: 3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472
+required_gates:
+- physics_conformance
+- complete_refinement_sequence
+- successful_moose_runs
+- protected_error_oracle
+- required_convergence
+- reported_values_match
+- resource_compliance
+csv_path: mms.csv
+error_columns:
+  eta: eta_l2
+secondary_metrics: {}
+protected_hit_patterns:
+- Functions/exact/type
+- Functions/exact/expression
+- Postprocessors/eta_l2/**
+- Outputs/csv
+- Outputs/file_base
+physics_requirements:
+- pattern: Variables/eta/order
+  required_values:
+  - FIRST
+- pattern: Kernels/*/type
+  required_values:
+  - TimeDerivative
+  - AllenCahn
+  - SimpleACInterface
+  - BodyForce
+- pattern: Materials/*/type
+  required_values:
+  - GenericConstantMaterial
+  - DerivativeParsedMaterial
+- pattern: BCs/*/type
+  required_values:
+  - FunctionDirichletBC
+- pattern: Executioner/scheme
+  required_values:
+  - implicit-euler
+limits:
+  wall_time_seconds: 600
+  cpu_seconds: 480
+  memory_mib: 4096
+  max_output_bytes: 4194304
+  max_processes: 32

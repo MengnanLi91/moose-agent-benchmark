@@ -1,0 +1,84 @@
+{
+  "claim": {
+    "asymptotic_regime": {
+      "T": false
+    },
+    "expected_order": {
+      "T": 1.0
+    },
+    "interpretation": "The final T order falls outside the formal-order tolerance.",
+    "norm": "temporal_l2",
+    "observed_orders": {
+      "T": [
+        1.0668029050998875,
+        1.0557490945701433,
+        1.0
+      ]
+    },
+    "refinement_parameter": "time_step",
+    "runs": [
+      {
+        "controls": {
+          "dt": 0.2,
+          "n": 128
+        },
+        "errors": {
+          "T": 0.0010456413316003
+        },
+        "level": 0,
+        "parameter": 0.2
+      },
+      {
+        "controls": {
+          "dt": 0.1,
+          "n": 128
+        },
+        "errors": {
+          "T": 0.00049916378318814
+        },
+        "level": 1,
+        "parameter": 0.1
+      },
+      {
+        "controls": {
+          "dt": 0.05,
+          "n": 128
+        },
+        "errors": {
+          "T": 0.00024012143065278
+        },
+        "level": 2,
+        "parameter": 0.05
+      },
+      {
+        "controls": {
+          "dt": 0.025,
+          "n": 128
+        },
+        "errors": {
+          "T": 0.00012006071532639
+        },
+        "level": 3,
+        "parameter": 0.025
+      }
+    ],
+    "verdict": "not_verified"
+  },
+  "evidence": [
+    {
+      "interpretation": "The implementation targets the specified manufactured problem.",
+      "observation": "Used the supplied equations and required convergence sequence.",
+      "source_id": "mms_problem_specification"
+    },
+    {
+      "interpretation": "The reported errors use the benchmark instrumentation.",
+      "observation": "Preserved the protected exact functions, error postprocessors, and CSV output.",
+      "source_id": "mms_input_scaffold"
+    },
+    {
+      "interpretation": "The convergence claim is tied to the submitted implementation.",
+      "observation": "Executed the submitted input at all four prescribed levels.",
+      "source_id": "mms_moose_input"
+    }
+  ]
+}

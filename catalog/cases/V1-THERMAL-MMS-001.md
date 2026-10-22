@@ -1,146 +1,55 @@
 ---
 catalog_schema_version: "1.0"
 case_id: V1-THERMAL-MMS-001
-title: "Nonlinear Heat-Conduction MMS"
+title: "Transient Heat-Conduction MMS"
 case_kind: atomic
 track: VERIFY
 subcategory: V1
+mms_task: implementation
 physics_domains:
   - thermal_energy_transport
 difficulty: L2
 base_problem_id: THERMAL-MMS-BASE-001
-status: planned
-priority: normal
+status: in_progress
+priority: high
 owner: null
 reviewers: []
 source_type: synthetic
-source_name: "MOOSE Agent Benchmark Seed Problems"
+source_name: "Deriving an MMS Benchmark from the MOOSEnger Verification Runs"
 source_url: ""
 domain_review_complete: false
 benchmark_review_complete: false
 moose_validation_required: true
-moose_validated: false
+moose_validated: true
 github_issue: ""
 github_pr: ""
-tags:
-  - benchmark-case
-  - seed-case
-  - verify
-  - v1
+tags: [benchmark-case, verify, v1, mms]
 ---
 
-# Nonlinear Heat-Conduction MMS
+# Transient Heat-Conduction MMS
 
 ## Benchmark purpose
 
-This case is a planned atomic benchmark for **V1 — Exact-solution and MMS verification**. It measures
-the requested behavior without awarding cross-credit for upstream or downstream work.
+Verify first-order backward-Euler convergence for transient heat conduction. The participant receives complete MMS equations and protected instrumentation, then authors and verifies a MOOSE input.
 
-> [!NOTE]
-> This is a planning record only. The referenced public/private case directories, inputs,
-> logs, evaluator, and submission fixtures have not been created yet.
+## Capability boundary
 
-## Problem description
-
-This planned atomic case, **Nonlinear Heat-Conduction MMS**, exercises the V1 capability.
-
-## What this case tests
-
-**V1 — Exact-solution and MMS verification.**
-
-- correct norm;
-- correct observed order;
-- reproducible quantitative evidence;
-- correct interpretation.
-
-Capabilities outside V1 are intentionally excluded from the score.
-
-## Starting information
-
-The planned benchmark will provide:
-
-- accepted executable MOOSE model;
-- manufactured temperature field $T^*(x,y,t)$;
-- precomputed forcing function;
-- precomputed boundary expressions;
-- expected element order;
-- mesh-refinement sequence.
+MMS derivation and the refinement sequence are supplied. Input construction, successful execution, and demonstrated convergence are scored.
 
 ## Required output
 
-The agent must:
+Submit `artifacts/solution.i` and `response.json` containing the authoritative four-level convergence report.
 
-1. run the supplied mesh sequence;
-2. compute the spatial $L^2$ error;
-3. estimate the observed order of convergence;
-4. compare against the expected discretization order;
-5. issue an implementation-verification conclusion.
+## Implementation status
 
-## Permitted actions
+The public contract, private evaluator, development fixtures, manifest registration, and pinned real-MOOSE calibration are complete. The case remains disabled until domain and benchmark-design reviews are complete.
 
-Once implemented, run the accepted model and the controlled verification or comparison study.
+## Review checklist
 
-## Prohibited actions
-
-Do not change the accepted formulation or substitute model repair for the requested verification evidence.
-
-## Isolation rationale
-
-The manufactured forcing term is supplied. The agent is not asked to derive it.
-
-
-## Case construction
-
-Develop this synthetic case from `THERMAL-MMS-BASE-001`. Preserve the clean reference
-model. For mutation-based variants, place hidden mutation details in the private evaluator;
-keep all expected answers and numeric thresholds private.
-
-## Evidence available to the participant
-
-- The participant-visible inputs and evidence described under Starting information.
-- Concrete artifact names and captured outputs will be finalized during implementation.
-
-## Acceptance summary
-
-- correct norm;
-- correct observed order;
-- reproducible quantitative evidence;
-- correct interpretation.
-
-The executable evaluator will define objective criteria, evidence requirements, and hard gates.
-
-## Source and provenance
-
-Imported from the synthetic design document *MOOSE Agent Benchmark Seed Problems*. The
-concrete MOOSE application, revision, source citations, licenses, and redistribution notes
-remain to be recorded when the base model is selected. The case is currently a synthetic benchmark proposal.
-
-## Implementation checklist
-
-- [ ] Public contract and prompt written
-- [ ] Required artifacts and evidence added
-- [ ] Private evaluator written
-- [ ] Gold and mutant development submissions added
-- [ ] Manifest entry added
-- [ ] Local validation passes
-- [ ] Required MOOSE validation completed
+- [ ] Exact solution and forcing independently re-derived
+- [x] Canonical input passes `--check-input`
+- [x] All four authoritative runs complete
+- [x] Final two orders meet the formal-order band
+- [x] Gold response accepted and mutant rejected
 - [ ] Domain review complete
 - [ ] Benchmark-design review complete
-
-## Planned files
-
-These case-specific artifacts have not been created yet:
-
-- Planned public case (not created): `benchmark/public/cases/V1-THERMAL-MMS-001/`
-- Planned private evaluator (not created): `benchmark/private/cases/V1-THERMAL-MMS-001/`
-- Planned development fixtures (not created): `benchmark/example-submissions/V1-THERMAL-MMS-001*.json`
-- Planned manifest registration (not added): entry in `benchmark/manifest.yaml`
-
-## Open questions
-
-Finalize the reference model, participant-visible artifacts, objective evaluator, and
-reviewed tolerances before implementation begins.
-
-## Development notes
-
-This planned record captures the seed design only; it is not yet a runnable benchmark case.

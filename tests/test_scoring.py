@@ -13,6 +13,11 @@ def case_result(
     case_kind="atomic",
     first_failed_stage=None,
     gates_passed=True,
+    difficulty="L1",
+    physics_domains=None,
+    mms_task=None,
+    verification_study=None,
+    failure_category=None,
 ):
     track = None
     if case_kind == "atomic":
@@ -38,9 +43,9 @@ def case_result(
         "case_kind": case_kind,
         "track": track,
         "subcategory": subcategory if case_kind == "atomic" else None,
-        "difficulty": "L1",
+        "difficulty": difficulty,
         "base_problem_id": f"base-{case_id}",
-        "physics_domains": ["thermal_energy_transport"],
+        "physics_domains": physics_domains or ["thermal_energy_transport"],
         "submission_sha256": "0" * 64,
         "run_record_sha256": "1" * 64,
         "submitted_artifacts": [],
@@ -79,6 +84,13 @@ def case_result(
             if form_profile
             else None
         ),
+        "mms_task": (
+            mms_task
+            if mms_task is not None
+            else ("implementation" if subcategory == "V1" else None)
+        ),
+        "verification_study": verification_study,
+        "failure_category": failure_category,
         "first_failed_stage": first_failed_stage,
     }
 
@@ -156,6 +168,67 @@ class ScoringTests(unittest.TestCase):
     def test_aggregate_rejects_duplicate_case_ids(self):
         with self.assertRaisesRegex(ValueError, "one result per case_id"):
             aggregate_results([case_result("duplicate"), case_result("duplicate")])
+
+    def test_v1_aggregation_reports_study_domain_difficulty_and_failures(self):
+        aggregate = aggregate_results(
+            [
+                case_result(
+                    "v1-spatial",
+                    subcategory="V1",
+                    mms_task="derivation",
+                    verification_study=None,
+                    physics_domains=["scalar_diffusion"],
+                ),
+                case_result(
+                    "v1-spatial-implementation",
+                    subcategory="V1",
+                    verification_study="spatial",
+                    physics_domains=["scalar_diffusion"],
+                ),
+                case_result(
+                    "v1-temporal",
+                    subcategory="V1",
+                    score=0.0,
+                    passed=False,
+                    gates_passed=False,
+                    difficulty="L3",
+                    physics_domains=["thermal_energy_transport", "solid_mechanics"],
+                    verification_study="temporal",
+                    failure_category="execution",
+                ),
+            ]
+        )
+        profile = aggregate["verification_profile"]
+        self.assertEqual(profile["case_count"], 3)
+        self.assertEqual(profile["case_pass_rate"], 0.6667)
+        self.assertEqual(
+            profile["task_scores"],
+            {"derivation": 100.0, "implementation": 50.0},
+        )
+        self.assertEqual(profile["mms_suite_score"], 75.0)
+        self.assertEqual(profile["study_scores"], {"spatial": 100.0, "temporal": 0.0})
+        self.assertEqual(
+            profile["domain_scores"],
+            {
+                "scalar_diffusion": 100.0,
+                "solid_mechanics": 0.0,
+                "thermal_energy_transport": 0.0,
+            },
+        )
+        self.assertEqual(profile["difficulty_scores"], {"L1": 100.0, "L3": 0.0})
+        self.assertEqual(profile["failure_category_counts"], {"execution": 1})
+
+    def test_mms_suite_score_requires_both_task_halves(self):
+        aggregate = aggregate_results(
+            [
+                case_result(
+                    "derivation-only",
+                    subcategory="V1",
+                    mms_task="derivation",
+                )
+            ]
+        )
+        self.assertIsNone(aggregate["verification_profile"]["mms_suite_score"])
 
     def test_aggregate_rejects_out_of_range_scores(self):
         invalid = case_result("invalid")

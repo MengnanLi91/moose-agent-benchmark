@@ -1,0 +1,25 @@
+{
+  "canonical_input_sha256": "34b869b0e08e8f622a4c3d1a10ce095a54f2f04e7ad155761b722f5d2fbd7036",
+  "canonical_physics_conforms": true,
+  "canonical_physics_evidence": [
+    "Variables/T/order:expected=['FIRST'],actual=['FIRST'],passed=true",
+    "Variables/T/family:expected=['LAGRANGE'],actual=['LAGRANGE'],passed=true",
+    "Kernels/*/type:expected=['BodyForce', 'Diffusion', 'TimeDerivative'],actual=['BodyForce', 'Diffusion', 'TimeDerivative'],passed=true",
+    "ICs/*/type:expected=['FunctionIC'],actual=['FunctionIC'],passed=true",
+    "BCs/*/type:expected=['DirichletBC'],actual=['DirichletBC'],passed=true",
+    "Executioner/scheme:expected=['implicit-euler'],actual=['implicit-euler'],passed=true"
+  ],
+  "case_id": "V1-THERMAL-MMS-001",
+  "executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "protected_instrumentation_evidence": [
+    "Functions/exact/type:passed=true",
+    "Functions/exact/expression:passed=true",
+    "Postprocessors/T_l2/**:passed=true",
+    "Outputs/csv:passed=true",
+    "Outputs/file_base:passed=true"
+  ],
+  "protected_instrumentation_unchanged": true,
+  "public_scaffold_sha256": "7a8014e930fa3e849125db4c22e0fde4c54de46952285743a22952389cbd2900",
+  "schema_version": "1.0"
+}

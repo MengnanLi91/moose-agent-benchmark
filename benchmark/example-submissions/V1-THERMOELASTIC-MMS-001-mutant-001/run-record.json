@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "case_id": "V1-THERMOELASTIC-MMS-001",
+  "finished_at": "2026-10-08T12:01:00Z",
+  "model": {
+    "configuration": {},
+    "model": "mms-derivation-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "text/markdown",
+    "path": "response.md",
+    "sha256": "1bec9a164a734f318c5ae746e1a064a83b9a23aa38dba7c5af2d0ba0606c33e5",
+    "size_bytes": 885
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-08T12:00:00Z",
+  "submission_sha256": "c7dfb771d28fafdf08f6b45d66882dc2bffca88ed743c62ea8cf454f44a64aa0",
+  "usage": {
+    "cpu_seconds": 30.0,
+    "execution_attempts": 0,
+    "memory_mib": 256.0,
+    "tokens": null,
+    "validation_attempts": 0,
+    "wall_time_seconds": 60.0
+  }
+}

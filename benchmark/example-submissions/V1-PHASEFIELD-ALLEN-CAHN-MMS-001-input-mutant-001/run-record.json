@@ -1,0 +1,34 @@
+{
+  "artifacts": [
+    {
+      "path": "artifacts/solution.i",
+      "role": "mms_moose_input",
+      "sha256": "a70f17dd5e1ee4fc95bf8489aed24754aa6d2c856eb6adc78dd5fcde7cf5fd63",
+      "size_bytes": 1541
+    }
+  ],
+  "case_id": "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+  "finished_at": "2026-10-08T12:05:00Z",
+  "model": {
+    "configuration": {},
+    "model": "mms-input-mutant-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "d4098fc0b3e4563f92a5d2c5e2361663e7079b8393f6192ce6a0f3ba94102567",
+    "size_bytes": 2003
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-08T12:00:00Z",
+  "submission_sha256": "8dda4e1ea9ee279febbf7fa25cfa4c967d2c99f9b208013545f3e3e4161c0b85",
+  "usage": {
+    "cpu_seconds": 240.0,
+    "execution_attempts": 4,
+    "memory_mib": 1024.0,
+    "tokens": null,
+    "validation_attempts": 1,
+    "wall_time_seconds": 300.0
+  }
+}

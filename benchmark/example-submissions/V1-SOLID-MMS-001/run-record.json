@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "case_id": "V1-SOLID-MMS-001",
+  "finished_at": "2026-10-08T12:01:00Z",
+  "model": {
+    "configuration": {},
+    "model": "mms-derivation-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "text/markdown",
+    "path": "response.md",
+    "sha256": "f80647c56add5e0c06738394aa48ab8a86e8be39d0f075137a830bef6b4df065",
+    "size_bytes": 735
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-08T12:00:00Z",
+  "submission_sha256": "ea97c39eddcd2b9b9401b87b175a86c06b50929d18ad9b0246b49c9486170a5c",
+  "usage": {
+    "cpu_seconds": 30.0,
+    "execution_attempts": 0,
+    "memory_mib": 256.0,
+    "tokens": null,
+    "validation_attempts": 0,
+    "wall_time_seconds": 60.0
+  }
+}

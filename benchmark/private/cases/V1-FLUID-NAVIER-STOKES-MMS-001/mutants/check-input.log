@@ -1,0 +1,17 @@
+
+[31m
+*** ERROR ***
+/private/tmp/mms-mutant-navier-stokes/input.i:128.5: invalid syntax for double parameter: BCs/u_boundary/value='exact_u'
+/private/tmp/mms-mutant-navier-stokes/input.i:134.5: invalid syntax for double parameter: BCs/v_boundary/value='exact_v'[39m
+
+Stack frames: 9
+0: 0   libmesh_opt.0.dylib                 0x000000010cef4cc8 libMesh::print_trace(std::__1::basic_ostream<char, std::__1::char_traits<char>>&) + 1008
+1: 1   libmoose-opt.0.dylib                0x0000000106208c94 moose::internal::mooseErrorRaw(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, hit::Node const*, bool) + 272
+2: 2   libmoose-opt.0.dylib                0x0000000104f0684c void mooseError<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>&&) + 268
+3: 3   libmoose-opt.0.dylib                0x0000000105b2d700 Parser::parseError(std::__1::vector<hit::ErrorMessage, std::__1::allocator<hit::ErrorMessage>>) const + 684
+4: 4   libmoose-opt.0.dylib                0x0000000105b2d328 Moose::Builder::build() + 1852
+5: 5   libmoose-opt.0.dylib                0x0000000106200594 MooseApp::setupOptions() + 12264
+6: 6   libmoose-opt.0.dylib                0x00000001061fd054 MooseApp::run() + 1640
+7: 7   combined-opt                        0x000000010210bcd4 int Moose::main<CombinedTestApp>(int, char**) + 160
+8: 8   dyld                                0x00000001870c04e4 start + 6992
+Abort(1) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0

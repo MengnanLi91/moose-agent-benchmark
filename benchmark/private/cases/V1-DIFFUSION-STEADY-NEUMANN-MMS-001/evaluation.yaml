@@ -1,0 +1,59 @@
+schema_version: '2.0'
+case_id: V1-DIFFUSION-STEADY-NEUMANN-MMS-001
+evaluator: mms_derivation_v1
+reference_solution: reference-solution.md
+capability_criteria:
+- id: derivatives_and_residual
+  weight: 0.25
+  full_credit: Correctly derives the required derivatives and assembles the governing
+    residual with the stated sign convention.
+  partial_credit: The approach is correct but contains one localized derivative or
+    algebra error.
+  common_errors:
+  - omits a derivative term
+  - reverses the residual sign
+- id: source_terms
+  weight: 0.35
+  full_credit: Reports every manufactured source or body-force component in a mathematically
+    equivalent correct form.
+  partial_credit: Most source terms are correct but one component or coupling term
+    is missing or incorrect.
+  common_errors:
+  - drops the time derivative
+  - omits thermoelastic coupling
+- id: boundary_and_initial_data
+  weight: 0.25
+  full_credit: Derives all applicable boundary flux or value data and all applicable
+    initial data from the exact fields.
+  partial_credit: The main conditions are correct but one side, component, or initial
+    value is incomplete.
+  common_errors:
+  - uses value data for a Neumann condition
+  - omits a transient initial condition
+- id: constraints_and_conventions
+  weight: 0.15
+  full_credit: States all applicable compatibility, normalization, constitutive, and
+    dimensional conventions consistently.
+  partial_credit: The main convention is present but one constraint or normalization
+    detail is incomplete.
+  common_errors:
+  - omits the Neumann mean constraint
+  - uses plane stress instead of plane strain
+evidence_criteria:
+- id: derivation_trace
+  weight: 0.7
+  full_credit: Shows enough substitution and intermediate derivatives to audit every
+    final expression.
+  partial_credit: Provides some derivation evidence but skips an important intermediate
+    step.
+  common_errors:
+  - lists final formulas without showing their origin
+- id: notation_and_parameter_consistency
+  weight: 0.3
+  full_credit: Uses consistent variables, coefficients, normals, and sign conventions
+    throughout.
+  partial_credit: The meaning remains recoverable despite a minor notation inconsistency.
+  common_errors:
+  - changes coefficient definitions
+  - mixes inward and outward normals
+hard_gates: []

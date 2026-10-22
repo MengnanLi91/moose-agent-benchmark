@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "case_id": "V1-DIFFUSION-STEADY-NEUMANN-MMS-001",
+  "finished_at": "2026-10-08T12:01:00Z",
+  "model": {
+    "configuration": {},
+    "model": "mms-derivation-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "text/markdown",
+    "path": "response.md",
+    "sha256": "64db6cc694c5160e0d2c5ca3b258b37600aa1cad3668fefca080ae2d02656cd2",
+    "size_bytes": 638
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-08T12:00:00Z",
+  "submission_sha256": "6e6e2813c3028c8dd68865bac7be957588b50e750050e71c5efea359142d85e5",
+  "usage": {
+    "cpu_seconds": 30.0,
+    "execution_attempts": 0,
+    "memory_mib": 256.0,
+    "tokens": null,
+    "validation_attempts": 0,
+    "wall_time_seconds": 60.0
+  }
+}

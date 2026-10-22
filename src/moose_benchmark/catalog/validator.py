@@ -53,6 +53,7 @@ def _identity_errors(record: CatalogRecord, case: CaseContract) -> list[str]:
         "subcategory",
         "difficulty",
         "base_problem_id",
+        "mms_task",
     ):
         catalog_value = getattr(record, field_name)
         case_value = getattr(case, field_name)

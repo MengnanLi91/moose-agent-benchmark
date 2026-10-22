@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from .semantic import SemanticRubricEvaluator
+from .mms import MmsClaimEvaluator
+from .semantic import MmsDerivationEvaluator, SemanticRubricEvaluator
 from .structured import StructuredClaimEvaluator
 
 _EVALUATORS = {
+    "mms_claim_v1": MmsClaimEvaluator(),
+    "mms_derivation_v1": MmsDerivationEvaluator(),
     "semantic_rubric_v1": SemanticRubricEvaluator(),
     "structured_claim_v2": StructuredClaimEvaluator(),
 }

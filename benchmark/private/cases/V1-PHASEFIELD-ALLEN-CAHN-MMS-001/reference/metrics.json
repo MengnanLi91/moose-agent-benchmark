@@ -1,0 +1,75 @@
+{
+  "asymptotic_regime": {
+    "eta": true
+  },
+  "error_tolerance": {
+    "absolute": 1e-12,
+    "relative": 1e-06
+  },
+  "executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "expected_order": {
+    "eta": 1.0
+  },
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "norm": "temporal_l2",
+  "observed_orders": {
+    "eta": [
+      1.0384637839822035,
+      1.028595505080081,
+      1.0341478791839436
+    ]
+  },
+  "order_tolerance": {
+    "absolute": 1e-08,
+    "relative": 1e-06
+  },
+  "refinement_parameter": "time_step",
+  "runs": [
+    {
+      "controls": {
+        "dt": 0.1,
+        "n": 128
+      },
+      "errors": {
+        "eta": 0.002649763896168
+      },
+      "level": 0,
+      "parameter": 0.1
+    },
+    {
+      "controls": {
+        "dt": 0.05,
+        "n": 128
+      },
+      "errors": {
+        "eta": 0.0012900259007365
+      },
+      "level": 1,
+      "parameter": 0.05
+    },
+    {
+      "controls": {
+        "dt": 0.025,
+        "n": 128
+      },
+      "errors": {
+        "eta": 0.00063235408666082
+      },
+      "level": 2,
+      "parameter": 0.025
+    },
+    {
+      "controls": {
+        "dt": 0.0125,
+        "n": 128
+      },
+      "errors": {
+        "eta": 0.00030878116256179
+      },
+      "level": 3,
+      "parameter": 0.0125
+    }
+  ],
+  "schema_version": "1.0",
+  "verdict": "verified"
+}

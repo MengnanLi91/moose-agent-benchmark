@@ -1,0 +1,12 @@
+{
+  "case_id": "V1-THERMAL-MMS-001",
+  "failed_gates": [
+    "required_convergence",
+    "reported_values_match"
+  ],
+  "generated_on": "2026-10-09",
+  "input_sha256": "d95f9f9f48bd4188c9f7994dd2f915fd4c8ce1be84e6d598047c0abd9b5b7fdd",
+  "mutant": "wrong-source-sign.i",
+  "passed": true,
+  "schema_version": "1.0"
+}

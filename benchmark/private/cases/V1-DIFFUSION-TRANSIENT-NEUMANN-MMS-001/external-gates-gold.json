@@ -1,0 +1,174 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001",
+    "detail": "submitted input contains the required physics structure",
+    "evidence": [
+      "Variables/u/order:expected=['FIRST'],actual=['FIRST'],passed=true",
+      "Variables/u/family:expected=['LAGRANGE'],actual=['LAGRANGE'],passed=true",
+      "Kernels/*/type:expected=['Diffusion', 'TimeDerivative'],actual=['Diffusion', 'TimeDerivative'],passed=true",
+      "ICs/*/type:expected=['FunctionIC'],actual=['FunctionIC'],passed=true",
+      "Executioner/type:expected=['Transient'],actual=['Transient'],passed=true",
+      "Executioner/scheme:expected=['implicit-euler'],actual=['implicit-euler'],passed=true"
+    ],
+    "gate_id": "physics_conformance",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "e15aac18442bb2246941ac188ebcb165b7fbab89a840adc3538107b0ce2522a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001",
+    "detail": "all prescribed refinement levels are present exactly once",
+    "evidence": [],
+    "gate_id": "complete_refinement_sequence",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "e15aac18442bb2246941ac188ebcb165b7fbab89a840adc3538107b0ce2522a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001",
+    "detail": "check-input and all four authoritative runs succeeded",
+    "evidence": [],
+    "gate_id": "successful_moose_runs",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "e15aac18442bb2246941ac188ebcb165b7fbab89a840adc3538107b0ce2522a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001",
+    "detail": "protected instrumentation is unchanged and produced finite errors",
+    "evidence": [
+      "Functions/exact/type:passed=true",
+      "Functions/exact/expression:passed=true",
+      "Postprocessors/domain_mean/**:passed=true",
+      "Postprocessors/u_l2/**:passed=true",
+      "Outputs/csv:passed=true",
+      "Outputs/file_base:passed=true",
+      "level=0,field=u,error=0.008689458262489",
+      "level=0,secondary=domain_mean,passed=True",
+      "level=1,field=u,error=0.0044182118954291",
+      "level=1,secondary=domain_mean,passed=True",
+      "level=2,field=u,error=0.0022177961473371",
+      "level=2,secondary=domain_mean,passed=True",
+      "level=3,field=u,error=0.0011006973255984",
+      "level=3,secondary=domain_mean,passed=True"
+    ],
+    "gate_id": "protected_error_oracle",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "e15aac18442bb2246941ac188ebcb165b7fbab89a840adc3538107b0ce2522a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001",
+    "detail": "every required field meets the formal-order convergence band",
+    "evidence": [],
+    "gate_id": "required_convergence",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "e15aac18442bb2246941ac188ebcb165b7fbab89a840adc3538107b0ce2522a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001",
+    "detail": "reported errors and orders match the authoritative rerun",
+    "evidence": [],
+    "gate_id": "reported_values_match",
+    "mms_measurement": {
+      "asymptotic_regime": {
+        "u": true
+      },
+      "case_id": "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001",
+      "expected_order": {
+        "u": 1.0
+      },
+      "norm": "temporal_l2",
+      "observed_orders": {
+        "u": [
+          0.9758036247949051,
+          0.9943358476266411,
+          1.0107089586630333
+        ]
+      },
+      "refinement_parameter": "time_step",
+      "runs": [
+        {
+          "controls": {
+            "dt": 0.005,
+            "n": 128
+          },
+          "errors": {
+            "u": 0.008689458262489
+          },
+          "level": 0,
+          "parameter": 0.005
+        },
+        {
+          "controls": {
+            "dt": 0.0025,
+            "n": 128
+          },
+          "errors": {
+            "u": 0.0044182118954291
+          },
+          "level": 1,
+          "parameter": 0.0025
+        },
+        {
+          "controls": {
+            "dt": 0.00125,
+            "n": 128
+          },
+          "errors": {
+            "u": 0.0022177961473371
+          },
+          "level": 2,
+          "parameter": 0.00125
+        },
+        {
+          "controls": {
+            "dt": 0.000625,
+            "n": 128
+          },
+          "errors": {
+            "u": 0.0011006973255984
+          },
+          "level": 3,
+          "parameter": 0.000625
+        }
+      ],
+      "schema_version": "1.0",
+      "submission_sha256": "e15aac18442bb2246941ac188ebcb165b7fbab89a840adc3538107b0ce2522a0",
+      "verdict": "verified"
+    },
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "e15aac18442bb2246941ac188ebcb165b7fbab89a840adc3538107b0ce2522a0"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001",
+    "detail": "runner-owned usage and protected execution remain within limits",
+    "evidence": [],
+    "gate_id": "resource_compliance",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "e15aac18442bb2246941ac188ebcb165b7fbab89a840adc3538107b0ce2522a0"
+  }
+]

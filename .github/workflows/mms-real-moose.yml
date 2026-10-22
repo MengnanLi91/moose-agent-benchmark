@@ -1,0 +1,92 @@
+name: MMS Real-MOOSE
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled]
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: MMS matrix size
+        type: choice
+        options: [smoke, full]
+        default: smoke
+      derivation_judge:
+        description: Run the opt-in live MMS derivation judge calibration
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    if: >-
+      github.event_name == 'release' ||
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.pull_request.labels.*.name, 'mms-smoke')
+    runs-on: [self-hosted, moose]
+    strategy:
+      fail-fast: false
+      matrix:
+        case_id: ${{ fromJSON((github.event_name == 'release' || inputs.scope == 'full') && '["V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001","V1-THERMAL-MMS-001","V1-POROUS-DARCY-MMS-001","V1-PHASEFIELD-ALLEN-CAHN-MMS-001","V1-FLUID-NAVIER-STOKES-MMS-001"]' || '["V1-POROUS-DARCY-MMS-001"]') }}
+    env:
+      MOOSE_DIR: ${{ vars.MOOSE_DIR }}
+      MOOSE_EXECUTABLE: ${{ vars.MOOSE_EXECUTABLE }}
+      FI_PROVIDER: ${{ vars.FI_PROVIDER }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --extra dev --locked
+
+      - name: Verify MMS gold response
+        env:
+          CASE_ID: ${{ matrix.case_id }}
+        run: |
+          test -n "$MOOSE_DIR"
+          test -x "$MOOSE_EXECUTABLE"
+          export FI_PROVIDER="${FI_PROVIDER:-tcp}"
+          uv run moose-benchmark generate-gates \
+            --manifest benchmark/manifest.yaml \
+            --case-id "$CASE_ID" \
+            --submission-dir "benchmark/example-submissions/$CASE_ID" \
+            --moose-dir "$MOOSE_DIR" \
+            --executable "$MOOSE_EXECUTABLE" \
+            --output "$RUNNER_TEMP/$CASE_ID-gates.json" \
+            --include-disabled
+          uv run moose-benchmark score \
+            --manifest benchmark/manifest.yaml \
+            --case-id "$CASE_ID" \
+            --submission-dir "benchmark/example-submissions/$CASE_ID" \
+            --external-gates "$RUNNER_TEMP/$CASE_ID-gates.json" \
+            --output "$RUNNER_TEMP/$CASE_ID-result.json" \
+            --include-disabled
+          uv run python -c \
+            'import json, os, pathlib; result = json.loads(pathlib.Path(os.environ["RUNNER_TEMP"], os.environ["CASE_ID"] + "-result.json").read_text()); assert result["official_score"] == 100.0 and result["case_passed"]'
+
+  derivation-judge:
+    if: github.event_name == 'workflow_dispatch' && inputs.derivation_judge
+    runs-on: [self-hosted, moose]
+    env:
+      MOOSE_BENCHMARK_LLM_CONFIG: ${{ vars.MOOSE_BENCHMARK_LLM_CONFIG }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install judge dependencies
+        run: uv sync --extra dev --extra llm --locked
+
+      - name: Calibrate MMS derivation judge
+        run: |
+          test -n "$MOOSE_BENCHMARK_LLM_CONFIG"
+          uv run pytest -q -m llm \
+            tests/test_semantic.py::test_live_mms_derivation_judge_accepts_gold_and_rejects_sign_mutant

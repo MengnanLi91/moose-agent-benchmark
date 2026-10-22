@@ -219,6 +219,11 @@ def run_command(
         if process.poll() is None:
             try:
                 os.killpg(process.pid, signal.SIGKILL)
+            except PermissionError:
+                try:
+                    process.kill()
+                except ProcessLookupError:
+                    pass
             except ProcessLookupError:
                 pass
         process.wait()

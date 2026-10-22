@@ -1,0 +1,12 @@
+{
+  "case_id": "V1-POROUS-DARCY-MMS-001",
+  "failed_gates": [
+    "required_convergence",
+    "reported_values_match"
+  ],
+  "generated_on": "2026-10-09",
+  "input_sha256": "eeeb9812c36ff29dcb40ea1b1912ab9bce146bd7f4179f3e3e489f7dc6122364",
+  "mutant": "wrong-boundary-data.i",
+  "passed": true,
+  "schema_version": "1.0"
+}

@@ -1,0 +1,168 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+    "detail": "submitted input contains the required physics structure",
+    "evidence": [
+      "Variables/eta/order:expected=['FIRST'],actual=['FIRST'],passed=true",
+      "Kernels/*/type:expected=['AllenCahn', 'BodyForce', 'SimpleACInterface', 'TimeDerivative'],actual=['AllenCahn', 'BodyForce', 'SimpleACInterface', 'TimeDerivative'],passed=true",
+      "Materials/*/type:expected=['DerivativeParsedMaterial', 'GenericConstantMaterial'],actual=['DerivativeParsedMaterial', 'GenericConstantMaterial'],passed=true",
+      "BCs/*/type:expected=['FunctionDirichletBC'],actual=['FunctionDirichletBC'],passed=true",
+      "Executioner/scheme:expected=['implicit-euler'],actual=['implicit-euler'],passed=true"
+    ],
+    "gate_id": "physics_conformance",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "5f619380eb5c0cd7d1ef73aab38bef28634b6b5466d3dde6f8a109c095d9276b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+    "detail": "all prescribed refinement levels are present exactly once",
+    "evidence": [],
+    "gate_id": "complete_refinement_sequence",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "5f619380eb5c0cd7d1ef73aab38bef28634b6b5466d3dde6f8a109c095d9276b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+    "detail": "check-input and all four authoritative runs succeeded",
+    "evidence": [],
+    "gate_id": "successful_moose_runs",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "5f619380eb5c0cd7d1ef73aab38bef28634b6b5466d3dde6f8a109c095d9276b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+    "detail": "protected instrumentation is unchanged and produced finite errors",
+    "evidence": [
+      "Functions/exact/type:passed=true",
+      "Functions/exact/expression:passed=true",
+      "Postprocessors/eta_l2/**:passed=true",
+      "Outputs/csv:passed=true",
+      "Outputs/file_base:passed=true",
+      "level=0,field=eta,error=0.002649763896168",
+      "level=1,field=eta,error=0.0012900259007365",
+      "level=2,field=eta,error=0.00063235408666082",
+      "level=3,field=eta,error=0.00030878116256179"
+    ],
+    "gate_id": "protected_error_oracle",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "5f619380eb5c0cd7d1ef73aab38bef28634b6b5466d3dde6f8a109c095d9276b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+    "detail": "every required field meets the formal-order convergence band",
+    "evidence": [],
+    "gate_id": "required_convergence",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "5f619380eb5c0cd7d1ef73aab38bef28634b6b5466d3dde6f8a109c095d9276b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+    "detail": "reported errors or orders differ from the authoritative rerun",
+    "evidence": [],
+    "gate_id": "reported_values_match",
+    "mms_measurement": {
+      "asymptotic_regime": {
+        "eta": true
+      },
+      "case_id": "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+      "expected_order": {
+        "eta": 1.0
+      },
+      "norm": "temporal_l2",
+      "observed_orders": {
+        "eta": [
+          1.0384637839822035,
+          1.028595505080081,
+          1.0341478791839436
+        ]
+      },
+      "refinement_parameter": "time_step",
+      "runs": [
+        {
+          "controls": {
+            "dt": 0.1,
+            "n": 128
+          },
+          "errors": {
+            "eta": 0.002649763896168
+          },
+          "level": 0,
+          "parameter": 0.1
+        },
+        {
+          "controls": {
+            "dt": 0.05,
+            "n": 128
+          },
+          "errors": {
+            "eta": 0.0012900259007365
+          },
+          "level": 1,
+          "parameter": 0.05
+        },
+        {
+          "controls": {
+            "dt": 0.025,
+            "n": 128
+          },
+          "errors": {
+            "eta": 0.00063235408666082
+          },
+          "level": 2,
+          "parameter": 0.025
+        },
+        {
+          "controls": {
+            "dt": 0.0125,
+            "n": 128
+          },
+          "errors": {
+            "eta": 0.00030878116256179
+          },
+          "level": 3,
+          "parameter": 0.0125
+        }
+      ],
+      "schema_version": "1.0",
+      "submission_sha256": "5f619380eb5c0cd7d1ef73aab38bef28634b6b5466d3dde6f8a109c095d9276b",
+      "verdict": "verified"
+    },
+    "passed": false,
+    "schema_version": "2.0",
+    "submission_sha256": "5f619380eb5c0cd7d1ef73aab38bef28634b6b5466d3dde6f8a109c095d9276b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+    "detail": "runner-owned usage and protected execution remain within limits",
+    "evidence": [],
+    "gate_id": "resource_compliance",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "5f619380eb5c0cd7d1ef73aab38bef28634b6b5466d3dde6f8a109c095d9276b"
+  }
+]

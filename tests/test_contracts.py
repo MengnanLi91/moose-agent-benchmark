@@ -1,3 +1,4 @@
+import json
 import unittest
 from pathlib import Path
 
@@ -7,6 +8,7 @@ from moose_benchmark.contracts import (
     ArtifactSpec,
     CaseContract,
     EvaluationSpec,
+    MmsResponse,
     RecordedArtifact,
 )
 from moose_benchmark.loader import load_case, load_evaluation, load_submission_record
@@ -39,8 +41,6 @@ class ContractTests(unittest.TestCase):
             '"schema_version": "1.0"',
             1,
         )
-        import json
-
         from moose_benchmark.contracts import SubmissionRecord
 
         with self.assertRaises(ValidationError):
@@ -123,6 +123,94 @@ class ContractTests(unittest.TestCase):
                     ],
                 }
             )
+
+    def test_v1_case_requires_an_ordered_declared_refinement_study(self):
+        path = ROOT / "benchmark/public/cases/V1-POROUS-DARCY-MMS-001/case.yaml"
+        data = load_case(path).model_dump(mode="json")
+        invalid_cases = []
+
+        missing_study = dict(data)
+        missing_study["verification_study"] = None
+        invalid_cases.append(missing_study)
+
+        duplicate_level = json.loads(json.dumps(data))
+        duplicate_level["verification_study"]["levels"][2]["level"] = 1
+        invalid_cases.append(duplicate_level)
+
+        unordered_parameters = json.loads(json.dumps(data))
+        unordered_parameters["verification_study"]["levels"][2]["parameter"] = 0.125
+        invalid_cases.append(unordered_parameters)
+
+        undeclared_override = json.loads(json.dumps(data))
+        undeclared_override["verification_study"]["levels"][0]["overrides"].append(
+            "Executioner/dt=0.1"
+        )
+        invalid_cases.append(undeclared_override)
+
+        for invalid in invalid_cases:
+            with self.subTest(invalid=invalid):
+                with self.assertRaises(ValidationError):
+                    CaseContract.model_validate(invalid)
+
+    def test_mms_response_rejects_invalid_error_and_order_sequences(self):
+        path = ROOT / "benchmark/example-submissions/" "V1-POROUS-DARCY-MMS-001/response.json"
+        response = json.loads(path.read_text(encoding="utf-8"))
+        invalid_responses = []
+
+        zero_error = json.loads(json.dumps(response))
+        zero_error["claim"]["runs"][0]["errors"]["p"] = 0
+        invalid_responses.append(zero_error)
+
+        nonfinite_error = json.loads(json.dumps(response))
+        nonfinite_error["claim"]["runs"][0]["errors"]["p"] = float("nan")
+        invalid_responses.append(nonfinite_error)
+
+        missing_level = json.loads(json.dumps(response))
+        missing_level["claim"]["runs"].pop()
+        invalid_responses.append(missing_level)
+
+        duplicate_level = json.loads(json.dumps(response))
+        duplicate_level["claim"]["runs"][2]["level"] = 1
+        invalid_responses.append(duplicate_level)
+
+        unordered_parameters = json.loads(json.dumps(response))
+        unordered_parameters["claim"]["runs"][2]["parameter"] = 0.125
+        invalid_responses.append(unordered_parameters)
+
+        for invalid in invalid_responses:
+            with self.subTest(invalid=invalid):
+                with self.assertRaises(ValidationError):
+                    MmsResponse.model_validate(invalid)
+
+    def test_v1_derivation_and_implementation_submission_shapes_are_distinct(self):
+        derivation = load_case(
+            ROOT / "benchmark/public/cases/" "V1-DIFFUSION-STEADY-DIRICHLET-MMS-001/case.yaml"
+        )
+        implementation = load_case(
+            ROOT / "benchmark/public/cases/V1-POROUS-DARCY-MMS-001/case.yaml"
+        )
+
+        self.assertEqual(derivation.mms_task.value, "derivation")
+        self.assertEqual(derivation.submission.response_mode.value, "free_text")
+        self.assertIsNotNone(derivation.mms_derivation)
+        self.assertIsNone(derivation.verification_study)
+
+        self.assertEqual(implementation.mms_task.value, "implementation")
+        self.assertEqual(implementation.submission.response_mode.value, "structured_json")
+        self.assertEqual(
+            implementation.submission.required_artifacts[0].role,
+            "mms_moose_input",
+        )
+        self.assertIsNotNone(implementation.verification_study)
+
+    def test_v1_derivation_requires_all_declared_problem_and_output_groups(self):
+        path = ROOT / "benchmark/public/cases/" "V1-DIFFUSION-STEADY-DIRICHLET-MMS-001/case.yaml"
+        data = load_case(path).model_dump(mode="json")
+        for key in ("supplied", "required_outputs"):
+            invalid = json.loads(json.dumps(data))
+            invalid["mms_derivation"][key].pop()
+            with self.subTest(key=key), self.assertRaises(ValidationError):
+                CaseContract.model_validate(invalid)
 
 
 if __name__ == "__main__":

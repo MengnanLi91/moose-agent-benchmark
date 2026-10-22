@@ -1,0 +1,34 @@
+{
+  "artifacts": [
+    {
+      "path": "artifacts/solution.i",
+      "role": "mms_moose_input",
+      "sha256": "13191d8b72d23b68df02211eea2843090c7a2beeefda79e5253725d9cc0a8487",
+      "size_bytes": 2889
+    }
+  ],
+  "case_id": "V1-FLUID-NAVIER-STOKES-MMS-001",
+  "finished_at": "2026-10-08T12:05:00Z",
+  "model": {
+    "configuration": {},
+    "model": "mms-input-mutant-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "4340dbef8604ed6a8159ceec97e8a28d338773dd33ba1a34663559e61cbdf7f3",
+    "size_bytes": 2441
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-08T12:00:00Z",
+  "submission_sha256": "3b9fa2c1ea8890254759d791bb6068c0dc23a6acffa7d5edecf5438833f8e4f4",
+  "usage": {
+    "cpu_seconds": 240.0,
+    "execution_attempts": 4,
+    "memory_mib": 1024.0,
+    "tokens": null,
+    "validation_attempts": 1,
+    "wall_time_seconds": 300.0
+  }
+}

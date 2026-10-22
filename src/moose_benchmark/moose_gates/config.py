@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Literal
 
+import yaml
 from pydantic import Field, model_validator
 
 from ..contracts import StrictModel, validate_relative_path
@@ -45,6 +47,62 @@ class MetricEquality(StrictModel):
     right_column: str
     row: int = -1
     tolerance: NumericTolerance
+
+
+class MmsMetricExpectation(StrictModel):
+    column: str
+    expected: float
+    tolerance: NumericTolerance
+    every_row: bool = False
+
+
+class MmsHitRequirement(StrictModel):
+    pattern: str = Field(min_length=1)
+    required_values: list[str] = Field(min_length=1)
+
+
+class MmsGateConfig(StrictModel):
+    schema_version: Literal["1.0"]
+    case_id: str
+    case_type: Literal["mms_refinement"]
+    public_scaffold_path: str
+    submitted_input_path: str
+    canonical_input_path: str
+    reference_data: str | None = None
+    expected_moose_revision: str
+    expected_executable_sha256: str | None = None
+    required_gates: list[str] = Field(min_length=1)
+    csv_path: str
+    error_columns: dict[str, str] = Field(min_length=1)
+    secondary_metrics: dict[str, MmsMetricExpectation] = Field(default_factory=dict)
+    protected_hit_patterns: list[str] = Field(min_length=1)
+    physics_requirements: list[MmsHitRequirement] = Field(min_length=1)
+    limits: GateRunLimits
+
+    @model_validator(mode="after")
+    def validate_mms_config(self) -> MmsGateConfig:
+        self.public_scaffold_path = validate_relative_path(self.public_scaffold_path)
+        self.submitted_input_path = validate_relative_path(self.submitted_input_path)
+        self.canonical_input_path = validate_relative_path(self.canonical_input_path)
+        self.csv_path = validate_relative_path(self.csv_path)
+        if self.reference_data is not None:
+            self.reference_data = validate_relative_path(self.reference_data)
+        if len(self.required_gates) != len(set(self.required_gates)):
+            raise ValueError("required_gates must be unique")
+        expected = {
+            "physics_conformance",
+            "complete_refinement_sequence",
+            "successful_moose_runs",
+            "protected_error_oracle",
+            "required_convergence",
+            "reported_values_match",
+            "resource_compliance",
+        }
+        if set(self.required_gates) != expected:
+            raise ValueError("MMS configurations require the seven standard MMS gates")
+        if len(self.protected_hit_patterns) != len(set(self.protected_hit_patterns)):
+            raise ValueError("protected HIT patterns must be unique")
+        return self
 
 
 class MooseGateConfig(StrictModel):
@@ -97,3 +155,11 @@ class MooseGateConfig(StrictModel):
         ):
             raise ValueError("R2 requires coupling_path and coupling_variable")
         return self
+
+
+def load_gate_config(path: Path) -> MooseGateConfig | MmsGateConfig:
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError(f"gate configuration must be an object: {path}")
+    model = MmsGateConfig if data.get("case_type") == "mms_refinement" else MooseGateConfig
+    return model.model_validate(data)

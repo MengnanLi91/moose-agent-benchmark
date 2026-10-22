@@ -1,7 +1,7 @@
 [
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
     "detail": "candidate changes are confined to the authorized HIT paths",
     "evidence": [
@@ -15,7 +15,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
     "detail": "check_input completed within evaluator limits",
     "evidence": [
@@ -33,7 +33,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
     "detail": "transient advanced beyond the faulty breakdown time",
     "evidence": [
@@ -46,7 +46,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
     "detail": "transient completed within evaluator limits",
     "evidence": [
@@ -64,7 +64,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
     "detail": "the transient SUBPC failure is absent",
     "evidence": [],
@@ -75,7 +75,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
     "detail": "constraint and private repair ranges are satisfied",
     "evidence": [
@@ -90,7 +90,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001",
     "detail": "early transient evolution matches the reference",
     "evidence": [

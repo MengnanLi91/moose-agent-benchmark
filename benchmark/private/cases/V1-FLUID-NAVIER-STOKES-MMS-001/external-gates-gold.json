@@ -1,0 +1,200 @@
+[
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-FLUID-NAVIER-STOKES-MMS-001",
+    "detail": "submitted input contains the required physics structure",
+    "evidence": [
+      "Variables/u/order:expected=['SECOND'],actual=['SECOND'],passed=true",
+      "Variables/v/order:expected=['SECOND'],actual=['SECOND'],passed=true",
+      "Variables/p/order:expected=['FIRST'],actual=['FIRST'],passed=true",
+      "Kernels/*/type:expected=['BodyForce', 'INSMass', 'INSMomentumLaplaceForm', 'ScalarLagrangeMultiplier'],actual=['BodyForce', 'INSMass', 'INSMomentumLaplaceForm', 'ScalarLagrangeMultiplier'],passed=true",
+      "ScalarKernels/*/type:expected=['AverageValueConstraint'],actual=['AverageValueConstraint'],passed=true",
+      "BCs/*/type:expected=['FunctionDirichletBC'],actual=['FunctionDirichletBC'],passed=true",
+      "Executioner/type:expected=['Steady'],actual=['Steady'],passed=true"
+    ],
+    "gate_id": "physics_conformance",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "bf59abcb26b7775d21d4056cc25753380a23d4a6f89814b8db48f68606fa238b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-FLUID-NAVIER-STOKES-MMS-001",
+    "detail": "all prescribed refinement levels are present exactly once",
+    "evidence": [],
+    "gate_id": "complete_refinement_sequence",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "bf59abcb26b7775d21d4056cc25753380a23d4a6f89814b8db48f68606fa238b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-FLUID-NAVIER-STOKES-MMS-001",
+    "detail": "check-input and all four authoritative runs succeeded",
+    "evidence": [],
+    "gate_id": "successful_moose_runs",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "bf59abcb26b7775d21d4056cc25753380a23d4a6f89814b8db48f68606fa238b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-FLUID-NAVIER-STOKES-MMS-001",
+    "detail": "protected instrumentation is unchanged and produced finite errors",
+    "evidence": [
+      "Functions/exact_u/**:passed=true",
+      "Functions/exact_v/**:passed=true",
+      "Functions/exact_p/**:passed=true",
+      "Postprocessors/pressure_integral/**:passed=true",
+      "Postprocessors/u_l2/**:passed=true",
+      "Postprocessors/v_l2/**:passed=true",
+      "Postprocessors/p_l2/**:passed=true",
+      "Outputs/csv:passed=true",
+      "Outputs/file_base:passed=true",
+      "level=0,field=u,error=0.0029396772706125",
+      "level=0,field=v,error=0.0029396772706125",
+      "level=0,field=p,error=0.12072129082544",
+      "level=1,field=u,error=0.00023686166107087",
+      "level=1,field=v,error=0.00023686166107089",
+      "level=1,field=p,error=0.02472422055186",
+      "level=2,field=u,error=2.6632707289509e-05",
+      "level=2,field=v,error=2.663270728951e-05",
+      "level=2,field=p,error=0.0058545992300579",
+      "level=3,field=u,error=3.2461148032821e-06",
+      "level=3,field=v,error=3.2461148032365e-06",
+      "level=3,field=p,error=0.0014434894340627"
+    ],
+    "gate_id": "protected_error_oracle",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "bf59abcb26b7775d21d4056cc25753380a23d4a6f89814b8db48f68606fa238b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-FLUID-NAVIER-STOKES-MMS-001",
+    "detail": "every required field meets the formal-order convergence band",
+    "evidence": [],
+    "gate_id": "required_convergence",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "bf59abcb26b7775d21d4056cc25753380a23d4a6f89814b8db48f68606fa238b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-FLUID-NAVIER-STOKES-MMS-001",
+    "detail": "reported errors and orders match the authoritative rerun",
+    "evidence": [],
+    "gate_id": "reported_values_match",
+    "mms_measurement": {
+      "asymptotic_regime": {
+        "p": true,
+        "u": true,
+        "v": true
+      },
+      "case_id": "V1-FLUID-NAVIER-STOKES-MMS-001",
+      "expected_order": {
+        "p": 2.0,
+        "u": 3.0,
+        "v": 3.0
+      },
+      "norm": "spatial_l2",
+      "observed_orders": {
+        "p": [
+          2.287683192376531,
+          2.078282718574686,
+          2.020009868565772
+        ],
+        "u": [
+          3.633541174073622,
+          3.1527737046870086,
+          3.036413161225765
+        ],
+        "v": [
+          3.6335411740735,
+          3.152773704687076,
+          3.0364131612460854
+        ]
+      },
+      "refinement_parameter": "mesh_h",
+      "runs": [
+        {
+          "controls": {
+            "n": 4
+          },
+          "errors": {
+            "p": 0.12072129082544,
+            "u": 0.0029396772706125,
+            "v": 0.0029396772706125
+          },
+          "level": 0,
+          "parameter": 0.25
+        },
+        {
+          "controls": {
+            "n": 8
+          },
+          "errors": {
+            "p": 0.02472422055186,
+            "u": 0.00023686166107087,
+            "v": 0.00023686166107089
+          },
+          "level": 1,
+          "parameter": 0.125
+        },
+        {
+          "controls": {
+            "n": 16
+          },
+          "errors": {
+            "p": 0.0058545992300579,
+            "u": 2.6632707289509e-05,
+            "v": 2.663270728951e-05
+          },
+          "level": 2,
+          "parameter": 0.0625
+        },
+        {
+          "controls": {
+            "n": 32
+          },
+          "errors": {
+            "p": 0.0014434894340627,
+            "u": 3.2461148032821e-06,
+            "v": 3.2461148032365e-06
+          },
+          "level": 3,
+          "parameter": 0.03125
+        }
+      ],
+      "schema_version": "1.0",
+      "submission_sha256": "bf59abcb26b7775d21d4056cc25753380a23d4a6f89814b8db48f68606fa238b",
+      "verdict": "verified"
+    },
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "bf59abcb26b7775d21d4056cc25753380a23d4a6f89814b8db48f68606fa238b"
+  },
+  {
+    "benchmark_id": "moose-agent-benchmark-development",
+    "benchmark_version": "0.5.0",
+    "case_id": "V1-FLUID-NAVIER-STOKES-MMS-001",
+    "detail": "runner-owned usage and protected execution remain within limits",
+    "evidence": [],
+    "gate_id": "resource_compliance",
+    "mms_measurement": null,
+    "passed": true,
+    "schema_version": "2.0",
+    "submission_sha256": "bf59abcb26b7775d21d4056cc25753380a23d4a6f89814b8db48f68606fa238b"
+  }
+]

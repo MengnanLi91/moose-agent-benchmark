@@ -1,7 +1,7 @@
 [
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
     "detail": "candidate changes are confined to the authorized HIT paths",
     "evidence": [
@@ -14,7 +14,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
     "detail": "not evaluated because fieldsplit_partition failed",
     "evidence": [],
@@ -25,7 +25,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
     "detail": "nested split ownership is incomplete or overlapping",
     "evidence": [
@@ -39,7 +39,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
     "detail": "not evaluated because fieldsplit_partition failed",
     "evidence": [],
@@ -50,7 +50,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
     "detail": "not evaluated because fieldsplit_partition failed",
     "evidence": [],
@@ -61,7 +61,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
     "detail": "the intended field-split solver is preserved",
     "evidence": [],
@@ -72,7 +72,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R3-FLUID-FIELDSPLIT-VARS-001",
     "detail": "not evaluated because fieldsplit_partition failed",
     "evidence": [],

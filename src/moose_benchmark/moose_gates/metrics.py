@@ -25,11 +25,66 @@ def read_csv_rows(path: Path) -> list[dict[str, float]]:
 
 
 def within_tolerance(actual: float, expected: float, tolerance: NumericTolerance) -> bool:
+    return values_within_tolerance(
+        actual,
+        expected,
+        absolute=tolerance.absolute,
+        relative=tolerance.relative,
+    )
+
+
+def values_within_tolerance(
+    actual: float,
+    expected: float,
+    *,
+    absolute: float,
+    relative: float,
+) -> bool:
     if not math.isfinite(actual):
         return False
     difference = abs(actual - expected)
     scale = max(abs(actual), abs(expected))
-    return difference <= max(tolerance.absolute, tolerance.relative * scale)
+    return difference <= max(absolute, relative * scale)
+
+
+def observed_orders(parameters: list[float], errors: list[float]) -> list[float]:
+    if len(parameters) != len(errors) or len(parameters) < 2:
+        raise ValueError("observed-order inputs must have equal lengths of at least two")
+    if any(not math.isfinite(value) or value <= 0 for value in [*parameters, *errors]):
+        raise ValueError("observed-order inputs must be finite and positive")
+    orders = []
+    for left_error, right_error, left_parameter, right_parameter in zip(
+        errors[:-1],
+        errors[1:],
+        parameters[:-1],
+        parameters[1:],
+        strict=True,
+    ):
+        if left_parameter <= right_parameter:
+            raise ValueError("refinement parameters must strictly decrease")
+        orders.append(
+            math.log(left_error / right_error) / math.log(left_parameter / right_parameter)
+        )
+    return orders
+
+
+def classify_mms_verdict(
+    orders: dict[str, list[float]],
+    expected_orders: dict[str, float],
+    *,
+    acceptance_band: float = 0.2,
+) -> tuple[dict[str, bool], str]:
+    if set(orders) != set(expected_orders) or any(
+        len(values) < 2 or any(not math.isfinite(value) for value in values)
+        for values in orders.values()
+    ):
+        return {}, "inconclusive"
+    assessments = {
+        field: all(abs(order - expected_orders[field]) <= acceptance_band for order in values[-2:])
+        for field, values in orders.items()
+    }
+    verdict = "verified" if all(assessments.values()) else "not_verified"
+    return assessments, verdict
 
 
 def contains_any(text: str, signatures: list[str]) -> bool:

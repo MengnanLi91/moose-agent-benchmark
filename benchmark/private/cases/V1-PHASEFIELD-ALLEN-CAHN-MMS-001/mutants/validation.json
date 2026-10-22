@@ -1,0 +1,15 @@
+{
+  "case_id": "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+  "failed_gates": [
+    "physics_conformance",
+    "successful_moose_runs",
+    "protected_error_oracle",
+    "required_convergence",
+    "reported_values_match"
+  ],
+  "generated_on": "2026-10-09",
+  "input_sha256": "a70f17dd5e1ee4fc95bf8489aed24754aa6d2c856eb6adc78dd5fcde7cf5fd63",
+  "mutant": "quadratic-discretization.i",
+  "passed": true,
+  "schema_version": "1.0"
+}

@@ -1,0 +1,30 @@
+{
+  "canonical_input_sha256": "dde588885db54ba6275927e75d98e5857b5f21d9c116d491a798d50edeee6186",
+  "canonical_physics_conforms": true,
+  "canonical_physics_evidence": [
+    "Variables/u/order:expected=['SECOND'],actual=['SECOND'],passed=true",
+    "Variables/v/order:expected=['SECOND'],actual=['SECOND'],passed=true",
+    "Variables/p/order:expected=['FIRST'],actual=['FIRST'],passed=true",
+    "Kernels/*/type:expected=['BodyForce', 'INSMass', 'INSMomentumLaplaceForm', 'ScalarLagrangeMultiplier'],actual=['BodyForce', 'INSMass', 'INSMomentumLaplaceForm', 'ScalarLagrangeMultiplier'],passed=true",
+    "ScalarKernels/*/type:expected=['AverageValueConstraint'],actual=['AverageValueConstraint'],passed=true",
+    "BCs/*/type:expected=['FunctionDirichletBC'],actual=['FunctionDirichletBC'],passed=true",
+    "Executioner/type:expected=['Steady'],actual=['Steady'],passed=true"
+  ],
+  "case_id": "V1-FLUID-NAVIER-STOKES-MMS-001",
+  "executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "protected_instrumentation_evidence": [
+    "Functions/exact_u/**:passed=true",
+    "Functions/exact_v/**:passed=true",
+    "Functions/exact_p/**:passed=true",
+    "Postprocessors/pressure_integral/**:passed=true",
+    "Postprocessors/u_l2/**:passed=true",
+    "Postprocessors/v_l2/**:passed=true",
+    "Postprocessors/p_l2/**:passed=true",
+    "Outputs/csv:passed=true",
+    "Outputs/file_base:passed=true"
+  ],
+  "protected_instrumentation_unchanged": true,
+  "public_scaffold_sha256": "eddcb69259cf718c9bd450ae8c785003470717f7615c5869a69599ef0592e775",
+  "schema_version": "1.0"
+}

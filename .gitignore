@@ -11,3 +11,4 @@ dist/
 benchmark-results/
 .claude/
 .obsidian/
+.vscode/settings.json

@@ -1,0 +1,119 @@
+schema_version: '2.0'
+case_id: V1-FLUID-NAVIER-STOKES-MMS-001
+title: Incompressible Navier-Stokes MMS
+case_kind: atomic
+track: VERIFY
+subcategory: V1
+difficulty: L4
+scoring_profile: balanced_v1
+base_problem_id: NAVIER-STOKES-MMS-BASE-001
+physics_domains:
+- fluid_dynamics
+target:
+  application: combined
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+prompt_path: prompt.md
+prompt_sha256: f4d439a92eb3eb2d21c481bb67f8607c822e988a50b389e73820fa30c0d0ef77
+artifacts:
+- id: mms_problem_specification
+  path: artifacts/problem-specification.md
+  role: mms_implementation_problem
+  mutable: false
+  required: true
+  sha256: 6255b27caf1a73f474bcab5bf57ff27707e0e9fe4edfe57a235b14f243ebe2e0
+- id: mms_input_scaffold
+  path: artifacts/input-scaffold.i
+  role: protected_mms_instrumentation
+  mutable: false
+  required: true
+  sha256: eddcb69259cf718c9bd450ae8c785003470717f7615c5869a69599ef0592e775
+evidence_sources: []
+starting_state:
+  description: The complete MMS equations, convergence contract, and protected instrumentation
+    scaffold are supplied.
+  supplied_truth:
+  - Governing equations and manufactured fields
+  - Expanded source and boundary or initial data
+  - Formal orders and refinement sequence
+  - Protected error instrumentation
+  excluded_from_scoring:
+  - MMS equation derivation
+  - Choice of convergence sequence
+actions:
+  permitted:
+  - Create one complete MOOSE input from the specification and scaffold.
+  - Run the prescribed levels and report measured convergence.
+  prohibited:
+  - Modify protected instrumentation.
+  - Use undeclared overrides or external include files.
+  - Submit additional artifacts.
+budget:
+  wall_time_seconds: 1800
+  cpu_seconds: 1200
+  memory_mib: 4096
+  validation_attempts: 1
+  execution_attempts: 4
+submission:
+  response_mode: structured_json
+  required_claim_paths:
+  - /claim/norm
+  - /claim/refinement_parameter
+  - /claim/runs
+  - /claim/observed_orders
+  - /claim/expected_order
+  - /claim/asymptotic_regime
+  - /claim/verdict
+  - /claim/interpretation
+  evidence_required: true
+  required_artifacts:
+  - role: mms_moose_input
+    path: artifacts/solution.i
+  maximum_artifacts: 1
+verification_study:
+  method: mms
+  study_type: spatial
+  norm: spatial_l2
+  refinement_parameter: mesh_h
+  permitted_overrides:
+  - Mesh/nx
+  - Mesh/ny
+  levels:
+  - level: 0
+    parameter: 0.25
+    controls:
+      n: 4
+    overrides:
+    - Mesh/nx=4
+    - Mesh/ny=4
+  - level: 1
+    parameter: 0.125
+    controls:
+      n: 8
+    overrides:
+    - Mesh/nx=8
+    - Mesh/ny=8
+  - level: 2
+    parameter: 0.0625
+    controls:
+      n: 16
+    overrides:
+    - Mesh/nx=16
+    - Mesh/ny=16
+  - level: 3
+    parameter: 0.03125
+    controls:
+      n: 32
+    overrides:
+    - Mesh/nx=32
+    - Mesh/ny=32
+  required_fields:
+  - u
+  - v
+  - p
+  expected_orders:
+    u: 3.0
+    v: 3.0
+    p: 2.0
+required_stages: []
+mms_task: implementation

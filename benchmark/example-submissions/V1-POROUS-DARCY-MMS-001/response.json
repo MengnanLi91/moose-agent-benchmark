@@ -1,0 +1,80 @@
+{
+  "claim": {
+    "asymptotic_regime": {
+      "p": true
+    },
+    "expected_order": {
+      "p": 2.0
+    },
+    "interpretation": "The final two observed orders are within 0.2 of the formal order.",
+    "norm": "spatial_l2",
+    "observed_orders": {
+      "p": [
+        1.9979717947938693,
+        1.9994758697348791,
+        1.9998679013272582
+      ]
+    },
+    "refinement_parameter": "mesh_h",
+    "runs": [
+      {
+        "controls": {
+          "n": 8
+        },
+        "errors": {
+          "p": 0.0064082604697863
+        },
+        "level": 0,
+        "parameter": 0.125
+      },
+      {
+        "controls": {
+          "n": 16
+        },
+        "errors": {
+          "p": 0.0016043189561358
+        },
+        "level": 1,
+        "parameter": 0.0625
+      },
+      {
+        "controls": {
+          "n": 32
+        },
+        "errors": {
+          "p": 0.00040122547754047
+        },
+        "level": 2,
+        "parameter": 0.03125
+      },
+      {
+        "controls": {
+          "n": 64
+        },
+        "errors": {
+          "p": 0.00010031555424022
+        },
+        "level": 3,
+        "parameter": 0.015625
+      }
+    ],
+    "verdict": "verified"
+  },
+  "evidence": [
+    {
+      "interpretation": "The implementation targets the specified manufactured problem.",
+      "observation": "Used the supplied equations and required convergence sequence.",
+      "source_id": "mms_problem_specification"
+    },
+    {
+      "interpretation": "The reported errors use the benchmark instrumentation.",
+      "observation": "Preserved the protected exact functions, error postprocessors, and CSV output.",
+      "source_id": "mms_input_scaffold"
+    },
+    {
+      "interpretation": "The convergence claim is tied to the submitted implementation.",
+      "observation": "Executed the submitted input at all four prescribed levels.",
+      "source_id": "mms_moose_input"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 [
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "F4-POROUS-SOLUTE-001",
     "detail": "combined-opt c2dfd9fedd reported Syntax OK on September 22, 2026.",
     "evidence": [
@@ -14,7 +14,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "F4-POROUS-SOLUTE-001",
     "detail": "The authoritative run completed 208 time steps through 86400000 seconds.",
     "evidence": [
@@ -28,7 +28,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "F4-POROUS-SOLUTE-001",
     "detail": "CSV output contains both midpoint columns and a final-time row.",
     "evidence": [
@@ -42,7 +42,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "F4-POROUS-SOLUTE-001",
     "detail": "The submitted input matches the private required structure and supplied values.",
     "evidence": [

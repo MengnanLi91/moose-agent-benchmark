@@ -1,0 +1,124 @@
+schema_version: '2.0'
+case_id: V1-PHASEFIELD-ALLEN-CAHN-MMS-001
+title: Allen-Cahn MMS
+case_kind: atomic
+track: VERIFY
+subcategory: V1
+difficulty: L3
+scoring_profile: balanced_v1
+base_problem_id: ALLEN-CAHN-BASE-001
+physics_domains:
+- phase_field
+target:
+  application: combined
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+prompt_path: prompt.md
+prompt_sha256: cf8407250acc0e5a0d58867a04041acc6b99d40637c30b42034247b444fe71c0
+artifacts:
+- id: mms_problem_specification
+  path: artifacts/problem-specification.md
+  role: mms_implementation_problem
+  mutable: false
+  required: true
+  sha256: 1b03b5f4dcdd6750f022f5dd46f4a71169f8bb8143863e4831c7d44d11bb1cce
+- id: mms_input_scaffold
+  path: artifacts/input-scaffold.i
+  role: protected_mms_instrumentation
+  mutable: false
+  required: true
+  sha256: fbf78412abbdf626314fa8e212a5fe8eb5a66500c2d37cbdb46f7991595f82d0
+evidence_sources: []
+starting_state:
+  description: The complete MMS equations, convergence contract, and protected instrumentation
+    scaffold are supplied.
+  supplied_truth:
+  - Governing equations and manufactured fields
+  - Expanded source and boundary or initial data
+  - Formal orders and refinement sequence
+  - Protected error instrumentation
+  excluded_from_scoring:
+  - MMS equation derivation
+  - Choice of convergence sequence
+actions:
+  permitted:
+  - Create one complete MOOSE input from the specification and scaffold.
+  - Run the prescribed levels and report measured convergence.
+  prohibited:
+  - Modify protected instrumentation.
+  - Use undeclared overrides or external include files.
+  - Submit additional artifacts.
+budget:
+  wall_time_seconds: 1800
+  cpu_seconds: 1200
+  memory_mib: 4096
+  validation_attempts: 1
+  execution_attempts: 4
+submission:
+  response_mode: structured_json
+  required_claim_paths:
+  - /claim/norm
+  - /claim/refinement_parameter
+  - /claim/runs
+  - /claim/observed_orders
+  - /claim/expected_order
+  - /claim/asymptotic_regime
+  - /claim/verdict
+  - /claim/interpretation
+  evidence_required: true
+  required_artifacts:
+  - role: mms_moose_input
+    path: artifacts/solution.i
+  maximum_artifacts: 1
+verification_study:
+  method: mms
+  study_type: temporal
+  norm: temporal_l2
+  refinement_parameter: time_step
+  permitted_overrides:
+  - Mesh/nx
+  - Mesh/ny
+  - Executioner/dt
+  levels:
+  - level: 0
+    parameter: 0.1
+    controls:
+      dt: 0.1
+      n: 128
+    overrides:
+    - Mesh/nx=128
+    - Mesh/ny=128
+    - Executioner/dt=0.1
+  - level: 1
+    parameter: 0.05
+    controls:
+      dt: 0.05
+      n: 128
+    overrides:
+    - Mesh/nx=128
+    - Mesh/ny=128
+    - Executioner/dt=0.05
+  - level: 2
+    parameter: 0.025
+    controls:
+      dt: 0.025
+      n: 128
+    overrides:
+    - Mesh/nx=128
+    - Mesh/ny=128
+    - Executioner/dt=0.025
+  - level: 3
+    parameter: 0.0125
+    controls:
+      dt: 0.0125
+      n: 128
+    overrides:
+    - Mesh/nx=128
+    - Mesh/ny=128
+    - Executioner/dt=0.0125
+  required_fields:
+  - eta
+  expected_orders:
+    eta: 1.0
+required_stages: []
+mms_task: implementation

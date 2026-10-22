@@ -1,0 +1,34 @@
+{
+  "artifacts": [
+    {
+      "path": "artifacts/solution.i",
+      "role": "mms_moose_input",
+      "sha256": "2698c7ca27b3723640570ad82a313910d7491ce8141c3c9b2656f4866f1edb94",
+      "size_bytes": 2249
+    }
+  ],
+  "case_id": "V1-POROUS-DARCY-MMS-001",
+  "finished_at": "2026-10-08T12:05:00Z",
+  "model": {
+    "configuration": {},
+    "model": "mms-implementation-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "608cf87957f424642f9383ee9313890316e6be1c6da2782bf8c813d55bc07b4f",
+    "size_bytes": 1885
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-08T12:00:00Z",
+  "submission_sha256": "f6d56000ef906d179b40e846417b68ae471b11b82392c2640f333ad4aa07e87f",
+  "usage": {
+    "cpu_seconds": 240.0,
+    "execution_attempts": 4,
+    "memory_mib": 1024.0,
+    "tokens": null,
+    "validation_attempts": 1,
+    "wall_time_seconds": 300.0
+  }
+}

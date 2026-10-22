@@ -21,16 +21,16 @@ class CatalogReportTests(unittest.TestCase):
     def test_repository_counts(self):
         report = self.build_repository_report()
         self.assertEqual(report["target_total"], 120)
-        self.assertEqual(report["totals"]["cataloged"], 35)
-        self.assertEqual(report["totals"]["atomic"], 35)
-        self.assertEqual(report["totals"]["implemented"], 12)
+        self.assertEqual(report["totals"]["cataloged"], 43)
+        self.assertEqual(report["totals"]["atomic"], 43)
+        self.assertEqual(report["totals"]["implemented"], 22)
         self.assertEqual(report["totals"]["complete"], 0)
-        self.assertEqual(report["status_counts"]["planned"], 23)
+        self.assertEqual(report["status_counts"]["planned"], 21)
+        self.assertEqual(report["status_counts"]["in_progress"], 22)
         self.assertEqual(report["track_counts"]["FORM"]["cataloged"], 12)
         self.assertEqual(report["track_counts"]["DIAG"]["cataloged"], 7)
-        self.assertTrue(
-            all(report["track_counts"][track]["cataloged"] == 8 for track in ("REPAIR", "VERIFY"))
-        )
+        self.assertEqual(report["track_counts"]["REPAIR"]["cataloged"], 8)
+        self.assertEqual(report["track_counts"]["VERIFY"]["cataloged"], 16)
         self.assertTrue(
             all(
                 report["subcategory_counts"][subcategory]["cataloged"] == 3
@@ -42,9 +42,10 @@ class CatalogReportTests(unittest.TestCase):
             all(
                 values["cataloged"] == 2
                 for name, values in report["subcategory_counts"].items()
-                if name not in {"D1", "F1", "F2", "F3", "F4"}
+                if name not in {"D1", "F1", "F2", "F3", "F4", "V1"}
             )
         )
+        self.assertEqual(report["subcategory_counts"]["V1"]["cataloged"], 10)
         self.assertEqual(report["track_counts"]["DIAG"]["implemented"], 4)
         self.assertEqual(report["track_counts"]["REPAIR"]["implemented"], 4)
         self.assertEqual(report["subcategory_counts"]["D1"]["implemented"], 1)
@@ -66,6 +67,7 @@ class CatalogReportTests(unittest.TestCase):
                 for subcategory in ("R1", "R2", "R3", "R4")
             )
         )
+        self.assertEqual(report["subcategory_counts"]["V1"]["implemented"], 10)
 
     def test_json_report_is_deterministic(self):
         first = json.dumps(self.build_repository_report(), sort_keys=True)
@@ -92,9 +94,9 @@ class CatalogReportTests(unittest.TestCase):
             coverage = load_coverage_config(root / "catalog/coverage.yaml")
             report = build_catalog_report(validation, coverage)
         self.assertEqual(report["totals"]["integrated"], 1)
-        self.assertEqual(report["totals"]["atomic"], 35)
+        self.assertEqual(report["totals"]["atomic"], 43)
         self.assertEqual(report["track_counts"]["DIAG"]["cataloged"], 7)
-        self.assertEqual(report["difficulty_counts"]["L4"]["cataloged"], 1)
+        self.assertEqual(report["difficulty_counts"]["L4"]["cataloged"], 3)
 
 
 if __name__ == "__main__":

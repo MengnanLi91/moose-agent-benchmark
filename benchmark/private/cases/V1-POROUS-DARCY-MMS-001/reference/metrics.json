@@ -1,0 +1,71 @@
+{
+  "asymptotic_regime": {
+    "p": true
+  },
+  "error_tolerance": {
+    "absolute": 1e-12,
+    "relative": 1e-06
+  },
+  "executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "expected_order": {
+    "p": 2.0
+  },
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "norm": "spatial_l2",
+  "observed_orders": {
+    "p": [
+      1.9979717947938693,
+      1.9994758697348791,
+      1.9998679013272582
+    ]
+  },
+  "order_tolerance": {
+    "absolute": 1e-08,
+    "relative": 1e-06
+  },
+  "refinement_parameter": "mesh_h",
+  "runs": [
+    {
+      "controls": {
+        "n": 8
+      },
+      "errors": {
+        "p": 0.0064082604697863
+      },
+      "level": 0,
+      "parameter": 0.125
+    },
+    {
+      "controls": {
+        "n": 16
+      },
+      "errors": {
+        "p": 0.0016043189561358
+      },
+      "level": 1,
+      "parameter": 0.0625
+    },
+    {
+      "controls": {
+        "n": 32
+      },
+      "errors": {
+        "p": 0.00040122547754047
+      },
+      "level": 2,
+      "parameter": 0.03125
+    },
+    {
+      "controls": {
+        "n": 64
+      },
+      "errors": {
+        "p": 0.00010031555424022
+      },
+      "level": 3,
+      "parameter": 0.015625
+    }
+  ],
+  "schema_version": "1.0",
+  "verdict": "verified"
+}

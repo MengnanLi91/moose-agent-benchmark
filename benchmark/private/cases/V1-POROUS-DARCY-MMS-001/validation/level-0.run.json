@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "/Users/lim2/Research/LLM/moosenger-gitlab/worktrees/LLM-wiki-integration/moose/modules/combined/combined-opt",
+    "-i",
+    "/private/var/folders/0z/h3nnf_rs5976t_zwndw7gxx03y0fpn/T/V1-POROUS-DARCY-MMS-001-mms-evooqcww/level-0/artifacts/solution.i",
+    "Mesh/nx=8",
+    "Mesh/ny=8"
+  ],
+  "exit_code": 0,
+  "memory_limit_enforced": false,
+  "output_limit_exceeded": false,
+  "process_limit_enforced": true,
+  "process_limit_exceeded": false,
+  "stderr": "",
+  "stdout": "Framework Information:\nMOOSE Version:           git commit c2dfd9fedd on 2026-08-18\nLibMesh Version:         \nPETSc Version:           3.25.2\nSLEPc Version:           3.25.0\nCurrent Time:            Thu Oct  8 21:19:42 2026\nExecutable Timestamp:    Mon Sep 28 21:07:40 2026\n\nInput File(s):\n  /private/var/folders/0z/h3nnf_rs5976t_zwndw7gxx03y0fpn/T/V1-POROUS-DARCY-MMS-001-mms-evooqcww/level-0/artifacts/solution.i\n\nCommand Line Input Argument(s):\n  Mesh/nx=8\n  Mesh/ny=8\n\nCheckpoint:\n  Wall Time Interval:      Every 3600 s\n  Checkpoint:              Outputs/checkpoint\n  # Checkpoints Kept:      2\n  Execute On:              TIMESTEP_END \n\nParallelism:\n  Num Processors:          1\n  Num Threads:             1\n\nMesh: \n  Parallel Type:           replicated\n  Mesh Dimension:          2\n  Spatial Dimension:       2\n  Nodes:                   81\n  Elems:                   64\n  Num Subdomains:          1\n\nNonlinear System:\n  Num DOFs:                81\n  Num Local DOFs:          81\n  Variables:               \"p\" \n  Finite Element Types:    \"LAGRANGE\" \n  Approximation Orders:    \"FIRST\" \n\nAuxiliary System:\n  Num DOFs:                81\n  Num Local DOFs:          81\n  Variables:               \"permeability_value\" \n  Finite Element Types:    \"LAGRANGE\" \n  Approximation Orders:    \"FIRST\" \n\nExecution Information:\n  Executioner:             Steady\n  Solver Mode:             NEWTON \n  MOOSE Preconditioner:    SMP \n\n\nPostprocessor Values:\n+----------------+----------------+\n| time           | p_l2           |\n+----------------+----------------+\n|   0.000000e+00 |   0.000000e+00 |\n+----------------+----------------+\n\n 0 Nonlinear |R| = \u001b[32m6.872145e+00\u001b[39m\n      0 Linear |R| = \u001b[32m6.872145e+00\u001b[39m\n      1 Linear |R| = \u001b[32m1.269204e+00\u001b[39m\n      2 Linear |R| = \u001b[32m1.962147e-01\u001b[39m\n      3 Linear |R| = \u001b[32m1.885922e-02\u001b[39m\n      4 Linear |R| = \u001b[32m8.886821e-04\u001b[39m\n      5 Linear |R| = \u001b[32m4.824601e-05\u001b[39m\n 1 Nonlinear |R| = \u001b[32m4.824601e-05\u001b[39m\n      0 Linear |R| = \u001b[32m4.824601e-05\u001b[39m\n      1 Linear |R| = \u001b[32m5.611160e-06\u001b[39m\n      2 Linear |R| = \u001b[32m3.422208e-07\u001b[39m\n      3 Linear |R| = \u001b[32m1.473061e-08\u001b[39m\n      4 Linear |R| = \u001b[32m1.329463e-09\u001b[39m\n      5 Linear |R| = \u001b[32m3.101670e-10\u001b[39m\n 2 Nonlinear |R| = \u001b[32m3.101671e-10\u001b[39m\n      0 Linear |R| = \u001b[32m3.101671e-10\u001b[39m\n      1 Linear |R| = \u001b[32m7.692674e-11\u001b[39m\n      2 Linear |R| = \u001b[32m9.499232e-12\u001b[39m\n      3 Linear |R| = \u001b[32m6.520517e-13\u001b[39m\n      4 Linear |R| = \u001b[32m3.495694e-14\u001b[39m\n      5 Linear |R| = \u001b[32m1.514708e-15\u001b[39m\n 3 Nonlinear |R| = \u001b[32m2.048972e-15\u001b[39m\n\u001b[32m Solve Converged!\u001b[39m\n\n\nPostprocessor Values:\n+----------------+----------------+\n| time           | p_l2           |\n+----------------+----------------+\n|   0.000000e+00 |   0.000000e+00 |\n|   1.000000e+00 |   6.408260e-03 |\n+----------------+----------------+\n\n",
+  "timed_out": false,
+  "wall_time_seconds": 0.5211
+}

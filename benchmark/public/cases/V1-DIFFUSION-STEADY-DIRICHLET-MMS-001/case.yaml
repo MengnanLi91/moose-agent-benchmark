@@ -1,0 +1,68 @@
+schema_version: '2.0'
+case_id: V1-DIFFUSION-STEADY-DIRICHLET-MMS-001
+title: Steady Dirichlet Diffusion MMS
+case_kind: atomic
+track: VERIFY
+subcategory: V1
+difficulty: L1
+scoring_profile: balanced_v1
+base_problem_id: DIFFUSION-STEADY-DIRICHLET-BASE-001
+physics_domains:
+- scalar_diffusion
+target:
+  application: combined
+  version: c2dfd9fedd3193740a5278ec32269450c618e3b7
+  executable_hint: combined-opt
+prompt_path: prompt.md
+prompt_sha256: 64807fdb6610b962981d628fcbb01b8a28de9e78735b11521662cb9fd1842d17
+artifacts:
+- id: mms_problem_specification
+  path: artifacts/problem-specification.md
+  role: mms_derivation_problem
+  mutable: false
+  required: true
+  sha256: f418a364da007af25be5837241545455fa886f41271fe96b3b18757d1035690e
+evidence_sources: []
+starting_state:
+  description: The governing equations, coefficients, domain, and exact fields are
+    supplied.
+  supplied_truth:
+  - Governing equations and sign conventions
+  - Domain and coefficients
+  - Exact manufactured fields
+  excluded_from_scoring:
+  - MOOSE input construction
+  - Numerical execution
+  - Convergence measurement
+actions:
+  permitted:
+  - Derive the requested MMS terms and conditions.
+  - Use mathematically equivalent notation and simplifications.
+  prohibited:
+  - Create or submit a MOOSE input.
+  - Assume source, boundary, initial, or constraint data not derived from the specification.
+budget:
+  wall_time_seconds: 1800
+  cpu_seconds: 1200
+  memory_mib: 4096
+  validation_attempts: 0
+  execution_attempts: 0
+submission:
+  response_mode: free_text
+  required_claim_paths: []
+  evidence_required: false
+  required_artifacts: []
+  maximum_artifacts: 0
+required_stages: []
+mms_task: derivation
+mms_derivation:
+  supplied:
+  - governing_equations
+  - coefficients
+  - domain
+  - manufactured_fields
+  required_outputs:
+  - derivatives_and_residual
+  - source_terms
+  - boundary_and_initial_data
+  - constraints_and_conventions

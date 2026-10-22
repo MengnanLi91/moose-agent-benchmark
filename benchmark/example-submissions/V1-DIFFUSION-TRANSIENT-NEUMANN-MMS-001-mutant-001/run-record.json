@@ -1,0 +1,34 @@
+{
+  "artifacts": [
+    {
+      "path": "artifacts/solution.i",
+      "role": "mms_moose_input",
+      "sha256": "eb9257777c1f3affcdfe41e83d8c79c7ad874bf8cd62a16f82c09c6deb7059ab",
+      "size_bytes": 932
+    }
+  ],
+  "case_id": "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001",
+  "finished_at": "2026-10-08T12:05:00Z",
+  "model": {
+    "configuration": {},
+    "model": "mms-implementation-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "application/json",
+    "path": "response.json",
+    "sha256": "21a176f78d3ec930f063c3b1c3bb0adefa1abab76a9ad5dfb37bff7c3e6f943e",
+    "size_bytes": 1989
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-08T12:00:00Z",
+  "submission_sha256": "971b71b34be3e6f36daa6ae450de7df961d8fda6e49a360b5e9dc942bd5d67f7",
+  "usage": {
+    "cpu_seconds": 240.0,
+    "execution_attempts": 4,
+    "memory_mib": 1024.0,
+    "tokens": null,
+    "validation_attempts": 1,
+    "wall_time_seconds": 300.0
+  }
+}

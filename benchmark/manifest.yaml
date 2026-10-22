@@ -1,81 +1,131 @@
-schema_version: "2.0"
+schema_version: '2.0'
 benchmark_id: moose-agent-benchmark-development
-benchmark_version: 0.4.0
+benchmark_version: 0.5.0
 required_atomic_subcategories:
-  - F1
-  - F2
-  - F3
-  - F4
-  - D1
-  - D2
-  - D3
-  - D4
-  - R1
-  - R2
-  - R3
-  - R4
-  - V1
-  - V2
-  - V3
-  - V4
+- F1
+- F2
+- F3
+- F4
+- D1
+- D2
+- D3
+- D4
+- R1
+- R2
+- R3
+- R4
+- V1
+- V2
+- V3
+- V4
 cases:
-  - case_id: D1-SOLVER-DTMIN-001
-    public_case: public/cases/D1-SOLVER-DTMIN-001/case.yaml
-    private_evaluation: private/cases/D1-SOLVER-DTMIN-001/evaluation.yaml
-    split: development
-    enabled: true
-  - case_id: D2-THERMAL-REL-TOL-001
-    public_case: public/cases/D2-THERMAL-REL-TOL-001/case.yaml
-    private_evaluation: private/cases/D2-THERMAL-REL-TOL-001/evaluation.yaml
-    split: development
-    enabled: true
-  - case_id: D3-PERIODIC-NODESET-001
-    public_case: public/cases/D3-PERIODIC-NODESET-001/case.yaml
-    private_evaluation: private/cases/D3-PERIODIC-NODESET-001/evaluation.yaml
-    split: development
-    enabled: true
-  - case_id: D4-COUPLED-JACOBIAN-TEST-001
-    public_case: public/cases/D4-COUPLED-JACOBIAN-TEST-001/case.yaml
-    private_evaluation: private/cases/D4-COUPLED-JACOBIAN-TEST-001/evaluation.yaml
-    split: development
-    enabled: true
-  - case_id: F1-SOLID-DUCT-BOWING-001
-    public_case: public/cases/F1-SOLID-DUCT-BOWING-001/case.yaml
-    private_evaluation: private/cases/F1-SOLID-DUCT-BOWING-001/evaluation.yaml
-    split: development
-    enabled: true
-  - case_id: F2-THERMAL-REFLECTOR-001
-    public_case: public/cases/F2-THERMAL-REFLECTOR-001/case.yaml
-    private_evaluation: private/cases/F2-THERMAL-REFLECTOR-001/evaluation.yaml
-    split: development
-    enabled: true
-  - case_id: F3-PHASEFIELD-SPLITCH-001
-    public_case: public/cases/F3-PHASEFIELD-SPLITCH-001/case.yaml
-    private_evaluation: private/cases/F3-PHASEFIELD-SPLITCH-001/evaluation.yaml
-    split: development
-    enabled: true
-  - case_id: F4-POROUS-SOLUTE-001
-    public_case: public/cases/F4-POROUS-SOLUTE-001/case.yaml
-    private_evaluation: private/cases/F4-POROUS-SOLUTE-001/evaluation.yaml
-    split: development
-    enabled: true
-  - case_id: R1-DIFFUSION-PERIODIC-SIDESET-001
-    public_case: public/cases/R1-DIFFUSION-PERIODIC-SIDESET-001/case.yaml
-    private_evaluation: private/cases/R1-DIFFUSION-PERIODIC-SIDESET-001/evaluation.yaml
-    split: development
-    enabled: true
-  - case_id: R2-COUPLED-VARIABLE-WIRING-001
-    public_case: public/cases/R2-COUPLED-VARIABLE-WIRING-001/case.yaml
-    private_evaluation: private/cases/R2-COUPLED-VARIABLE-WIRING-001/evaluation.yaml
-    split: development
-    enabled: true
-  - case_id: R3-FLUID-FIELDSPLIT-VARS-001
-    public_case: public/cases/R3-FLUID-FIELDSPLIT-VARS-001/case.yaml
-    private_evaluation: private/cases/R3-FLUID-FIELDSPLIT-VARS-001/evaluation.yaml
-    split: development
-    enabled: true
-  - case_id: R4-PHASEFIELD-LAGRANGE-TRANSIENT-001
-    public_case: public/cases/R4-PHASEFIELD-LAGRANGE-TRANSIENT-001/case.yaml
-    private_evaluation: private/cases/R4-PHASEFIELD-LAGRANGE-TRANSIENT-001/evaluation.yaml
-    split: development
-    enabled: true
+- case_id: D1-SOLVER-DTMIN-001
+  public_case: public/cases/D1-SOLVER-DTMIN-001/case.yaml
+  private_evaluation: private/cases/D1-SOLVER-DTMIN-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: D2-THERMAL-REL-TOL-001
+  public_case: public/cases/D2-THERMAL-REL-TOL-001/case.yaml
+  private_evaluation: private/cases/D2-THERMAL-REL-TOL-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: D3-PERIODIC-NODESET-001
+  public_case: public/cases/D3-PERIODIC-NODESET-001/case.yaml
+  private_evaluation: private/cases/D3-PERIODIC-NODESET-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: D4-COUPLED-JACOBIAN-TEST-001
+  public_case: public/cases/D4-COUPLED-JACOBIAN-TEST-001/case.yaml
+  private_evaluation: private/cases/D4-COUPLED-JACOBIAN-TEST-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: F1-SOLID-DUCT-BOWING-001
+  public_case: public/cases/F1-SOLID-DUCT-BOWING-001/case.yaml
+  private_evaluation: private/cases/F1-SOLID-DUCT-BOWING-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: F2-THERMAL-REFLECTOR-001
+  public_case: public/cases/F2-THERMAL-REFLECTOR-001/case.yaml
+  private_evaluation: private/cases/F2-THERMAL-REFLECTOR-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: F3-PHASEFIELD-SPLITCH-001
+  public_case: public/cases/F3-PHASEFIELD-SPLITCH-001/case.yaml
+  private_evaluation: private/cases/F3-PHASEFIELD-SPLITCH-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: F4-POROUS-SOLUTE-001
+  public_case: public/cases/F4-POROUS-SOLUTE-001/case.yaml
+  private_evaluation: private/cases/F4-POROUS-SOLUTE-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: R1-DIFFUSION-PERIODIC-SIDESET-001
+  public_case: public/cases/R1-DIFFUSION-PERIODIC-SIDESET-001/case.yaml
+  private_evaluation: private/cases/R1-DIFFUSION-PERIODIC-SIDESET-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: R2-COUPLED-VARIABLE-WIRING-001
+  public_case: public/cases/R2-COUPLED-VARIABLE-WIRING-001/case.yaml
+  private_evaluation: private/cases/R2-COUPLED-VARIABLE-WIRING-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: R3-FLUID-FIELDSPLIT-VARS-001
+  public_case: public/cases/R3-FLUID-FIELDSPLIT-VARS-001/case.yaml
+  private_evaluation: private/cases/R3-FLUID-FIELDSPLIT-VARS-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: R4-PHASEFIELD-LAGRANGE-TRANSIENT-001
+  public_case: public/cases/R4-PHASEFIELD-LAGRANGE-TRANSIENT-001/case.yaml
+  private_evaluation: private/cases/R4-PHASEFIELD-LAGRANGE-TRANSIENT-001/evaluation.yaml
+  split: development
+  enabled: true
+- case_id: V1-DIFFUSION-STEADY-DIRICHLET-MMS-001
+  public_case: public/cases/V1-DIFFUSION-STEADY-DIRICHLET-MMS-001/case.yaml
+  private_evaluation: private/cases/V1-DIFFUSION-STEADY-DIRICHLET-MMS-001/evaluation.yaml
+  split: development
+  enabled: false
+- case_id: V1-DIFFUSION-STEADY-NEUMANN-MMS-001
+  public_case: public/cases/V1-DIFFUSION-STEADY-NEUMANN-MMS-001/case.yaml
+  private_evaluation: private/cases/V1-DIFFUSION-STEADY-NEUMANN-MMS-001/evaluation.yaml
+  split: validation
+  enabled: false
+- case_id: V1-DIFFUSION-TRANSIENT-DIRICHLET-MMS-001
+  public_case: public/cases/V1-DIFFUSION-TRANSIENT-DIRICHLET-MMS-001/case.yaml
+  private_evaluation: private/cases/V1-DIFFUSION-TRANSIENT-DIRICHLET-MMS-001/evaluation.yaml
+  split: development
+  enabled: false
+- case_id: V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001
+  public_case: public/cases/V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001/case.yaml
+  private_evaluation: private/cases/V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001/evaluation.yaml
+  split: test
+  enabled: false
+- case_id: V1-PHASEFIELD-ALLEN-CAHN-MMS-001
+  public_case: public/cases/V1-PHASEFIELD-ALLEN-CAHN-MMS-001/case.yaml
+  private_evaluation: private/cases/V1-PHASEFIELD-ALLEN-CAHN-MMS-001/evaluation.yaml
+  split: test
+  enabled: false
+- case_id: V1-POROUS-DARCY-MMS-001
+  public_case: public/cases/V1-POROUS-DARCY-MMS-001/case.yaml
+  private_evaluation: private/cases/V1-POROUS-DARCY-MMS-001/evaluation.yaml
+  split: validation
+  enabled: false
+- case_id: V1-THERMAL-MMS-001
+  public_case: public/cases/V1-THERMAL-MMS-001/case.yaml
+  private_evaluation: private/cases/V1-THERMAL-MMS-001/evaluation.yaml
+  split: validation
+  enabled: false
+- case_id: V1-SOLID-MMS-001
+  public_case: public/cases/V1-SOLID-MMS-001/case.yaml
+  private_evaluation: private/cases/V1-SOLID-MMS-001/evaluation.yaml
+  split: development
+  enabled: false
+- case_id: V1-FLUID-NAVIER-STOKES-MMS-001
+  public_case: public/cases/V1-FLUID-NAVIER-STOKES-MMS-001/case.yaml
+  private_evaluation: private/cases/V1-FLUID-NAVIER-STOKES-MMS-001/evaluation.yaml
+  split: test
+  enabled: false
+- case_id: V1-THERMOELASTIC-MMS-001
+  public_case: public/cases/V1-THERMOELASTIC-MMS-001/case.yaml
+  private_evaluation: private/cases/V1-THERMOELASTIC-MMS-001/evaluation.yaml
+  split: test
+  enabled: false

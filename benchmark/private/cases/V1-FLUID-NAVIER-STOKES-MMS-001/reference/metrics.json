@@ -1,0 +1,93 @@
+{
+  "asymptotic_regime": {
+    "p": true,
+    "u": true,
+    "v": true
+  },
+  "error_tolerance": {
+    "absolute": 1e-12,
+    "relative": 1e-06
+  },
+  "executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472",
+  "expected_order": {
+    "p": 2.0,
+    "u": 3.0,
+    "v": 3.0
+  },
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "norm": "spatial_l2",
+  "observed_orders": {
+    "p": [
+      2.287683192376531,
+      2.078282718574686,
+      2.020009868565772
+    ],
+    "u": [
+      3.633541174073622,
+      3.1527737046870086,
+      3.036413161225765
+    ],
+    "v": [
+      3.6335411740735,
+      3.152773704687076,
+      3.0364131612460854
+    ]
+  },
+  "order_tolerance": {
+    "absolute": 1e-08,
+    "relative": 1e-06
+  },
+  "refinement_parameter": "mesh_h",
+  "runs": [
+    {
+      "controls": {
+        "n": 4
+      },
+      "errors": {
+        "p": 0.12072129082544,
+        "u": 0.0029396772706125,
+        "v": 0.0029396772706125
+      },
+      "level": 0,
+      "parameter": 0.25
+    },
+    {
+      "controls": {
+        "n": 8
+      },
+      "errors": {
+        "p": 0.02472422055186,
+        "u": 0.00023686166107087,
+        "v": 0.00023686166107089
+      },
+      "level": 1,
+      "parameter": 0.125
+    },
+    {
+      "controls": {
+        "n": 16
+      },
+      "errors": {
+        "p": 0.0058545992300579,
+        "u": 2.6632707289509e-05,
+        "v": 2.663270728951e-05
+      },
+      "level": 2,
+      "parameter": 0.0625
+    },
+    {
+      "controls": {
+        "n": 32
+      },
+      "errors": {
+        "p": 0.0014434894340627,
+        "u": 3.2461148032821e-06,
+        "v": 3.2461148032365e-06
+      },
+      "level": 3,
+      "parameter": 0.03125
+    }
+  ],
+  "schema_version": "1.0",
+  "verdict": "verified"
+}

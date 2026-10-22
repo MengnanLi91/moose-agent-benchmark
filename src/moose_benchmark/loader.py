@@ -87,6 +87,8 @@ def discover_submission_artifact_paths(submission_root: Path) -> list[str]:
 
     paths = []
     for path in artifact_root.rglob("*"):
+        if path.is_symlink():
+            raise ValueError(f"submission artifacts cannot contain symlinks: {path}")
         resolved = path.resolve()
         if resolved != submission_root and submission_root not in resolved.parents:
             raise ValueError(f"artifact path escapes submission root: {path}")

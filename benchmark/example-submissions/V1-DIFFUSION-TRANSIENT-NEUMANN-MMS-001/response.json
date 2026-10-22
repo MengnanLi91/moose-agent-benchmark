@@ -1,0 +1,84 @@
+{
+  "claim": {
+    "asymptotic_regime": {
+      "u": true
+    },
+    "expected_order": {
+      "u": 1.0
+    },
+    "interpretation": "The final two observed orders are within 0.2 of the formal order.",
+    "norm": "temporal_l2",
+    "observed_orders": {
+      "u": [
+        0.9758036247949051,
+        0.9943358476266411,
+        1.0107089586630333
+      ]
+    },
+    "refinement_parameter": "time_step",
+    "runs": [
+      {
+        "controls": {
+          "dt": 0.005,
+          "n": 128
+        },
+        "errors": {
+          "u": 0.008689458262489
+        },
+        "level": 0,
+        "parameter": 0.005
+      },
+      {
+        "controls": {
+          "dt": 0.0025,
+          "n": 128
+        },
+        "errors": {
+          "u": 0.0044182118954291
+        },
+        "level": 1,
+        "parameter": 0.0025
+      },
+      {
+        "controls": {
+          "dt": 0.00125,
+          "n": 128
+        },
+        "errors": {
+          "u": 0.0022177961473371
+        },
+        "level": 2,
+        "parameter": 0.00125
+      },
+      {
+        "controls": {
+          "dt": 0.000625,
+          "n": 128
+        },
+        "errors": {
+          "u": 0.0011006973255984
+        },
+        "level": 3,
+        "parameter": 0.000625
+      }
+    ],
+    "verdict": "verified"
+  },
+  "evidence": [
+    {
+      "interpretation": "The implementation targets the specified manufactured problem.",
+      "observation": "Used the supplied equations and required convergence sequence.",
+      "source_id": "mms_problem_specification"
+    },
+    {
+      "interpretation": "The reported errors use the benchmark instrumentation.",
+      "observation": "Preserved the protected exact functions, error postprocessors, and CSV output.",
+      "source_id": "mms_input_scaffold"
+    },
+    {
+      "interpretation": "The convergence claim is tied to the submitted implementation.",
+      "observation": "Executed the submitted input at all four prescribed levels.",
+      "source_id": "mms_moose_input"
+    }
+  ]
+}

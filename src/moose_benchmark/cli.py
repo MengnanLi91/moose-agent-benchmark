@@ -18,6 +18,7 @@ from .contracts import (
     CaseResult,
     EvaluationContext,
     ExternalGateResult,
+    MmsReferenceData,
     ModelIdentity,
     ResponseMode,
     TokenUsage,
@@ -37,10 +38,16 @@ from .loader import (
 )
 from .moose_gates import (
     GateInfrastructureError,
-    MooseGateConfig,
+    MmsGateConfig,
+    build_reference_data,
     generate_case_gates,
+    generate_mms_gates,
+    load_gate_config,
     prepare_workspace,
+    reference_data_matches,
+    run_mms_study,
     verify_tools,
+    write_validation_artifacts,
 )
 from .runner import RunLimits, build_submission_record, run_moose_check
 from .scoring import aggregate_results
@@ -92,7 +99,7 @@ def validate_manifest(
             get_evaluator(evaluation.evaluator)
             gate_config_path = evaluation_path.parent / "gate-config.yaml"
             if gate_config_path.is_file():
-                gate_config = load_model(gate_config_path, MooseGateConfig)
+                gate_config = load_gate_config(gate_config_path)
                 external_ids = [
                     gate.id for gate in evaluation.hard_gates if gate.kind == "external"
                 ]
@@ -102,6 +109,38 @@ def validate_manifest(
                     errors.append(
                         f"{ref.case_id}: gate configuration and evaluation hard gates differ"
                     )
+                if isinstance(gate_config, MmsGateConfig):
+                    study = case.verification_study
+                    artifact_paths = {item.path for item in case.artifacts}
+                    required_submission_paths = {
+                        item.path for item in case.submission.required_artifacts
+                    }
+                    if gate_config.public_scaffold_path not in artifact_paths:
+                        errors.append(f"{ref.case_id}: MMS scaffold is not a declared artifact")
+                    if gate_config.submitted_input_path not in required_submission_paths:
+                        errors.append(
+                            f"{ref.case_id}: MMS submitted input path differs from the contract"
+                        )
+                    canonical = resolve_inside(
+                        evaluation_path.parent,
+                        gate_config.canonical_input_path,
+                    )
+                    if not canonical.is_file():
+                        errors.append(f"{ref.case_id}: MMS canonical input does not exist")
+                    if gate_config.reference_data != evaluation.reference_data:
+                        errors.append(
+                            f"{ref.case_id}: MMS gate and evaluator reference data differ"
+                        )
+                    if gate_config.expected_moose_revision != case.target.version:
+                        errors.append(
+                            f"{ref.case_id}: MMS gate revision differs from the case target"
+                        )
+                    if study is not None and set(gate_config.error_columns) != set(
+                        study.required_fields
+                    ):
+                        errors.append(
+                            f"{ref.case_id}: MMS error columns differ from required fields"
+                        )
             if (
                 evaluation.evaluator == "semantic_rubric_v1"
                 and case.submission.response_mode == ResponseMode.STRUCTURED_JSON
@@ -112,6 +151,16 @@ def validate_manifest(
                 and case.submission.response_mode != ResponseMode.STRUCTURED_JSON
             ):
                 errors.append(f"{ref.case_id}: structured evaluator requires structured_json")
+            if (
+                evaluation.evaluator == "mms_claim_v1"
+                and case.submission.response_mode != ResponseMode.STRUCTURED_JSON
+            ):
+                errors.append(f"{ref.case_id}: MMS evaluator requires structured_json")
+            if (
+                evaluation.evaluator == "mms_derivation_v1"
+                and case.submission.response_mode != ResponseMode.FREE_TEXT
+            ):
+                errors.append(f"{ref.case_id}: MMS derivation evaluator requires free_text")
             if case.case_id != ref.case_id or evaluation.case_id != ref.case_id:
                 errors.append(f"{ref.case_id}: manifest, case, and evaluation IDs differ")
             if case.target.version.startswith("replace-with-"):
@@ -148,6 +197,32 @@ def validate_manifest(
                 )
                 if not reference.is_file():
                     errors.append(f"{ref.case_id}: reference solution does not exist: {reference}")
+            if evaluation.reference_data is not None:
+                reference = resolve_inside(
+                    evaluation_path.parent,
+                    evaluation.reference_data,
+                )
+                if not reference.is_file():
+                    errors.append(f"{ref.case_id}: reference data does not exist: {reference}")
+                elif evaluation.evaluator == "mms_claim_v1":
+                    reference_data = load_model(reference, MmsReferenceData)
+                    study = case.verification_study
+                    if study is None:
+                        errors.append(f"{ref.case_id}: MMS case has no verification study")
+                    elif (
+                        reference_data.norm != study.norm
+                        or reference_data.refinement_parameter != study.refinement_parameter
+                        or reference_data.expected_order != study.expected_orders
+                        or [item.level for item in reference_data.runs]
+                        != [item.level for item in study.levels]
+                        or [item.parameter for item in reference_data.runs]
+                        != [item.parameter for item in study.levels]
+                        or [item.controls for item in reference_data.runs]
+                        != [item.controls for item in study.levels]
+                    ):
+                        errors.append(
+                            f"{ref.case_id}: MMS reference data differs from the public study"
+                        )
         except Exception as exc:  # validation reports every case before failing
             errors.append(f"{ref.case_id}: {exc}")
     for base_problem_id, splits in sorted(base_problem_splits.items()):
@@ -219,7 +294,7 @@ def command_score(args: argparse.Namespace) -> int:
         private_case_root=evaluation_path.parent,
     )
     llm_client = None
-    if evaluation.evaluator == "semantic_rubric_v1":
+    if evaluation.evaluator in {"semantic_rubric_v1", "mms_derivation_v1"}:
         if not args.llm_config:
             raise ValueError("--llm-config is required for semantic evaluation")
         llm_client = LLMClient(load_llm_config(args.llm_config))
@@ -337,14 +412,12 @@ def command_generate_gates(args: argparse.Namespace) -> int:
     config_path = evaluation_path.parent / "gate-config.yaml"
     if not config_path.is_file():
         raise GateInfrastructureError(f"private gate configuration is missing: {config_path}")
-    config = load_model(config_path, MooseGateConfig)
+    config = load_gate_config(config_path)
     external_ids = [gate.id for gate in evaluation.hard_gates if gate.kind == "external"]
     if external_ids != config.required_gates:
         raise GateInfrastructureError(
             "evaluation hard gates do not match gate-config required_gates"
         )
-    if len(case.submission.required_artifacts) != 1:
-        raise ValueError("gate generation requires exactly one submission artifact")
     submission_root = Path(args.submission_dir).resolve()
     run_record_path = submission_root / "run-record.json"
     submission = load_submission_record(run_record_path)
@@ -358,16 +431,70 @@ def command_generate_gates(args: argparse.Namespace) -> int:
         private_case_root=evaluation_path.parent,
     )
     tools = verify_tools(Path(args.moose_dir), Path(args.executable), config)
-    artifact_path = case.submission.required_artifacts[0].path
-    with prepare_workspace(
-        evaluation_path.parent,
-        submission_root,
-        submission,
-        artifact_path,
-        config,
-    ) as workspace:
-        gates = generate_case_gates(config, workspace, tools, context, submission)
+    if isinstance(config, MmsGateConfig):
+        gates = generate_mms_gates(case, config, tools, context, submission)
+    else:
+        if len(case.submission.required_artifacts) != 1:
+            raise ValueError("repair gate generation requires exactly one submission artifact")
+        artifact_path = case.submission.required_artifacts[0].path
+        with prepare_workspace(
+            evaluation_path.parent,
+            submission_root,
+            submission,
+            artifact_path,
+            config,
+        ) as workspace:
+            gates = generate_case_gates(config, workspace, tools, context, submission)
     _write_json([gate.model_dump(mode="json") for gate in gates], str(output_path))
+    return 0
+
+
+def command_generate_mms_reference(args: argparse.Namespace) -> int:
+    errors = validate_manifest(args.manifest, include_disabled=True)
+    if errors:
+        raise ValueError("manifest validation failed: " + "; ".join(errors))
+    case_path, evaluation_path = case_bundle_paths(
+        args.manifest,
+        args.case_id,
+        include_disabled=True,
+    )
+    case = load_case(case_path)
+    config_path = evaluation_path.parent / "gate-config.yaml"
+    config = load_gate_config(config_path)
+    if not isinstance(config, MmsGateConfig):
+        raise ValueError("generate-mms-reference requires an mms_refinement gate config")
+    tools = verify_tools(Path(args.moose_dir), Path(args.executable), config)
+    canonical_input = resolve_inside(
+        evaluation_path.parent,
+        config.canonical_input_path,
+    )
+    study = run_mms_study(
+        case,
+        config,
+        case_path.parent,
+        canonical_input,
+        tools,
+    )
+    reference = build_reference_data(case, config, tools, study)
+    output_path = Path(args.output)
+    if output_path.is_file() and not args.update_reference:
+        frozen = load_model(output_path, MmsReferenceData)
+        if not reference_data_matches(reference, frozen):
+            raise ValueError(
+                "MMS reference drift detected; frozen metrics were not modified "
+                "(pass --update-reference after review to accept the new baseline)"
+            )
+    write_validation_artifacts(
+        study,
+        Path(args.validation_dir),
+        case=case,
+        config=config,
+        tools=tools,
+        public_root=case_path.parent,
+        private_root=evaluation_path.parent,
+    )
+    if not output_path.is_file() or args.update_reference:
+        _write_json(reference, args.output)
     return 0
 
 
@@ -496,6 +623,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="allow gate generation for a disabled development case",
     )
     generate.set_defaults(handler=command_generate_gates)
+
+    generate_reference = subparsers.add_parser(
+        "generate-mms-reference",
+        help="run and freeze a protected MMS reference study",
+    )
+    generate_reference.add_argument("--manifest", required=True)
+    generate_reference.add_argument("--case-id", required=True)
+    generate_reference.add_argument("--moose-dir", required=True)
+    generate_reference.add_argument("--executable", required=True)
+    generate_reference.add_argument("--output", required=True)
+    generate_reference.add_argument("--validation-dir", required=True)
+    generate_reference.add_argument(
+        "--update-reference",
+        action="store_true",
+        help="replace an existing frozen reference after reviewing detected drift",
+    )
+    generate_reference.set_defaults(handler=command_generate_mms_reference)
 
     aggregate = subparsers.add_parser("aggregate", help="aggregate case-result JSON files")
     aggregate.add_argument("results", nargs="+")

@@ -1,0 +1,27 @@
+{
+  "artifacts": [],
+  "case_id": "V1-DIFFUSION-STEADY-DIRICHLET-MMS-001",
+  "finished_at": "2026-10-08T12:01:00Z",
+  "model": {
+    "configuration": {},
+    "model": "mms-derivation-fixture",
+    "provider": "fixture"
+  },
+  "response": {
+    "media_type": "text/markdown",
+    "path": "response.md",
+    "sha256": "6eb77fc2ab9802f1ff8f75a5c42241eab6df329eb55a8abbcae68f6eb6d42edf",
+    "size_bytes": 437
+  },
+  "schema_version": "2.0",
+  "started_at": "2026-10-08T12:00:00Z",
+  "submission_sha256": "39c81c6383df7660028c9feee6b82181967da1bf1312140fe08ca36e5838c4fe",
+  "usage": {
+    "cpu_seconds": 30.0,
+    "execution_attempts": 0,
+    "memory_mib": 256.0,
+    "tokens": null,
+    "validation_attempts": 0,
+    "wall_time_seconds": 60.0
+  }
+}

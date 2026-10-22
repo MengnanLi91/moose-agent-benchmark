@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "/Users/lim2/Research/LLM/moosenger-gitlab/worktrees/LLM-wiki-integration/moose/modules/combined/combined-opt",
+    "-i",
+    "/private/var/folders/0z/h3nnf_rs5976t_zwndw7gxx03y0fpn/T/V1-FLUID-NAVIER-STOKES-MMS-001-mms-zks9gczo/check/artifacts/solution.i",
+    "--check-input",
+    "Mesh/nx=4",
+    "Mesh/ny=4"
+  ],
+  "exit_code": 0,
+  "memory_limit_enforced": false,
+  "output_limit_exceeded": false,
+  "process_limit_enforced": true,
+  "process_limit_exceeded": false,
+  "stderr": "Syntax OK\n",
+  "stdout": "",
+  "timed_out": false,
+  "wall_time_seconds": 0.5003
+}

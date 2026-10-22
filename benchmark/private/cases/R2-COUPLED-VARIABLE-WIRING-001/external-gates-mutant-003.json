@@ -1,7 +1,7 @@
 [
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "candidate changes include missing or unauthorized HIT paths",
     "evidence": [
@@ -14,7 +14,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "not evaluated because authorized_edit_scope failed",
     "evidence": [],
@@ -25,7 +25,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "the dependent material has a missing or incorrect variable declaration",
     "evidence": [
@@ -38,7 +38,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "not evaluated because authorized_edit_scope failed",
     "evidence": [],
@@ -49,7 +49,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "not evaluated because authorized_edit_scope failed",
     "evidence": [],
@@ -60,7 +60,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R2-COUPLED-VARIABLE-WIRING-001",
     "detail": "candidate changes extend beyond the coupling declaration",
     "evidence": [],

@@ -1,0 +1,15 @@
+{
+  "case_id": "V1-FLUID-NAVIER-STOKES-MMS-001",
+  "failed_gates": [
+    "physics_conformance",
+    "successful_moose_runs",
+    "protected_error_oracle",
+    "required_convergence",
+    "reported_values_match"
+  ],
+  "generated_on": "2026-10-09",
+  "input_sha256": "13191d8b72d23b68df02211eea2843090c7a2beeefda79e5253725d9cc0a8487",
+  "mutant": "numeric-function-bc.i",
+  "passed": true,
+  "schema_version": "1.0"
+}

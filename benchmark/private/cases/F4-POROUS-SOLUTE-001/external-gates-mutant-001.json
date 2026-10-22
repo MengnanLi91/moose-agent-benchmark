@@ -1,7 +1,7 @@
 [
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "F4-POROUS-SOLUTE-001",
     "detail": "The mutant remains syntactically valid and passes --check-input.",
     "evidence": [
@@ -14,7 +14,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "F4-POROUS-SOLUTE-001",
     "detail": "The bounded run repeatedly failed nonlinear convergence and did not advance.",
     "evidence": [
@@ -28,7 +28,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "F4-POROUS-SOLUTE-001",
     "detail": "The CSV contains only the initial row and no final-time QoI output.",
     "evidence": [
@@ -41,7 +41,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "F4-POROUS-SOLUTE-001",
     "detail": "The PorousFlowDictator omits C from porous_flow_vars.",
     "evidence": [

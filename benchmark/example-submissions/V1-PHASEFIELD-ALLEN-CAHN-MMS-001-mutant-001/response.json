@@ -1,0 +1,84 @@
+{
+  "claim": {
+    "asymptotic_regime": {
+      "eta": false
+    },
+    "expected_order": {
+      "eta": 1.0
+    },
+    "interpretation": "The final eta order falls outside the formal-order tolerance.",
+    "norm": "temporal_l2",
+    "observed_orders": {
+      "eta": [
+        1.0384637839822035,
+        1.028595505080081,
+        1.0
+      ]
+    },
+    "refinement_parameter": "time_step",
+    "runs": [
+      {
+        "controls": {
+          "dt": 0.1,
+          "n": 128
+        },
+        "errors": {
+          "eta": 0.002649763896168
+        },
+        "level": 0,
+        "parameter": 0.1
+      },
+      {
+        "controls": {
+          "dt": 0.05,
+          "n": 128
+        },
+        "errors": {
+          "eta": 0.0012900259007365
+        },
+        "level": 1,
+        "parameter": 0.05
+      },
+      {
+        "controls": {
+          "dt": 0.025,
+          "n": 128
+        },
+        "errors": {
+          "eta": 0.00063235408666082
+        },
+        "level": 2,
+        "parameter": 0.025
+      },
+      {
+        "controls": {
+          "dt": 0.0125,
+          "n": 128
+        },
+        "errors": {
+          "eta": 0.00031617704333041
+        },
+        "level": 3,
+        "parameter": 0.0125
+      }
+    ],
+    "verdict": "not_verified"
+  },
+  "evidence": [
+    {
+      "interpretation": "The implementation targets the specified manufactured problem.",
+      "observation": "Used the supplied equations and required convergence sequence.",
+      "source_id": "mms_problem_specification"
+    },
+    {
+      "interpretation": "The reported errors use the benchmark instrumentation.",
+      "observation": "Preserved the protected exact functions, error postprocessors, and CSV output.",
+      "source_id": "mms_input_scaffold"
+    },
+    {
+      "interpretation": "The convergence claim is tied to the submitted implementation.",
+      "observation": "Executed the submitted input at all four prescribed levels.",
+      "source_id": "mms_moose_input"
+    }
+  ]
+}

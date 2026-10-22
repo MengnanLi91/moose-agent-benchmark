@@ -10,10 +10,15 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
-from ..contracts import EvaluationContext, ExternalGateResult, SubmissionRecord
+from ..contracts import (
+    EvaluationContext,
+    ExternalGateResult,
+    MmsExecutionMeasurement,
+    SubmissionRecord,
+)
 from ..loader import resolve_inside, sha256_file, sha256_submission_content
 from ..runner import RunLimits, RunResult, run_command
-from .config import MooseGateConfig
+from .config import MmsGateConfig, MooseGateConfig
 from .errors import GateInfrastructureError
 
 
@@ -43,16 +48,21 @@ def _verify_submission_files(
         raise ValueError(
             f"recorded artifact path {artifact.path!r} does not match {expected_artifact_path!r}"
         )
+    unresolved_candidate = submission_root / artifact.path
+    if unresolved_candidate.is_symlink():
+        raise ValueError(f"submission artifact is a symlink: {unresolved_candidate}")
     candidate = resolve_inside(submission_root, artifact.path)
-    if not candidate.is_file() or candidate.is_symlink():
+    if not candidate.is_file():
         raise ValueError(f"submission artifact is not a regular file: {candidate}")
     if candidate.stat().st_size != artifact.size_bytes or sha256_file(candidate) != artifact.sha256:
         raise ValueError("submission artifact does not match its runner-owned record")
     if submission.response is not None:
+        unresolved_response = submission_root / submission.response.path
+        if unresolved_response.is_symlink():
+            raise ValueError(f"submission response is a symlink: {unresolved_response}")
         response = resolve_inside(submission_root, submission.response.path)
         if (
             not response.is_file()
-            or response.is_symlink()
             or response.stat().st_size != submission.response.size_bytes
             or sha256_file(response) != submission.response.sha256
         ):
@@ -101,7 +111,7 @@ def prepare_workspace(
 def verify_tools(
     moose_dir: Path,
     executable: Path,
-    config: MooseGateConfig,
+    config: MooseGateConfig | MmsGateConfig,
 ) -> GateTools:
     moose_dir = moose_dir.resolve()
     executable = executable.resolve()
@@ -169,6 +179,10 @@ def _safe_environment(tools: GateTools) -> dict[str, str]:
     environment = {name: os.environ[name] for name in _ENVIRONMENT_ALLOWLIST if name in os.environ}
     environment["MOOSE_DIR"] = str(tools.moose_dir)
     return environment
+
+
+def safe_environment(tools: GateTools) -> dict[str, str]:
+    return _safe_environment(tools)
 
 
 def run_configured_command(
@@ -241,6 +255,7 @@ def external_gate_result(
     passed: bool,
     detail: str,
     evidence: list[str] | None = None,
+    mms_measurement: MmsExecutionMeasurement | None = None,
 ) -> ExternalGateResult:
     if submission.submission_sha256 != context.submission_sha256:
         raise ValueError("evaluation context does not match the submission record")
@@ -254,11 +269,12 @@ def external_gate_result(
         passed=passed,
         detail=detail,
         evidence=evidence or [],
+        mms_measurement=mms_measurement,
     )
 
 
 def validate_gate_results(
-    config: MooseGateConfig,
+    config: MooseGateConfig | MmsGateConfig,
     results: list[ExternalGateResult],
 ) -> list[ExternalGateResult]:
     actual = [result.gate_id for result in results]

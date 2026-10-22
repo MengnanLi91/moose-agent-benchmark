@@ -51,14 +51,58 @@ REPAIR_FIXTURES = {
     "R4-PHASEFIELD-LAGRANGE-TRANSIENT-001": 3,
 }
 
+MMS_DERIVATION_FIXTURES = [
+    "V1-DIFFUSION-STEADY-DIRICHLET-MMS-001",
+    "V1-DIFFUSION-STEADY-NEUMANN-MMS-001",
+    "V1-DIFFUSION-TRANSIENT-DIRICHLET-MMS-001",
+    "V1-SOLID-MMS-001",
+    "V1-THERMOELASTIC-MMS-001",
+]
+
+MMS_IMPLEMENTATION_FIXTURES = [
+    "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001",
+    "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+    "V1-POROUS-DARCY-MMS-001",
+    "V1-THERMAL-MMS-001",
+    "V1-FLUID-NAVIER-STOKES-MMS-001",
+]
+
+MMS_INPUT_MUTANTS = {
+    "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001": (
+        "physics_conformance",
+        "input_construction",
+    ),
+    "V1-THERMAL-MMS-001": ("required_convergence", "convergence_calculation"),
+    "V1-POROUS-DARCY-MMS-001": ("required_convergence", "convergence_calculation"),
+    "V1-PHASEFIELD-ALLEN-CAHN-MMS-001": (
+        "physics_conformance",
+        "input_construction",
+    ),
+    "V1-FLUID-NAVIER-STOKES-MMS-001": (
+        "successful_moose_runs",
+        "input_construction",
+    ),
+}
+
 
 def _external_gates(case_id, filename):
     path = ROOT / f"benchmark/private/cases/{case_id}/{filename}"
     return [ExternalGateResult.model_validate(item) for item in json.loads(path.read_text())]
 
 
-def evaluate_case(case_id, submission_name, *, ratings=None, gate_filename=None):
-    case_path, evaluation_path = case_bundle_paths(MANIFEST, case_id)
+def evaluate_case(
+    case_id,
+    submission_name,
+    *,
+    ratings=None,
+    gate_filename=None,
+    include_disabled=False,
+):
+    case_path, evaluation_path = case_bundle_paths(
+        MANIFEST,
+        case_id,
+        include_disabled=include_disabled,
+    )
     case = load_case(case_path)
     evaluation = load_evaluation(evaluation_path)
     submission_root = ROOT / f"benchmark/example-submissions/{submission_name}"
@@ -76,8 +120,9 @@ def evaluate_case(case_id, submission_name, *, ratings=None, gate_filename=None)
     )
     gates = _external_gates(case_id, gate_filename) if gate_filename else []
     client = None
-    if evaluation.evaluator == "semantic_rubric_v1":
-        selected = ratings or {criterion.id: "full" for criterion in evaluation.capability_criteria}
+    if evaluation.evaluator in {"semantic_rubric_v1", "mms_derivation_v1"}:
+        criteria = [*evaluation.capability_criteria, *evaluation.evidence_criteria]
+        selected = ratings or {criterion.id: "full" for criterion in criteria}
         client = ScriptedLLMClient(selected)
     result = get_evaluator(evaluation.evaluator).evaluate(
         case,
@@ -197,6 +242,7 @@ class ExampleCaseTests(unittest.TestCase):
                     case_id,
                     case_id,
                     gate_filename="external-gates-gold.json",
+                    include_disabled=True,
                 )
                 self.assertEqual(gold.official_score, 100.0)
                 self.assertTrue(gold.case_passed)
@@ -210,6 +256,94 @@ class ExampleCaseTests(unittest.TestCase):
                     )
                     self.assertEqual(mutant.official_score, 0.0)
                     self.assertFalse(mutant.case_passed)
+
+    def test_mms_derivation_gold_scores_100_and_mutants_fail_capability(self):
+        mutant_ratings = {
+            "derivatives_and_residual": "full",
+            "source_terms": "none",
+            "boundary_and_initial_data": "full",
+            "constraints_and_conventions": "full",
+            "derivation_trace": "full",
+            "notation_and_parameter_consistency": "full",
+        }
+        for case_id in MMS_DERIVATION_FIXTURES:
+            with self.subTest(case_id=case_id, variant="gold"):
+                gold, _ = evaluate_case(
+                    case_id,
+                    case_id,
+                    include_disabled=True,
+                )
+                self.assertEqual(gold.official_score, 100.0)
+                self.assertTrue(gold.case_passed)
+                self.assertIsNone(gold.failure_category)
+            with self.subTest(case_id=case_id, variant="mutant"):
+                mutant, _ = evaluate_case(
+                    case_id,
+                    f"{case_id}-mutant-001",
+                    ratings=mutant_ratings,
+                    include_disabled=True,
+                )
+                self.assertLess(mutant.official_score, 80.0)
+                self.assertFalse(mutant.case_passed)
+                self.assertEqual(mutant.failure_category, "equation_derivation")
+
+    def test_mms_derivation_partial_judgment_uses_balanced_scoring(self):
+        partial, _ = evaluate_case(
+            "V1-DIFFUSION-STEADY-DIRICHLET-MMS-001",
+            "V1-DIFFUSION-STEADY-DIRICHLET-MMS-001",
+            ratings={
+                "derivatives_and_residual": "full",
+                "source_terms": "partial",
+                "boundary_and_initial_data": "full",
+                "constraints_and_conventions": "full",
+                "derivation_trace": "full",
+                "notation_and_parameter_consistency": "full",
+            },
+            include_disabled=True,
+        )
+        self.assertEqual(partial.component_scores.capability, 82.5)
+        self.assertEqual(partial.component_scores.evidence, 100.0)
+        self.assertEqual(partial.component_scores.contract, 100.0)
+        self.assertEqual(partial.official_score, 87.75)
+        self.assertTrue(partial.case_passed)
+
+    def test_mms_implementation_gold_scores_100_and_claim_mutants_are_gated(self):
+        for case_id in MMS_IMPLEMENTATION_FIXTURES:
+            with self.subTest(case_id=case_id, variant="gold"):
+                gold, _ = evaluate_case(
+                    case_id,
+                    case_id,
+                    gate_filename="external-gates-gold.json",
+                    include_disabled=True,
+                )
+                self.assertEqual(gold.official_score, 100.0)
+                self.assertTrue(gold.case_passed)
+                self.assertIsNone(gold.failure_category)
+            with self.subTest(case_id=case_id, variant="mutant"):
+                mutant, _ = evaluate_case(
+                    case_id,
+                    f"{case_id}-mutant-001",
+                    gate_filename="external-gates-mutant-001.json",
+                    include_disabled=True,
+                )
+                self.assertEqual(mutant.official_score, 0.0)
+                self.assertFalse(mutant.case_passed)
+                self.assertEqual(mutant.failure_category, "error_calculation")
+
+    def test_mms_implementation_input_mutants_fail_their_intended_gates(self):
+        for case_id, (expected_gate, failure_category) in MMS_INPUT_MUTANTS.items():
+            with self.subTest(case_id=case_id):
+                result, _ = evaluate_case(
+                    case_id,
+                    f"{case_id}-input-mutant-001",
+                    gate_filename="external-gates-input-mutant-001.json",
+                    include_disabled=True,
+                )
+                gates = {gate.id: gate.passed for gate in result.gate_results}
+                self.assertFalse(gates[expected_gate])
+                self.assertEqual(result.official_score, 0.0)
+                self.assertFalse(result.case_passed)
+                self.assertEqual(result.failure_category, failure_category)
 
     def test_repair_wrong_structured_identifier_reduces_raw_score(self):
         case_id = "R1-DIFFUSION-PERIODIC-SIDESET-001"

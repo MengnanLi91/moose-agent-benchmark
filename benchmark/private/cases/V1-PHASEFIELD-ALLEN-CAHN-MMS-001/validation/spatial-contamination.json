@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "case_id": "V1-PHASEFIELD-ALLEN-CAHN-MMS-001",
+  "generated_on": "2026-10-07",
+  "refinement_parameter": "mesh_resolution",
+  "time_step": 0.0125,
+  "baseline_mesh": 128,
+  "doubled_mesh": 256,
+  "field": "eta",
+  "baseline_error": 0.00030878116256179,
+  "doubled_mesh_error": 0.00031735346684005,
+  "relative_change_fraction": 0.027011850110276445,
+  "acceptance_threshold_fraction": 0.1,
+  "passed": true,
+  "moose_revision": "c2dfd9fedd3193740a5278ec32269450c618e3b7",
+  "executable_sha256": "3be083e88c63c265e1c98a3f0cbd401fb2d7feb39547c6fa22ff1cb2f4f34472"
+}

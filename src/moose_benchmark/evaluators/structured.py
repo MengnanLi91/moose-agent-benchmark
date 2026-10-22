@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from ..comparison import MISSING, compare, resolve_json_pointer
+from ..comparison import compare, resolve_json_pointer
 from ..contracts import (
     CaseContract,
     CaseKind,
@@ -18,7 +18,7 @@ from ..contracts import (
 )
 from ..loader import resolve_inside
 from ..scoring import calculate_case_score
-from .common import automatic_gates, evaluation_gates
+from .common import automatic_gates, contract_score, evaluation_gates
 
 
 def _load_response(
@@ -59,48 +59,6 @@ def _score_criteria(document: dict[str, Any], criteria: list) -> tuple[float, li
     return round(100 * total, 4), details
 
 
-def _contract_score(
-    case: CaseContract,
-    response: StructuredResponse,
-    submission: SubmissionRecord,
-    *,
-    artifacts_verified: bool,
-) -> tuple[float, dict]:
-    document = response.model_dump(mode="json")
-    required_claim_results = [
-        resolve_json_pointer(document, pointer) is not MISSING
-        for pointer in case.submission.required_claim_paths
-    ]
-    required_claim_score = (
-        sum(required_claim_results) / len(required_claim_results) if required_claim_results else 1.0
-    )
-
-    known_evidence_ids = {item.id for item in case.evidence_sources}
-    known_evidence_ids.update(item.id for item in case.artifacts)
-    known_evidence_ids.update(item.role for item in submission.artifacts)
-    supplied_evidence_ids = {item.source_id for item in response.evidence}
-    evidence_ok = supplied_evidence_ids <= known_evidence_ids
-    if case.submission.evidence_required:
-        evidence_ok = evidence_ok and bool(response.evidence)
-
-    supplied_artifacts = {(item.role, item.path) for item in submission.artifacts}
-    required_artifacts = {(item.role, item.path) for item in case.submission.required_artifacts}
-    artifact_ok = (
-        artifacts_verified
-        and required_artifacts <= supplied_artifacts
-        and len(submission.artifacts) <= case.submission.maximum_artifacts
-    )
-    score = 40.0 + 30 * required_claim_score
-    score += 15 * float(evidence_ok)
-    score += 15 * float(artifact_ok)
-    return round(score, 4), {
-        "runner_identity": True,
-        "required_claim_fraction": round(required_claim_score, 4),
-        "evidence_references_valid": evidence_ok,
-        "artifact_contract_valid": artifact_ok,
-    }
-
-
 class StructuredClaimEvaluator:
     def evaluate(
         self,
@@ -132,7 +90,7 @@ class StructuredClaimEvaluator:
         capability, capability_details = _score_criteria(document, evaluation.capability_criteria)
         evidence, evidence_details = _score_criteria(document, evaluation.evidence_criteria)
         automatic, _verified = automatic_gates(case, submission, context)
-        contract, contract_details = _contract_score(
+        contract, contract_details = contract_score(
             case,
             response,
             submission,

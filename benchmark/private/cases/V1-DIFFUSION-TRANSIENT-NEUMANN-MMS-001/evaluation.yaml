@@ -1,0 +1,52 @@
+schema_version: '2.0'
+case_id: V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001
+evaluator: mms_claim_v1
+reference_data: reference/metrics.json
+capability_criteria:
+- id: norm_and_refinement
+  weight: 0.1
+  description: Correct norm and refinement variable.
+- id: error_sequence
+  weight: 0.25
+  description: Correct errors for every required field and level.
+- id: observed_orders
+  weight: 0.25
+  description: Correct pairwise observed orders.
+- id: asymptotic_assessment
+  weight: 0.2
+  description: Correct formal-order comparison and asymptotic assessment.
+- id: verdict
+  weight: 0.2
+  description: Correct verification conclusion.
+evidence_criteria:
+- id: refinement_trace
+  weight: 0.4
+  description: Reports every prescribed level and control.
+- id: arithmetic_consistency
+  weight: 0.4
+  description: Reported orders agree with reported errors.
+- id: source_binding
+  weight: 0.2
+  description: Evidence cites the submitted input, protected scaffold, and verification specification.
+hard_gates:
+- id: physics_conformance
+  description: Submitted input contains the required physics structure.
+  kind: external
+- id: complete_refinement_sequence
+  description: Complete refinement sequence.
+  kind: external
+- id: successful_moose_runs
+  description: Check-input and all authoritative runs succeed.
+  kind: external
+- id: protected_error_oracle
+  description: Protected instrumentation produces finite positive errors.
+  kind: external
+- id: required_convergence
+  description: Every required field meets the formal-order band.
+  kind: external
+- id: reported_values_match
+  description: Reported values match the authoritative rerun.
+  kind: external
+- id: resource_compliance
+  description: Execution remains within resource limits.
+  kind: external

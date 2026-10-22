@@ -1,0 +1,13 @@
+{
+  "case_id": "V1-DIFFUSION-TRANSIENT-NEUMANN-MMS-001",
+  "failed_gates": [
+    "physics_conformance",
+    "required_convergence",
+    "reported_values_match"
+  ],
+  "generated_on": "2026-10-09",
+  "input_sha256": "cac4fa754ffa600fdd5209e7ae48d99e272a2c83ec0c7eda9775effd20dc107c",
+  "mutant": "missing-diffusion.i",
+  "passed": true,
+  "schema_version": "1.0"
+}

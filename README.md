@@ -49,6 +49,41 @@ uv run moose-benchmark generate-gates \
 Use `--include-disabled` with `validate`, `record-submission`, `generate-gates`, or `score`
 while authoring disabled development cases.
 
+The V1 MMS suite has two equal-weight halves:
+
+- **Derivation cases** supply the governing problem and exact fields. Participants submit only
+  `response.md` with the requested sources, conditions, constraints, and derivation trace.
+- **Implementation cases** supply the complete MMS equations and a protected instrumentation
+  scaffold. Participants submit `artifacts/solution.i` plus `response.json`; the evaluator
+  reruns that submitted input at all four refinement levels.
+
+Maintainers can check an implementation case against its frozen private calibration with the
+pinned MOOSE checkout:
+
+```bash
+uv run moose-benchmark generate-mms-reference \
+  --manifest benchmark/manifest.yaml \
+  --case-id V1-POROUS-DARCY-MMS-001 \
+  --moose-dir /path/to/moose \
+  --executable /path/to/moose/modules/combined/combined-opt \
+  --output benchmark/private/cases/V1-POROUS-DARCY-MMS-001/reference/metrics.json \
+  --validation-dir benchmark/private/cases/V1-POROUS-DARCY-MMS-001/validation
+```
+
+An existing reference is not overwritten when its values drift. After reviewing an intentional
+baseline change, rerun with `--update-reference`. The protected runner verifies submission and
+scaffold hashes, rejects unsafe includes and protected-name collisions, checks case-owned HIT
+requirements, runs `--check-input`, executes each level independently, and computes unrounded
+observed orders from the submitted input. MMS cases remain disabled until their domain,
+benchmark-design, and applicable real-MOOSE or LLM-judge reviews are complete.
+
+The `MMS Real-MOOSE` workflow uses a self-hosted runner labeled `moose`. Add the
+`mms-smoke` label to a pull request to run the PorousFlow Darcy implementation case; published
+releases and manually dispatched `full` runs execute all five implementation cases. Live
+derivation-judge calibration is available only through an explicit manual-dispatch option.
+Configure the runner variables `MOOSE_DIR`, `MOOSE_EXECUTABLE`, and, for judge calibration,
+`MOOSE_BENCHMARK_LLM_CONFIG`.
+
 To score FORM cases, install the optional judge adapters and provide a private configuration:
 
 ```bash
@@ -258,9 +293,20 @@ official_score = raw_score when every hard gate passes, otherwise 0
 case_pass      = gates_pass and capability >= 80
 ```
 
-Transitional structured DIAG and integrated cases retain the `0.70/0.20/0.10` balanced profile.
+Structured DIAG, MMS VERIFY, and integrated cases use the `0.70/0.20/0.10` balanced profile.
+For MMS derivation, capability weights are `25/35/25/15` for derivatives/residual assembly,
+source terms, boundary/initial data, and constraints/conventions; evidence weights are `70/30`
+for derivation trace and notation consistency. For MMS implementation, the capability weights
+for norm/refinement, errors, observed orders, asymptotic assessment, and verdict are
+`10/25/25/20/20`.
 Submission integrity, required artifacts, and resource budgets are hard gates rather than FORM
 score components.
+
+When both MMS task types are represented, the suite reports
+
+$$
+S_{\mathrm{MMS}}=0.5S_{\mathrm{derivation}}+0.5S_{\mathrm{implementation}}.
+$$
 
 The Atomic Capability Score is the macro-average of the represented F1 through V4
 subcategory means. Production reports should show missing subcategories rather than imply

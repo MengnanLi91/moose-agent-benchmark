@@ -1,7 +1,7 @@
 [
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
     "detail": "candidate changes include missing or unauthorized HIT paths",
     "evidence": [
@@ -27,7 +27,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
     "detail": "not evaluated because authorized_edit_scope failed",
     "evidence": [],
@@ -38,7 +38,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
     "detail": "not evaluated because authorized_edit_scope failed",
     "evidence": [],
@@ -49,7 +49,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
     "detail": "not evaluated because authorized_edit_scope failed",
     "evidence": [],
@@ -60,7 +60,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
     "detail": "not evaluated because authorized_edit_scope failed",
     "evidence": [],
@@ -71,7 +71,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
     "detail": "not evaluated because authorized_edit_scope failed",
     "evidence": [],
@@ -82,7 +82,7 @@
   },
   {
     "benchmark_id": "moose-agent-benchmark-development",
-    "benchmark_version": "0.4.0",
+    "benchmark_version": "0.5.0",
     "case_id": "R1-DIFFUSION-PERIODIC-SIDESET-001",
     "detail": "frozen paths changed",
     "evidence": [],

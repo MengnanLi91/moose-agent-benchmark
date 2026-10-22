@@ -158,6 +158,50 @@ def aggregate_results(
         round(_mean(list(domain_scores.values())), 4) if domain_scores else None
     )
 
+    v1_cases = [item for item in atomic if item["subcategory"] == "V1"]
+    verification_by_task: dict[str, list[float]] = defaultdict(list)
+    verification_by_study: dict[str, list[float]] = defaultdict(list)
+    verification_by_domain: dict[str, list[float]] = defaultdict(list)
+    verification_by_difficulty: dict[str, list[float]] = defaultdict(list)
+    verification_failures = Counter()
+    for item in v1_cases:
+        verification_by_task[item["mms_task"]].append(item["official_score"])
+        if item["verification_study"] is not None:
+            verification_by_study[item["verification_study"]].append(item["official_score"])
+        for domain in item["physics_domains"]:
+            verification_by_domain[domain].append(item["official_score"])
+        verification_by_difficulty[item["difficulty"]].append(item["official_score"])
+        if not item["case_passed"]:
+            verification_failures[item["failure_category"] or "unclassified"] += 1
+    task_scores = {
+        key: round(_mean(values), 4) for key, values in sorted(verification_by_task.items())
+    }
+    mms_suite_score = None
+    if {"derivation", "implementation"} <= set(task_scores):
+        mms_suite_score = round(
+            0.5 * task_scores["derivation"] + 0.5 * task_scores["implementation"],
+            4,
+        )
+    verification_profile = {
+        "case_count": len(v1_cases),
+        "case_pass_rate": (
+            round(_mean([float(item["case_passed"]) for item in v1_cases]), 4) if v1_cases else None
+        ),
+        "task_scores": task_scores,
+        "mms_suite_score": mms_suite_score,
+        "study_scores": {
+            key: round(_mean(values), 4) for key, values in sorted(verification_by_study.items())
+        },
+        "domain_scores": {
+            key: round(_mean(values), 4) for key, values in sorted(verification_by_domain.items())
+        },
+        "difficulty_scores": {
+            key: round(_mean(values), 4)
+            for key, values in sorted(verification_by_difficulty.items())
+        },
+        "failure_category_counts": dict(sorted(verification_failures.items())),
+    }
+
     complete_integrated_cases = sum(bool(item["case_passed"]) for item in integrated_cases)
     integrated_workflow_completion_rate = (
         round(complete_integrated_cases / len(integrated_cases), 4) if integrated_cases else None
@@ -184,6 +228,7 @@ def aggregate_results(
         "atomic_pass_rate": atomic_pass_rate,
         "domain_scores": domain_scores,
         "domain_generalization_score": domain_generalization_score,
+        "verification_profile": verification_profile,
         "integrated_workflow_completion_rate": integrated_workflow_completion_rate,
         "integrated_first_failed_stage_counts": dict(sorted(first_failed_stage_counts.items())),
         "represented_subcategories": sorted(subcategory_scores),

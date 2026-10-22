@@ -12,6 +12,7 @@ from ..contracts import (
     AtomicSubcategory,
     CaseKind,
     Difficulty,
+    MmsTask,
     StrictModel,
     Track,
 )
@@ -56,6 +57,7 @@ class CatalogRecord(StrictModel):
     github_issue: str = ""
     github_pr: str = ""
     tags: list[str] = Field(default_factory=list)
+    mms_task: MmsTask | None = None
 
     @model_validator(mode="after")
     def validate_record(self) -> CatalogRecord:
@@ -64,10 +66,16 @@ class CatalogRecord(StrictModel):
                 raise ValueError("atomic catalog records require track and subcategory")
             if self.subcategory not in TRACK_SUBCATEGORIES[self.track]:
                 raise ValueError("subcategory must match the selected track")
+            if self.subcategory == "V1" and self.mms_task is None:
+                raise ValueError("V1 catalog records require mms_task")
+            if self.subcategory != "V1" and self.mms_task is not None:
+                raise ValueError("mms_task is reserved for V1 catalog records")
         elif self.track is not None or self.subcategory is not None:
             raise ValueError(
                 "integrated workflow catalog records must leave track and subcategory unset"
             )
+        elif self.mms_task is not None:
+            raise ValueError("integrated workflow catalog records cannot declare mms_task")
 
         self.owner = self.owner.strip() if self.owner and self.owner.strip() else None
         for label, values in (
